@@ -531,6 +531,60 @@ const getExpensePaymentModes = async () => {
   }
 }
 
+const getExpenseCategoryPages = async (params = {}) => {
+  try {
+    return await get("/ExpenseCategory/GetAllpage", {
+      params: buildPageParams(params),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense category pages API call failed"
+    )
+  }
+}
+
+const getExpenseCategoryById = async id => {
+  try {
+    return await get("/ExpenseCategory/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense category fetch by id failed"
+    )
+  }
+}
+
+const saveExpenseCategory = async payload => {
+  try {
+    return await post("/ExpenseCategory/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense category save failed"
+    )
+  }
+}
+
+const deleteExpenseCategoryById = async id => {
+  try {
+    return await del("/ExpenseCategory/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense category delete failed"
+    )
+  }
+}
+
 const changePassword = async payload => {
   try {
     return await post("/ChangePassword/Add", payload)
@@ -636,4 +690,8 @@ export {
   saveExpense,
   deleteExpenseById,
   getExpensePaymentModes,
+  getExpenseCategoryPages,
+  getExpenseCategoryById,
+  saveExpenseCategory,
+  deleteExpenseCategoryById,
 }

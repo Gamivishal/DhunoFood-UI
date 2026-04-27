@@ -36,6 +36,7 @@ import Pages500 from "../pages/Extra Pages/pages-500";
 
 import UserDemo from "../pages/UserDemo";
 import Expenses from "../pages/Expense";
+import ExpenseCategories from "../pages/ExpenseCategory";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -81,6 +82,13 @@ const userRoutes = [
   { path: "/expenses", component: <Expenses /> },
   { path: "/expenses/manage", component: <Expenses /> },
   { path: "/expenses/manage/:id", component: <Expenses /> },
+
+  { path: "/expense-categories", component: <ExpenseCategories /> },
+  { path: "/expense-categories/manage", component: <ExpenseCategories /> },
+  { path: "/expense-categories/manage/:id", component: <ExpenseCategories /> },
+  { path: "/expensecategorys", component: <ExpenseCategories /> },
+  { path: "/expensecategorys/manage", component: <ExpenseCategories /> },
+  { path: "/expensecategorys/manage/:id", component: <ExpenseCategories /> },
 
   // this route should be at the end of all other routes
   {

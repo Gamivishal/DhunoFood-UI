@@ -223,11 +223,9 @@ if (!(response?.isSuccess)) {
       columns: buildServerSortColumns({
         columns: [
           { label: "Expense Date", field: "expenseDate", sort: "asc" },
-        //  { label: "Category", field: "categoryName", sort: "asc" },
           { label: "Amount", field: "amount", sort: "asc" },
-          { label: "Payment Mode", field: "paymentMode", sort: "asc" },
+          { label: "Payment Mode", field: "paymentName", sort: "asc" },
           { label: "Description", field: "description", sort: "asc" },
-         // { label: "Active", field: "isActive", sort: "disabled" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
         onSort: handleSortChange,
@@ -239,7 +237,7 @@ if (!(response?.isSuccess)) {
         expenseDate: formatDate(item.expenseDate),
         categoryName: item.categoryName || "",
         amount: item.amount ?? "",
-        paymentMode: (item.paymentMode),
+        paymentName: item.paymentName || "",
         description: item.description || "",
         isActive: item.isActive ? "Yes" : "No",
         action: (

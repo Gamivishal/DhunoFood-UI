@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { Container, Row,Col, Card, CardBody, Label, Form, Alert, Input, FormFeedback } from 'reactstrap';
 import logoDark from "../../assets/images/logo-dark.png";
 import logoLight from "../../assets/images/logo-dark.png";
-
+import DhunoLogo from "../../assets/images/DhunoFood/Logo.jpeg"
 import { DASHBOARD_NAME } from "../../config";
 
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import PropTypes from "prop-types";
+
+
 
 // Formik validation
 import * as Yup from "yup";
@@ -22,7 +24,8 @@ import { showError } from "../../Pop_show/alertService";
 import { apiError, loginUser, socialLogin } from "../../store/actions";
 
 const Login = props => {
-  document.title = "Login | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = `Login | ${DASHBOARD_NAME}`
+
 
   const dispatch = useDispatch();
 
@@ -84,8 +87,8 @@ const Login = props => {
 
                                 <h3 className="text-center mt-5 mb-4">
                                     <Link to="/" className="d-block auth-logo">
-                                        <img src={logoDark} alt="" height="30" className="auth-logo-dark" />
-                                        <img src={logoLight} alt="" height="30" className="auth-logo-light" />
+                                        <img src={DhunoLogo} alt="" height="30" className="auth-logo-dark" />
+                                        <img src={DhunoLogo} alt="" height="30" className="auth-logo-light" />
                                     </Link>
                                 </h3>
 
@@ -145,21 +148,21 @@ const Login = props => {
                                                 >
                                                   Log In
                                                 </button>
-                                                <Link
+                                                {/* <Link
                                                   to="/register"
                                                   className="btn btn-outline-primary waves-effect"
                                                   style={{ minWidth: "140px", height: "46px", borderRadius: "8px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
                                                 >
                                                   Signup
-                                                </Link>
+                                                </Link> */}
                                             </div>
                                         </Row>
-                                        <Row className="form-group mb-0">
+                                        {/* <Row className="form-group mb-0">
                                           <div className="col-12 mt-4 d-flex flex-column align-items-start gap-2">
                                             <Link to="/forgot-password" className="text-muted"><i className="mdi mdi-lock"></i> Forgot your password?</Link>
                                             <Link to="/forgot-password2" className="text-muted"><i className="mdi mdi-lock"></i> Forgot your password2?</Link>
                                           </div>
-                                        </Row>
+                                        </Row> */}
                                     </Form>
                                 </div>
                             </CardBody>

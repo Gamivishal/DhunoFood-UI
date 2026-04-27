@@ -707,6 +707,61 @@ const getItemUnits = async () => {
   }
 }
 
+// Customer API helpers
+const getCustomerPages = async (params = {}) => {
+  try {
+    return await get("/Customer/GetAllpage", {
+      params: buildPageParams(params),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Customer pages API call failed"
+    )
+  }
+}
+
+const getCustomerById = async id => {
+  try {
+    return await get("/Customer/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Customer fetch by id failed"
+    )
+  }
+}
+
+const saveCustomer = async payload => {
+  try {
+    return await post("/Customer/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Customer save failed"
+    )
+  }
+}
+
+const deleteCustomerById = async id => {
+  try {
+    return await del("/Customer/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Customer delete failed"
+    )
+  }
+}
+
 const changePassword = async payload => {
   try {
     return await post("/ChangePassword/Add", payload)
@@ -825,4 +880,8 @@ export {
   saveItem,
   deleteItemById,
   getItemUnits,
+  getCustomerPages,
+  getCustomerById,
+  saveCustomer,
+  deleteCustomerById,
 }

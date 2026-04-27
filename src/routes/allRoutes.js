@@ -39,6 +39,7 @@ import Expenses from "../pages/Expense";
 import ExpenseCategories from "../pages/ExpenseCategory";
 import ItemCategories from "../pages/ItemCategory";
 import Items from "../pages/Item";
+import Customers from "../pages/Customer";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -105,6 +106,10 @@ const userRoutes = [
   { path: "/itemss", component: <Items /> },
   { path: "/itemss/manage", component: <Items /> },
   { path: "/itemss/manage/:id", component: <Items /> },
+
+  { path: "/customers", component: <Customers /> },
+  { path: "/customers/manage", component: <Customers /> },
+  { path: "/customers/manage/:id", component: <Customers /> },
 
   // this route should be at the end of all other routes
   {

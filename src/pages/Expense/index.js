@@ -12,6 +12,7 @@ import {
   getExpenseCategoryPages,
   getExpensePages,
   getExpensePaymentModes,
+  getItemUnits,
   saveExpense,
 } from "../../helpers/fakebackend_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
@@ -35,6 +36,7 @@ const Expenses = props => {
   const [error, setError] = useState("")
   const [formError, setFormError] = useState("")
   const [categoryOptions, setCategoryOptions] = useState([])
+  const [unitOptions, setUnitOptions] = useState([])
   const [paymentModeOptions, setPaymentModeOptions] = useState([])
   const [rows, setRows] = useState([])
   const [sortColumn, setSortColumn] = useState(EXPENSE_LIST_SORT_COLUMN)
@@ -45,6 +47,7 @@ const Expenses = props => {
     expenseDate: "",
     categoryId: "",
     amount: "",
+    unit: "",
     paymentMode: "",
     description: "",
     isActive: true,
@@ -146,6 +149,28 @@ if (!(response?.isSuccess)) {
   }, [isFormPage])
 
   useEffect(() => {
+    const loadUnits = async () => {
+      if (!isFormPage) {
+        return
+      }
+
+      try {
+        const response = await getItemUnits()
+        if (response?.isSuccess && Array.isArray(response?.data)) {
+          setUnitOptions(response.data)
+          return
+        }
+
+        throw new Error(response?.message || "Failed to load units")
+      } catch (err) {
+        setFormError(err?.message || err || "Failed to load units")
+      }
+    }
+
+    loadUnits()
+  }, [isFormPage])
+
+  useEffect(() => {
     const loadExpense = async () => {
       if (!isFormPage) {
         return
@@ -160,6 +185,7 @@ if (!(response?.isSuccess)) {
           expenseDate: "",
           categoryId: "",
           amount: "",
+          unit: "",
           paymentMode: "",
           description: "",
           isActive: true,
@@ -187,6 +213,7 @@ if (!(response?.isSuccess)) {
           expenseDate,
           categoryId: expense.categoryId ?? "",
           amount: expense.amount ?? "",
+          unit: expense.unit ?? "",
           paymentMode: expense.paymentMode ?? "",
           description: expense.description || "",
           isActive: expense.isActive ?? true,
@@ -224,6 +251,7 @@ if (!(response?.isSuccess)) {
         columns: [
           { label: "Expense Date", field: "expenseDate", sort: "asc" },
           { label: "Amount", field: "amount", sort: "asc" },
+          { label: "Unit", field: "unitName", sort: "asc" },
           { label: "Payment Mode", field: "paymentName", sort: "asc" },
           { label: "Description", field: "description", sort: "asc" },
           { label: "Action", field: "action", sort: "disabled" },
@@ -237,6 +265,7 @@ if (!(response?.isSuccess)) {
         expenseDate: formatDate(item.expenseDate),
         categoryName: item.categoryName || "",
         amount: item.amount ?? "",
+        unitName: item.unitName || "",
         paymentName: item.paymentName || "",
         description: item.description || "",
         isActive: item.isActive ? "Yes" : "No",
@@ -293,6 +322,13 @@ if (!(response?.isSuccess)) {
     }))
   }
 
+  const handleUnitChange = option => {
+    setFormData(previous => ({
+      ...previous,
+      unit: option?.value ?? "",
+    }))
+  }
+
   const handleDelete = async id => {
     const isConfirmed = await showConfirm("Are you sure you want to delete this expense?", "Delete", "Cancel")
     if (!isConfirmed) {
@@ -329,6 +365,7 @@ if (!(response?.isSuccess)) {
         expenseDate: formData.expenseDate,
         categoryId: Number(formData.categoryId) || 0,
         amount: Number(formData.amount) || 0,
+        unit: formData.unit,
         paymentMode: formData.paymentMode,
         description: formData.description,
         isActive: Boolean(formData.isActive),
@@ -372,11 +409,13 @@ if (!(response?.isSuccess)) {
                 formData={formData}
                 categoryOptions={categoryOptions}
                 paymentModeOptions={paymentModeOptions}
+                unitOptions={unitOptions}
                 isEditMode={isEditMode}
                 saving={saving}
                 onChange={handleChange}
                 onCategoryChange={handleCategoryChange}
                 onPaymentModeChange={handlePaymentModeChange}
+                onUnitChange={handleUnitChange}
                 onSubmit={handleSubmit}
                 onClose={() => navigate("/expenses")}
               />

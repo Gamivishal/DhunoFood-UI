@@ -762,6 +762,84 @@ const deleteCustomerById = async id => {
   }
 }
 
+const getQuotationPages = async (params = {}) => {
+  try {
+    return await get("/Quotation/GetAllpage", {
+      params: buildPageParams(params),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Quotation pages API call failed"
+    )
+  }
+}
+
+const getQuotationById = async id => {
+  try {
+    return await get("/Quotation/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Quotation fetch by id failed"
+    )
+  }
+}
+
+const saveQuotation = async payload => {
+  try {
+    return await post("/Quotation/Save", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Quotation save failed"
+    )
+  }
+}
+
+const deleteQuotationById = async id => {
+  try {
+    return await del("/Quotation/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Quotation delete failed"
+    )
+  }
+}
+
+const getItemList = async () => {
+  try {
+    return await get("/Dropdown/ItemList", {})
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item list fetch failed"
+    )
+  }
+}
+
+const getCustomerList = async () => {
+  try {
+    return await get("/Dropdown/CustomerList", {})
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Customer list fetch failed"
+    )
+  }
+}
+
 const changePassword = async payload => {
   try {
     return await post("/ChangePassword/Add", payload)
@@ -884,4 +962,10 @@ export {
   getCustomerById,
   saveCustomer,
   deleteCustomerById,
+  getQuotationPages,
+  getQuotationById,
+  saveQuotation,
+  deleteQuotationById,
+  getItemList,
+  getCustomerList,
 }

@@ -5,6 +5,8 @@ import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
 
+import { DASHBOARD_NAME } from "../../config";
+
 import { setBreadcrumbItems } from "../../store/actions"
 import {
   deleteCustomerById,
@@ -19,7 +21,7 @@ const CUSTOMER_LIST_SORT_COLUMN = "customerName"
 const CUSTOMER_LIST_SORT_DIR = "asc"
 
 const Customers = props => {
-  document.title = "Customers | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+    document.title = `Customers | ${DASHBOARD_NAME}`
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()
@@ -74,7 +76,7 @@ const Customers = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Customers", breadcrumbItems)
+    props.setBreadcrumbItems("Customers")
   }, [])
 
   useEffect(() => {

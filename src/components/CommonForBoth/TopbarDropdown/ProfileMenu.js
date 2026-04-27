@@ -14,8 +14,10 @@ import { connect } from "react-redux"
 import {  Link } from "react-router-dom";
 import withRouter from "components/Common/withRouter"
 
+
 // users
-import user1 from "../../../assets/images/users/user-1.jpg"
+//import user1 from "../../../assets/images/users/user-1.jpg"
+import user1 from "../../../assets/images/DhunoFood/Userimg.jpg"
 
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
@@ -46,7 +48,7 @@ const ProfileMenu = props => {
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1"/>
             {props.t("My Profile")}{" "}
           </DropdownItem>
-          <DropdownItem tag="a" href="#">
+          {/* <DropdownItem tag="a" href="#">
             <i className="mdi mdi-wallet font-size-17 text-muted align-middle me-1"/>
             {props.t("My Wallet")}
           </DropdownItem>
@@ -56,7 +58,7 @@ const ProfileMenu = props => {
           <DropdownItem tag="a" href="auth-lock-screen">
             <i className="mdi mdi-lock-open-outline font-size-17 text-muted align-middle me-1"/>
             {props.t("Lock screen")}
-          </DropdownItem>
+          </DropdownItem> */}
           
           <div className="dropdown-divider"/>
           <Link to="/logout" className="dropdown-item text-danger">

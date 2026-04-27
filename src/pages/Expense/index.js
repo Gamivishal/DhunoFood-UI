@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { Alert, Button, Card, CardBody, Col, Row, Spinner } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
+import { DASHBOARD_NAME } from "../../config";
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
 
@@ -21,7 +22,8 @@ const EXPENSE_LIST_SORT_COLUMN = "expenseDate"
 const EXPENSE_LIST_SORT_DIR = "asc"
 
 const Expenses = props => {
-  document.title = "Expenses | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+    document.title = `Expenses | ${DASHBOARD_NAME}`
+  //document.title = "Expenses | Lexa - Responsive Bootstrap 5 Admin Dashboard"
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()
@@ -83,7 +85,7 @@ if (!(response?.isSuccess)) {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Expenses", breadcrumbItems)
+    props.setBreadcrumbItems("Expenses")
   }, [])
 
   useEffect(() => {

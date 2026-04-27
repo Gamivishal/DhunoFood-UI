@@ -17,7 +17,7 @@ import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 import logo from "../../assets/images/logo-sm.png"
 import logoLightPng from "../../assets/images/logo-light.png"
 import logoDark from "../../assets/images/logo-dark.png"
-
+import DhunoLogo from "../../assets/images/DhunoFood/Logo.jpeg"
 //i18n
 import { withTranslation } from "react-i18next"
 
@@ -77,17 +77,18 @@ const Header = props => {
                   <img src={logo} alt="" height="22" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoDark} alt="" height="17" />
+                  <img src={DhunoLogo} alt="" height="17" />
                 </span>
               </Link>
 
               <Link to="/" className="logo logo-light">
-                <span className="logo-sm">
-                  <img src={logo} alt="" height="22" />
-                </span>
-                <span className="logo-lg">
-                  <img src={logoLightPng} alt="" height="19" />
-                </span>
+               <span className="logo-lg">
+  <img
+    src={DhunoLogo}
+    alt="logo"
+    style={{ height: "68px", width: "119px" }}
+  />
+</span>
               </Link>
             </div>
 
@@ -193,7 +194,7 @@ const Header = props => {
             </div>
             {/* <NotificationDropdown /> */}
             <ProfileMenu />
-            <div
+            {/* <div
               onClick={() => {
                 props.showRightSidebarAction(!props.showRightSidebar)
               }}
@@ -205,7 +206,7 @@ const Header = props => {
               >
                 <i className="mdi mdi-spin mdi-cog"></i>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

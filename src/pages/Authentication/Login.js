@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { Container, Row,Col, Card, CardBody, Label, Form, Alert, Input, FormFeedback } from 'reactstrap';
 import logoDark from "../../assets/images/logo-dark.png";
 import logoLight from "../../assets/images/logo-dark.png";
+
+import { DASHBOARD_NAME } from "../../config";
+
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import PropTypes from "prop-types";

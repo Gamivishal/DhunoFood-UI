@@ -4,6 +4,7 @@ import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
+import { DASHBOARD_NAME } from "../../config";
 
 import { setBreadcrumbItems } from "../../store/actions"
 import { deleteUserById, getRoleNames, getUserById, getUsersPages, saveUser } from "../../helpers/fakebackend_helper"
@@ -17,7 +18,7 @@ const USER_LIST_SORT_COLUMN = "userName"
 const USER_LIST_SORT_DIR = "asc"
 
 const Users = props => {
-  document.title = "Users | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+  document.title = `Users | ${DASHBOARD_NAME}`
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()
@@ -128,7 +129,7 @@ const handleExportPdf = async () => {
 
 
   useEffect(() => {
-    props.setBreadcrumbItems("Users", breadcrumbItems)
+    props.setBreadcrumbItems("Users")
   }, [])
 
   useEffect(() => {
@@ -181,7 +182,7 @@ const handleExportPdf = async () => {
           password: "",
           email: "",
           mobileNumber: "",
-          roleId: "",
+          roleId: 1,
           isDeleted: false,
         })
         return
@@ -203,7 +204,7 @@ const handleExportPdf = async () => {
           password: "",
           email: user.email || "",
           mobileNumber: user.mobileNumber || "",
-          roleId: user.roleId ?? "",
+          roleId: 1,
           isDeleted: Boolean(user.isDeleted),
         })
       } catch (err) {
@@ -223,7 +224,7 @@ const handleExportPdf = async () => {
           { label: "User Name", field: "userName", sort: "asc" },
           { label: "Email", field: "email", sort: "asc" },
           { label: "Mobile Number", field: "mobileNumber", sort: "asc" },
-          { label: "Role Name", field: "rolename", sort: "asc" },
+       //   { label: "Role Name", field: "rolename", sort: "asc" },
           { label: "Active", field: "isActive", sort: "disabled" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
@@ -322,7 +323,7 @@ const handleExportPdf = async () => {
         isDeleted: Boolean(formData.isDeleted),
         email: formData.email,
         mobileNumber: formData.mobileNumber,
-        roleId: Number(formData.roleId) || 0,
+        roleId: 1,
       }
 
       if (!isEditMode) {
@@ -380,14 +381,14 @@ const handleExportPdf = async () => {
                   <Button color="primary" type="button" onClick={() => navigate("/users/manage")}>
                      <i className="mdi mdi-plus me-1" />Add User
                   </Button>
-                  <Button color="success" className="me-2" onClick={handleExport}>
+                  {/* <Button color="success" className="me-2" onClick={handleExport}>
   <i className="mdi mdi-file-excel me-1" />
   Export Excel
 </Button>
 <Button color="danger" className="me-2" onClick={handleExportPdf}>
   <i className="mdi mdi-file-pdf me-1" />
   Export PDF
-</Button>
+</Button> */}
                 </div>
                 {error ? <Alert color="danger">{error}</Alert> : null}
                 {loading ? (

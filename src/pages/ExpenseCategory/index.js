@@ -4,6 +4,7 @@ import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
+import { DASHBOARD_NAME } from "../../config";
 
 import { setBreadcrumbItems } from "../../store/actions"
 import {
@@ -19,7 +20,8 @@ const EXPENSE_CATEGORY_LIST_SORT_COLUMN = "categoryName"
 const EXPENSE_CATEGORY_LIST_SORT_DIR = "asc"
 
 const ExpenseCategories = props => {
-  document.title = "Expense Categories | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+    document.title = `Expense Categories | ${DASHBOARD_NAME}`
+ // document.title = "Expense Categories | Lexa - Responsive Bootstrap 5 Admin Dashboard"
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()
@@ -72,7 +74,7 @@ const ExpenseCategories = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Expense Categories", breadcrumbItems)
+    props.setBreadcrumbItems("Expense Categories")
   }, [])
 
   useEffect(() => {

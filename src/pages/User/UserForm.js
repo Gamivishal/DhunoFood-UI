@@ -98,7 +98,7 @@ const UserForm = ({
                 maxLength={10}
               />
             </Col>
-            <Col md={6}>
+            {/* <Col md={6}>
               <Label>Select Role<span style={{ color: "red" }}>*</span></Label>
               <Select
                 classNamePrefix="select2-selection"
@@ -109,7 +109,7 @@ const UserForm = ({
                 isSearchable
                 isClearable
               />
-            </Col>
+            </Col> */}
           </Row>
 
           <div className="app-form-actions">

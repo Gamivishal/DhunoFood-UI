@@ -4,7 +4,7 @@ import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
-
+import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import {
   deleteQuotationById,
@@ -21,7 +21,8 @@ const QUOTATION_LIST_SORT_COLUMN = "quotationDate"
 const QUOTATION_LIST_SORT_DIR = "desc"
 
 const Quotations = props => {
-  document.title = "Quotations | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+    document.title = `Quotations | ${DASHBOARD_NAME}`
+ // document.title = "Quotations | Lexa - Responsive Bootstrap 5 Admin Dashboard"
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()
@@ -79,7 +80,7 @@ const Quotations = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Quotations", breadcrumbItems)
+    props.setBreadcrumbItems("Quotations")
   }, [])
 
   useEffect(() => {

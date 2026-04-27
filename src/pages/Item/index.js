@@ -189,19 +189,15 @@ const Items = props => {
     loadItem()
   }, [isFormPage, isEditMode, itemId])
 
-  const formatUnit = code => {
-    const unit = unitOptions.find(u => u.code === code)
-    return unit?.name || code || ""
-  }
-
   const data = useMemo(() => {
     return withAutoSrColumn({
-      columns: buildServerSortColumns({
+columns: buildServerSortColumns({
         columns: [
           { label: "Item Name", field: "itemName", sort: "asc" },
           { label: "Category", field: "categoryName", sort: "asc" },
-          { label: "Unit", field: "unit", sort: "asc" },
+          { label: "Unit", field: "unitName", sort: "asc" },
           { label: "Price", field: "price", sort: "asc" },
+    //      { label: "Payment Mode", field: "paymentName", sort: "asc" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
         onSort: handleSortChange,
@@ -212,8 +208,9 @@ const Items = props => {
         itemId: item.itemId,
         itemName: item.itemName || "",
         categoryName: item.categoryName || "",
-        unit: formatUnit(item.unit),
+        unitName: item.unitName || "",
         price: item.price ?? "",
+    //    paymentName: item.paymentName || "",
         action: (
           <div className="d-flex gap-2 justify-content-center">
             <Button

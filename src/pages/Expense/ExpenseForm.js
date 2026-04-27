@@ -29,8 +29,8 @@ const ExpenseForm = ({
   onClose,
 }) => {
   const categorySelectOptions = (categoryOptions || []).map(cat => ({
-    value: cat.id,
-    label: cat.name || cat.categoryName,
+    value: cat.expenseCategoryId,
+    label: cat.categoryName,
   }))
 
   const paymentModeSelectOptions = (paymentModeOptions || []).map(pm => ({

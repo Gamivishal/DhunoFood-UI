@@ -9,7 +9,7 @@ import { setBreadcrumbItems } from "../../store/actions"
 import {
   deleteExpenseById,
   getExpenseById,
-  getExpenseCategories,
+  getExpenseCategoryPages,
   getExpensePages,
   getExpensePaymentModes,
   saveExpense,
@@ -105,9 +105,12 @@ if (!(response?.isSuccess)) {
       }
 
       try {
-        const response = await getExpenseCategories()
-        if (response?.isSuccess && Array.isArray(response?.data)) {
-          setCategoryOptions(response.data)
+        const response = await getExpenseCategoryPages({
+          start: 0,
+          length: 100,
+        })
+        if (response?.isSuccess && Array.isArray(response?.data?.data)) {
+          setCategoryOptions(response.data.data)
           return
         }
 

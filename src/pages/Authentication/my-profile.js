@@ -435,9 +435,9 @@ const MyProfile = () => {
                       </Col>
 
                       <Col md="12">
-                        <Label>Role</Label>
+                        {/* <Label>Role</Label> */}
                         <Input
-                          className="form-control"
+                          className="form-control d-none"
                           type="text"
                           value={profile.role}
                           readOnly
@@ -476,8 +476,6 @@ const MyProfile = () => {
                   </div>
 
                   <Form onSubmit={handleChangePassword}>
-                    {/* {passwordError ? <Alert color="danger">{passwordError}</Alert> : null}
-                    {passwordSuccess ? <Alert color="success">{passwordSuccess}</Alert> : null} */}
 
                     <div className="mb-3 position-relative">
                       <Label>Current Password *</Label>
@@ -544,7 +542,7 @@ const MyProfile = () => {
               </Card>
             </Col>
 
-            <Col xl="4">
+            {/* <Col xl="4">
               <Card className="h-100 shadow-sm">
                 <CardBody>
                   <div className="d-flex align-items-center gap-2 mb-4 pb-3 border-bottom">
@@ -583,7 +581,7 @@ const MyProfile = () => {
                   </Form>
                 </CardBody>
               </Card>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </div>

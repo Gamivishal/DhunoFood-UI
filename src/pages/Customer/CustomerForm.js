@@ -1,6 +1,17 @@
 import React from "react"
-import { Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row } from "reactstrap"
-import { Spinner } from "reactstrap"
+import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Form,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from "reactstrap"
 
 const CustomerForm = ({
   title,
@@ -13,81 +24,68 @@ const CustomerForm = ({
   onClose,
 }) => {
   return (
-    <Card>
-      <CardBody>
-        <h4 className="card-title mb-4">{title}</h4>
-
-        {formError ? (
-          <div className="alert alert-danger">{formError}</div>
-        ) : null}
-
+    <Card className="mb-4 app-form-card">
+      <CardHeader className="bg-white d-flex align-items-center justify-content-between">
+        <h5 className="mb-0">{title}</h5>
+        <Button color="link" className="p-0" type="button" onClick={onClose}>
+          Close
+        </Button>
+      </CardHeader>
+      <CardBody className="app-form-body">
+        {formError ? <Alert color="danger">{formError}</Alert> : null}
         <Form onSubmit={onSubmit}>
-          <Row>
+          <Row className="g-3">
             <Col md={6}>
-              <FormGroup className="mb-3">
-                <Label for="customerName">
-                  Customer Name <span className="text-danger">*</span>
-                </Label>
-                <Input
-                  type="text"
-                  name="customerName"
-                  id="customerName"
-                  placeholder="Enter customer name"
-                  value={formData.customerName}
-                  onChange={onChange}
-                  required
-                />
-              </FormGroup>
+              <Label>Customer Name<span style={{ color: "red" }}>*</span></Label>
+              <Input
+                name="customerName"
+                value={formData.customerName}
+                onChange={onChange}
+                placeholder="Enter customer name"
+              />
             </Col>
-
             <Col md={6}>
-              <FormGroup className="mb-3">
-                <Label for="mobileNo">
-                  Mobile No <span className="text-danger">*</span>
-                </Label>
-                <Input
-                  type="text"
-                  name="mobileNo"
-                  id="mobileNo"
-                  placeholder="Enter mobile number"
-                  value={formData.mobileNo}
-                  onChange={onChange}
-                  required
-                />
-              </FormGroup>
+              <Label>Mobile No<span style={{ color: "red" }}>*</span></Label>
+              <Input
+                name="mobileNo"
+                type="tel"
+                pattern="[0-9]*"
+                inputMode="numeric"
+                value={formData.mobileNo}
+                onChange={e => {
+                  const value = e.target.value.replace(/[^0-9]/g, "")
+                  onChange({
+                    ...e,
+                    target: {
+                      ...e.target,
+                      value,
+                    },
+                  })
+                }}
+                placeholder="Enter mobile number"
+                maxLength={10}
+              />
             </Col>
-          </Row>
-
-          <Row>
             <Col md={12}>
-              <FormGroup className="mb-3">
-                <Label for="address">Address</Label>
-                <Input
-                  type="textarea"
-                  name="address"
-                  id="address"
-                  rows="3"
-                  placeholder="Enter address"
-                  value={formData.address}
-                  onChange={onChange}
-                />
-              </FormGroup>
+              <Label>Address</Label>
+              <Input
+                name="address"
+                type="textarea"
+                rows="3"
+                value={formData.address}
+                onChange={onChange}
+                placeholder="Enter address"
+              />
             </Col>
           </Row>
 
-          <div className="d-flex justify-content-end gap-2">
-            <Button type="button" color="secondary" onClick={onClose}>
+          <div className="app-form-actions">
+            <Button color="light" type="button" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" color="primary" disabled={saving}>
-              {saving ? (
-                <>
-                  <Spinner size="sm" className="me-1" />
-                  Saving...
-                </>
-              ) : (
-                isEditMode ? "Update" : "Save"
-              )}
+            <Button color="success" type="submit" disabled={saving}>
+              {saving ? <Spinner size="sm" className="me-2" /> : null}
+              Save
             </Button>
           </div>
         </Form>

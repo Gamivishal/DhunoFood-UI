@@ -585,6 +585,60 @@ const deleteExpenseCategoryById = async id => {
   }
 }
 
+const getItemCategoryPages = async (params = {}) => {
+  try {
+    return await get("/ItemCategory/GetAllpage", {
+      params: buildPageParams(params),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item category pages API call failed"
+    )
+  }
+}
+
+const getItemCategoryById = async id => {
+  try {
+    return await get("/ItemCategory/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item category fetch by id failed"
+    )
+  }
+}
+
+const saveItemCategory = async payload => {
+  try {
+    return await post("/ItemCategory/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item category save failed"
+    )
+  }
+}
+
+const deleteItemCategoryById = async id => {
+  try {
+    return await del("/ItemCategory/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item category delete failed"
+    )
+  }
+}
+
 const changePassword = async payload => {
   try {
     return await post("/ChangePassword/Add", payload)
@@ -694,4 +748,8 @@ export {
   getExpenseCategoryById,
   saveExpenseCategory,
   deleteExpenseCategoryById,
+  getItemCategoryPages,
+  getItemCategoryById,
+  saveItemCategory,
+  deleteItemCategoryById,
 }

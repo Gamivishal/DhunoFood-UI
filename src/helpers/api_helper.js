@@ -157,3 +157,9 @@ export async function saveOrUpdateProperty(formData) {
     headers: { 'Content-Type': 'multipart/form-data' },
   }).then(res => res.data);
 }
+
+
+// Generic Lov dropdown helper
+export async function getLovDropdownList(lovColumn) {
+  return await get(`/Dropdown/LovMaster?Lov_column=${encodeURIComponent(lovColumn)}`);
+}

@@ -449,6 +449,88 @@ const deleteMenuById = async id => {
   }
 }
 
+const getExpensePages = async (params = {}) => {
+  try {
+    return await get("/Expense/GetAllpage", {
+      params: buildPageParams(params),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense pages API call failed"
+    )
+  }
+}
+
+const getExpenseById = async id => {
+  try {
+    return await get("/Expense/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense fetch by id failed"
+    )
+  }
+}
+
+const getExpenseCategories = async () => {
+  try {
+    return await get("/ExpenseCategory/GetAllpage", {
+      params: buildPageParams({ length: 100 }),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense category API call failed"
+    )
+  }
+}
+
+const saveExpense = async payload => {
+  try {
+    return await post("/Expense/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense save failed"
+    )
+  }
+}
+
+const deleteExpenseById = async id => {
+  try {
+    return await del("/Expense/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Expense delete failed"
+    )
+  }
+}
+
+const getExpensePaymentModes = async () => {
+  try {
+    return await get("/Dropdown/LovMaster", {
+      params: { Lov_column: "PaymentMode" },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Payment mode API call failed"
+    )
+  }
+}
+
 const changePassword = async payload => {
   try {
     return await post("/ChangePassword/Add", payload)
@@ -526,8 +608,8 @@ export {
   getMenuPages,
   getMenusPages,
   getUsersPages,
-  getRolesPages,
   getMenuById,
+   getRolesPages,
   getUserById,
   getRoleById,
   getLovColumns,
@@ -548,4 +630,10 @@ export {
   changePassword,
   buildPageParams,
   resetPassword,
+  getExpensePages,
+  getExpenseById,
+  getExpenseCategories,
+  saveExpense,
+  deleteExpenseById,
+  getExpensePaymentModes,
 }

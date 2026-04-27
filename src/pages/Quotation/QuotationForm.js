@@ -76,12 +76,15 @@ const QuotationForm = ({
     let qty = Number(e.target.value) || 0
     if (qty < 1) qty = 1
     const updatedItems = [...formData.items]
+    const currentItem = formData.items[index] || {}
+    const currentQty = currentItem.quantity || 1
+    const itemPrice = currentItem.price || 0
     updatedItems[index] = {
-      ...updatedItems[index],
+      ...currentItem,
       quantity: qty,
-      amount: qty * (Number(updatedItems[index].price) || 0),
+      amount: qty * itemPrice,
     }
-    onQuantityChange(index, { target: { name: "quantity", value: qty } })
+    onQuantityChange(index, qty)
   }
 
   return (
@@ -133,7 +136,7 @@ const QuotationForm = ({
                 <Table className="table-sm table-bordered" striped>
                   <thead>
                     <tr>
-                      <th>Item</th>
+                      <th style={{ width: "200px" }}>Item</th>
                       <th style={{ width: "120px" }}>Price</th>
                       <th style={{ width: "120px" }}>Quantity</th>
                       <th style={{ width: "120px" }}>Amount</th>

@@ -194,7 +194,7 @@ const Quotations = props => {
     return withAutoSrColumn({
       columns: buildServerSortColumns({
         columns: [
-          { label: "Quotation ID", field: "quotationId", sort: "asc" },
+        //  { label: "Quotation ID", field: "quotationId", sort: "asc" },
           { label: "Customer Name", field: "customerName", sort: "asc" },
           { label: "Quotation Date", field: "quotationDate", sort: "asc" },
           { label: "Total Amount", field: "totalAmount", sort: "asc" },

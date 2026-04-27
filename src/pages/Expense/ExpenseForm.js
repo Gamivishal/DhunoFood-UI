@@ -20,13 +20,11 @@ const ExpenseForm = ({
   formData,
   categoryOptions,
   paymentModeOptions,
-  unitOptions,
   isEditMode,
   saving,
   onChange,
   onCategoryChange,
   onPaymentModeChange,
-  onUnitChange,
   onSubmit,
   onClose,
 }) => {
@@ -40,21 +38,12 @@ const ExpenseForm = ({
     label: pm.name,
   }))
 
-  const unitSelectOptions = (unitOptions || []).map(u => ({
-    value: u.code,
-    label: u.name,
-  }))
-
   const selectedCategory = categorySelectOptions.find(
     option => Number(option.value) === Number(formData.categoryId)
   ) || null
 
   const selectedPaymentMode = paymentModeSelectOptions.find(
     option => option.value === formData.paymentMode
-  ) || null
-
-  const selectedUnit = unitSelectOptions.find(
-    option => option.value === formData.unit
   ) || null
 
   return (
@@ -99,18 +88,6 @@ const ExpenseForm = ({
                 value={formData.amount}
                 onChange={onChange}
                 placeholder="Enter amount"
-              />
-            </Col>
-            <Col md={6}>
-              <Label>Unit (UOM)<span style={{ color: "red" }}>*</span></Label>
-              <Select
-                classNamePrefix="select2-selection"
-                placeholder="Select unit"
-                options={unitSelectOptions}
-                value={selectedUnit}
-                onChange={onUnitChange}
-                isSearchable
-                isClearable
               />
             </Col>
             <Col md={6}>

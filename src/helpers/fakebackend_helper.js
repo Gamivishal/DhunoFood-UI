@@ -639,6 +639,74 @@ const deleteItemCategoryById = async id => {
   }
 }
 
+const getItemPages = async (params = {}) => {
+  try {
+    return await get("/Item/GetAllpage", {
+      params: buildPageParams(params),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item pages API call failed"
+    )
+  }
+}
+
+const getItemById = async id => {
+  try {
+    return await get("/Item/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item fetch by id failed"
+    )
+  }
+}
+
+const saveItem = async payload => {
+  try {
+    return await post("/Item/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item save failed"
+    )
+  }
+}
+
+const deleteItemById = async id => {
+  try {
+    return await del("/Item/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Item delete failed"
+    )
+  }
+}
+
+const getItemUnits = async () => {
+  try {
+    return await get("/Dropdown/LovMaster", {
+      params: { Lov_column: "UOM" },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Unit API call failed"
+    )
+  }
+}
+
 const changePassword = async payload => {
   try {
     return await post("/ChangePassword/Add", payload)
@@ -752,4 +820,9 @@ export {
   getItemCategoryById,
   saveItemCategory,
   deleteItemCategoryById,
+  getItemPages,
+  getItemById,
+  saveItem,
+  deleteItemById,
+  getItemUnits,
 }

@@ -38,6 +38,7 @@ import UserDemo from "../pages/UserDemo";
 import Expenses from "../pages/Expense";
 import ExpenseCategories from "../pages/ExpenseCategory";
 import ItemCategories from "../pages/ItemCategory";
+import Items from "../pages/Item";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -97,6 +98,13 @@ const userRoutes = [
   { path: "/itemcategorys", component: <ItemCategories /> },
   { path: "/itemcategorys/manage", component: <ItemCategories /> },
   { path: "/itemcategorys/manage/:id", component: <ItemCategories /> },
+
+  { path: "/items", component: <Items /> },
+  { path: "/items/manage", component: <Items /> },
+  { path: "/items/manage/:id", component: <Items /> },
+  { path: "/itemss", component: <Items /> },
+  { path: "/itemss/manage", component: <Items /> },
+  { path: "/itemss/manage/:id", component: <Items /> },
 
   // this route should be at the end of all other routes
   {

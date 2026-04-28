@@ -41,6 +41,7 @@ import ItemCategories from "../pages/ItemCategory";
 import Items from "../pages/Item";
 import Customers from "../pages/Customer";
 import Quotations from "../pages/Quotation";
+import Orders from "../pages/Order";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -116,6 +117,10 @@ const userRoutes = [
   { path: "/quotations/manage", component: <Quotations /> },
   { path: "/quotations/manage/:id", component: <Quotations /> },
   { path: "/quotations/convert-to-order/:id", component: <Quotations /> },
+
+  { path: "/orders", component: <Orders /> },
+  { path: "/orders/manage", component: <Orders /> },
+  { path: "/orders/manage/:id", component: <Orders /> },
 
   // this route should be at the end of all other routes
   {

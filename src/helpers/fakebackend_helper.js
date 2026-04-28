@@ -816,6 +816,60 @@ const deleteQuotationById = async id => {
   }
 }
 
+const getOrderPages = async ({ start = 0, length = 10, sortColumn = "orderDate", sortColumnDir = "desc" } = {}) => {
+  try {
+    return await get("/Order/GetAllpage", {
+      params: { start, length, sortColumn, sortColumnDir },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Order list fetch failed"
+    )
+  }
+}
+
+const getOrderById = async id => {
+  try {
+    return await get("/Order/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Order fetch failed"
+    )
+  }
+}
+
+const saveOrder = async payload => {
+  try {
+    return await post("/Order/Save", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Order save failed"
+    )
+  }
+}
+
+const deleteOrderById = async id => {
+  try {
+    return await del("/Order/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Order delete failed"
+    )
+  }
+}
+
 const getItemList = async () => {
   try {
     return await get("/Dropdown/ItemList", {})
@@ -966,6 +1020,10 @@ export {
   getQuotationById,
   saveQuotation,
   deleteQuotationById,
+  getOrderPages,
+  getOrderById,
+  saveOrder,
+  deleteOrderById,
   getItemList,
   getCustomerList,
 }

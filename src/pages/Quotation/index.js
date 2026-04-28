@@ -274,26 +274,40 @@ const Quotations = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/quotations/manage/${quotation.quotationId}`)}
+              onClick={() => {
+                if (quotation.isConvert === 1 || quotation.isConvert === true) {
+                  showError("This quotation is converted to order so cannot update")
+                  return
+                }
+                navigate(`/quotations/manage/${quotation.quotationId}`)
+              }}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
-            <Button
-              color="link"
-              className="p-0 text-success"
-              title="Convert to Order"
-              type="button"
-              onClick={() => handleConvertToOrder(quotation)}
-            >
-              <i className="mdi mdi-cart-plus font-size-18" />
-            </Button>
+            {(quotation.isConvert !== 1 && quotation.isConvert !== true) && (
+              <Button
+                color="link"
+                className="p-0 text-success"
+                title="Convert to Order"
+                type="button"
+                onClick={() => handleConvertToOrder(quotation)}
+              >
+                <i className="mdi mdi-cart-plus font-size-18" />
+              </Button>
+            )}
             <Button
               color="link"
               className="p-0 text-danger"
               title="Delete"
               type="button"
               disabled={deletingId === quotation.quotationId}
-              onClick={() => handleDelete(quotation.quotationId)}
+              onClick={() => {
+                if (quotation.isConvert === 1 || quotation.isConvert === true) {
+                  showError("You cannot delete this because it is converted to order")
+                  return
+                }
+                handleDelete(quotation.quotationId)
+              }}
             >
               {deletingId === quotation.quotationId ? (
                 <Spinner size="sm" />

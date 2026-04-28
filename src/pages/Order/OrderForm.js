@@ -21,6 +21,7 @@ const OrderForm = ({
   formData,
   itemOptions,
   customerOptions,
+  statusOptions,
   isEditMode,
   saving,
   onChange,
@@ -43,11 +44,25 @@ const OrderForm = ({
     label: customer.name,
   }))
 
+  const statusSelectOptions = (statusOptions || []).map(status => ({
+    value: status.code,
+    label: status.name,
+  }))
+
   const handleCustomerSelectChange = option => {
     onChange({
       target: {
         name: "customerId",
         value: option?.value || 0,
+      },
+    })
+  }
+
+  const handleStatusSelectChange = option => {
+    onChange({
+      target: {
+        name: "status",
+        value: option?.value || "",
       },
     })
   }
@@ -120,6 +135,20 @@ const OrderForm = ({
                 name="orderDate"
                 value={formData.orderDate}
                 onChange={onChange}
+              />
+            </Col>
+            <Col md={6}>
+              <Label>Status</Label>
+              <Select
+                classNamePrefix="select2-selection"
+                placeholder="Select status"
+                options={statusSelectOptions}
+                value={statusSelectOptions.find(
+                  opt => opt.value === formData.status
+                ) || null}
+                onChange={handleStatusSelectChange}
+                isSearchable
+                isClearable
               />
             </Col>
           </Row>

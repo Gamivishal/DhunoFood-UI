@@ -14,6 +14,7 @@ import {
   getOrderPages,
   saveOrder,
 } from "../../helpers/fakebackend_helper"
+import { getLovDropdownList } from "../../helpers/api_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
 import OrderForm from "./OrderForm"
 
@@ -45,9 +46,11 @@ const Orders = props => {
     customerId: "",
     orderDate: new Date().toISOString().split("T")[0],
     quotationId: "",
+    status: "",
     totalAmount: 0,
     items: [],
   })
+  const [statusOptions, setStatusOptions] = useState([])
 
   const breadcrumbItems = [
     { title: "Lexa", link: "#" },
@@ -140,6 +143,28 @@ const Orders = props => {
   }, [isFormPage])
 
   useEffect(() => {
+    const loadStatusOptions = async () => {
+      if (!isFormPage) {
+        return
+      }
+
+      try {
+        const response = await getLovDropdownList("OrderStatus")
+        if (response?.isSuccess && Array.isArray(response?.data)) {
+          setStatusOptions(response.data)
+          return
+        }
+
+        throw new Error(response?.message || "Failed to load status")
+      } catch (err) {
+        setFormError(err?.message || err || "Failed to load status")
+      }
+    }
+
+    loadStatusOptions()
+  }, [isFormPage])
+
+  useEffect(() => {
     const loadOrder = async () => {
       if (!isFormPage) {
         return
@@ -178,6 +203,7 @@ const Orders = props => {
             ? new Date(order.orderDate).toISOString().split("T")[0]
             : new Date().toISOString().split("T")[0],
           quotationId: order.quotationId ?? "",
+          status: order.status || "",
           totalAmount: order.totalAmount ?? 0,
           items: Array.isArray(order.items) && order.items.length > 0
             ? order.items
@@ -201,7 +227,7 @@ const Orders = props => {
           { label: "Order Date", field: "orderDate", sort: "asc" },
           { label: "Total Amount", field: "totalAmount", sort: "asc" },
         //  { label: "Quotation", field: "quotationId", sort: "asc" },
-          { label: "Status", field: "status", sort: "asc" },
+          { label: "Status", field: "statusname", sort: "asc" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
         onSort: handleSortChange,
@@ -216,7 +242,7 @@ const Orders = props => {
           : "",
         totalAmount: order.totalAmount ?? 0,
         quotationId: order.quotationId || "-",
-        status: order.status || "",
+        statusname: order.statusname || "",
         action: (
           <div className="d-flex gap-2 justify-content-center">
             <Button
@@ -366,6 +392,7 @@ const Orders = props => {
         customerId: Number(formData.customerId) || 0,
         orderDate: new Date(formData.orderDate).toISOString(),
         quotationId: Number(formData.quotationId) || 0,
+        status: formData.status || "",
         totalAmount: calculateTotal(),
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
@@ -412,6 +439,7 @@ const Orders = props => {
                 formData={formData}
                 itemOptions={itemOptions}
                 customerOptions={customerOptions}
+                statusOptions={statusOptions}
                 isEditMode={isEditMode}
                 saving={saving}
                 onChange={handleChange}

@@ -18,7 +18,7 @@ const INIT_STATE = {
   layoutMode:"light",
   layoutType: "vertical",
   layoutWidth: "fluid",
-  leftSideBarTheme: "dark",
+  leftSideBarTheme: "dark",// chnage left sidebar color (light, dark, brand)
   leftSideBarType: "default",
   topbarTheme: "light",
   isPreloader: false,

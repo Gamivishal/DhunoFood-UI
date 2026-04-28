@@ -17,7 +17,7 @@ import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 import logo from "../../assets/images/logo-sm.png"
 import logoLightPng from "../../assets/images/logo-light.png"
 import logoDark from "../../assets/images/logo-dark.png"
-import DhunoLogo from "../../assets/images/DhunoFood/Logo.jpeg"
+import DhunoLogo from "../../assets/images/DhunoFood/NewLogo.png"
 //i18n
 import { withTranslation } from "react-i18next"
 

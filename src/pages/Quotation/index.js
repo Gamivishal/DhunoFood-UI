@@ -16,6 +16,7 @@ import {
 } from "../../helpers/fakebackend_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
 import QuotationForm from "./QuotationForm"
+import ConvertToOrderForm from "./ConvertToOrderForm"
 
 const QUOTATION_LIST_SORT_COLUMN = "quotationDate"
 const QUOTATION_LIST_SORT_DIR = "desc"
@@ -28,6 +29,8 @@ const Quotations = props => {
   const params = useParams()
   const quotationId = Number(params.id || 0)
   const isFormPage = location.pathname.startsWith("/quotations/manage")
+  const isConvertPagePath = location.pathname.startsWith("/quotations/convert-to-order")
+  const isConvertPage = isConvertPagePath && quotationId > 0
   const isEditMode = isFormPage && quotationId > 0
 
   const [loading, setLoading] = useState(false)
@@ -48,6 +51,58 @@ const Quotations = props => {
     totalAmount: 0,
     items: [],
   })
+  const [convertFormData, setConvertFormData] = useState({
+    quotationId: 0,
+    customerId: "",
+    customerName: "",
+    quotationDate: "",
+    totalAmount: 0,
+    orderDate: new Date().toISOString(),
+    items: [],
+  })
+
+  useEffect(() => {
+    const pathParts = location.pathname.split("/")
+    if (pathParts.includes("convert-to-order")) {
+      const convertIndex = pathParts.indexOf("convert-to-order")
+      const qId = Number(pathParts[convertIndex + 1]) || 0
+      if (qId > 0) {
+        loadQuotationForConvert(qId)
+      } else {
+        navigate("/quotations")
+      }
+    }
+  }, [location.pathname])
+
+  const loadQuotationForConvert = async qId => {
+    setLoading(true)
+    setFormError("")
+    setFormTitle("Convert to Order")
+
+    try {
+      const response = await getQuotationById(qId)
+      if (!(response?.isSuccess)) {
+        throw new Error(response?.message || "Failed to load quotation")
+      }
+
+      const quotation = response?.data || {}
+      setConvertFormData({
+        quotationId: quotation.quotationId || 0,
+        customerId: quotation.customerId ?? "",
+        customerName: quotation.customerName || "",
+        quotationDate: quotation.quotationDate || "",
+        totalAmount: quotation.totalAmount ?? 0,
+        orderDate: new Date().toISOString(),
+        items: Array.isArray(quotation.items) && quotation.items.length > 0
+          ? quotation.items
+          : [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
+      })
+    } catch (err) {
+      setFormError(err?.message || err || "Failed to load quotation")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const breadcrumbItems = [
     { title: "Lexa", link: "#" },
@@ -225,6 +280,15 @@ const Quotations = props => {
             </Button>
             <Button
               color="link"
+              className="p-0 text-success"
+              title="Convert to Order"
+              type="button"
+              onClick={() => handleConvertToOrder(quotation)}
+            >
+              <i className="mdi mdi-cart-plus font-size-18" />
+            </Button>
+            <Button
+              color="link"
               className="p-0 text-danger"
               title="Delete"
               type="button"
@@ -349,6 +413,111 @@ const Quotations = props => {
     }
   }
 
+  const handleConvertToOrder = quotation => {
+    navigate(`/quotations/convert-to-order/${quotation.quotationId}`)
+  }
+
+  const handleConvertChange = event => {
+    const { name, value } = event.target
+    setConvertFormData(previous => ({
+      ...previous,
+      [name]: value,
+    }))
+  }
+
+  const handleConvertItemChange = (index, event) => {
+    const { name, value } = event.target
+    const updatedItems = [...convertFormData.items]
+    
+    if (name === "itemSelected") {
+      const itemData = JSON.parse(value || "{}")
+      updatedItems[index] = {
+        ...updatedItems[index],
+        itemId: itemData.itemId || 0,
+        itemName: itemData.itemName || "",
+        price: itemData.price || 0,
+        quantity: itemData.quantity || 1,
+        amount: itemData.amount || 0,
+      }
+    } else {
+      updatedItems[index] = {
+        ...updatedItems[index],
+        [name]: name === "itemName" ? value : Number(value) || 0,
+      }
+
+      if (name === "quantity" || name === "price") {
+        updatedItems[index].amount =
+          (Number(updatedItems[index].quantity) || 0) * (Number(updatedItems[index].price) || 0)
+      }
+    }
+
+    setConvertFormData(previous => ({
+      ...previous,
+      items: updatedItems,
+    }))
+  }
+
+  const addConvertItem = () => {
+    setConvertFormData(previous => ({
+      ...previous,
+      items: [
+        ...previous.items,
+        { itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 },
+      ],
+    }))
+  }
+
+  const removeConvertItem = index => {
+    const updatedItems = convertFormData.items.filter((_, i) => i !== index)
+    setConvertFormData(previous => ({
+      ...previous,
+      items: updatedItems,
+    }))
+  }
+
+  const calculateConvertTotal = () => {
+    return convertFormData.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0)
+  }
+
+  const handleConvertSubmit = async event => {
+    event.preventDefault()
+    setFormError("")
+
+    setSaving(true)
+
+    try {
+      const payload = {
+        quotationId: Number(convertFormData.quotationId) || 0,
+        customerId: Number(convertFormData.customerId) || 0,
+        quotationDate: new Date(convertFormData.quotationDate).toISOString(),
+        totalAmount: calculateConvertTotal(),
+        isConvert: true,
+        orderDate: new Date(convertFormData.orderDate).toISOString(),
+        items: convertFormData.items.map(item => ({
+          itemId: Number(item.itemId) || 0,
+          quantity: Number(item.quantity) || 0,
+          price: Number(item.price) || 0,
+          amount: Number(item.amount) || 0,
+        })),
+      }
+
+      const response = await saveQuotation(payload)
+      if (response?.isSuccess) {
+        await showSuccess(response?.message || "Converted to order successfully")
+        navigate("/quotations")
+        return
+      }
+
+      throw new Error(response?.message || "Failed to convert to order")
+    } catch (err) {
+      const errorMessage = err?.message || err || "Failed to convert to order"
+      await showError(errorMessage)
+      setFormError(errorMessage)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const handleSubmit = async event => {
     event.preventDefault()
     setFormError("")
@@ -416,6 +585,31 @@ const Quotations = props => {
                 onSubmit={handleSubmit}
                 onClose={() => navigate("/quotations")}
                 calculateTotal={calculateTotal}
+              />
+            )
+          ) : isConvertPage ? (
+            loading ? (
+              <Card>
+                <CardBody>
+                  <div className="text-center py-5">
+                    <Spinner color="primary" />
+                  </div>
+                </CardBody>
+              </Card>
+            ) : (
+              <ConvertToOrderForm
+                title={formTitle}
+                formError={formError}
+                formData={convertFormData}
+                isEditMode={isEditMode}
+                saving={saving}
+                onChange={handleConvertChange}
+                onItemChange={handleConvertItemChange}
+                onAddItem={addConvertItem}
+                onRemoveItem={removeConvertItem}
+                onSubmit={handleConvertSubmit}
+                onClose={() => navigate("/quotations")}
+                calculateTotal={calculateConvertTotal}
               />
             )
           ) : (

@@ -115,6 +115,7 @@ const userRoutes = [
   { path: "/quotations", component: <Quotations /> },
   { path: "/quotations/manage", component: <Quotations /> },
   { path: "/quotations/manage/:id", component: <Quotations /> },
+  { path: "/quotations/convert-to-order/:id", component: <Quotations /> },
 
   // this route should be at the end of all other routes
   {

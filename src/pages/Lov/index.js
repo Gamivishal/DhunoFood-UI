@@ -73,11 +73,11 @@ const Lov = props => {
   const lovColumnParam = params.lovColumn || ""
   const lovCodeParam = params.lovCode || ""
 
-  const isMasterCreatePage = location.pathname === "/lov/manage"
-  const isMasterEditPage = location.pathname.startsWith("/lov/manage/") && !lovCodeParam
-  const isDetailListPage = location.pathname.startsWith("/lov/details/") &&
+  const isMasterCreatePage = location.pathname === "/Lov/manage"
+  const isMasterEditPage = location.pathname.startsWith("/Lov/manage/") && !lovCodeParam
+  const isDetailListPage = location.pathname.startsWith("/Lov/details/") &&
     !location.pathname.includes("/manage")
-  const isDetailFormPage = location.pathname.includes("/lov/details/") &&
+  const isDetailFormPage = location.pathname.includes("/Lov/details/") &&
     location.pathname.includes("/manage")
 
   const isMasterFormPage = isMasterCreatePage || isMasterEditPage
@@ -321,7 +321,7 @@ const Lov = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/lov/manage/${encodeURIComponent(item?.lov_Column || "")}`)}
+              onClick={() => navigate(`/Lov/manage/${encodeURIComponent(item?.lov_Column || "")}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -418,7 +418,7 @@ const Lov = props => {
       const response = await saveLovMaster(payload)
       if (response?.statusCode === 1) {
         await showSuccess(response?.message || "LOV master saved successfully")
-        navigate("/lov")
+        navigate("/Lov")
         return
       }
 
@@ -450,7 +450,7 @@ const Lov = props => {
       const response = await saveLovDetail(payload)
       if (response?.statusCode === 1) {
         await showSuccess(response?.message || "LOV detail saved successfully")
-        navigate(`/lov/details/${encodeURIComponent(lovColumnParam)}`)
+        navigate(`/Lov/details/${encodeURIComponent(lovColumnParam)}`)
         return
       }
 
@@ -473,7 +473,7 @@ const Lov = props => {
         formError={formError}
         onChange={handleMasterChange}
         onSubmit={handleMasterSubmit}
-        onCancel={() => navigate("/lov")}
+        onCancel={() => navigate("/Lov")}
       />
     )
   }
@@ -487,7 +487,7 @@ const Lov = props => {
         formError={formError}
         onChange={handleDetailChange}
         onSubmit={handleDetailSubmit}
-        onCancel={() => navigate(`/lov/details/${encodeURIComponent(lovColumnParam)}`)}
+        onCancel={() => navigate(`/Lov/details/${encodeURIComponent(lovColumnParam)}`)}
       />
     )
   }
@@ -499,7 +499,7 @@ const Lov = props => {
         data={detailTableData}
         loading={loading}
         error={error}
-        onBack={() => navigate("/lov")}
+        onBack={() => navigate("/Lov")}
         onAdd={() => navigate(`/lov/details/${encodeURIComponent(lovColumnParam)}/manage`)}
       />
     )
@@ -509,7 +509,7 @@ const Lov = props => {
     <Card>
       <CardBody>
         <div className="d-flex justify-content-end mb-3">
-          <Button color="primary" type="button" onClick={() => navigate("/lov/manage")}> 
+          <Button color="primary" type="button" onClick={() => navigate("/Lov/manage")}> 
             <i className="mdi mdi-plus me-1" />Add LOV
           </Button>
         </div>

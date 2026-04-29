@@ -29,7 +29,7 @@ const Items = props => {
   const location = useLocation()
   const params = useParams()
   const itemId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/items/manage")
+  const isFormPage = location.pathname.startsWith("/Item/manage")
   const isEditMode = isFormPage && itemId > 0
 
   const [loading, setLoading] = useState(false)
@@ -221,7 +221,7 @@ columns: buildServerSortColumns({
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/items/manage/${item.itemId}`)}
+              onClick={() => navigate(`/Item/manage/${item.itemId}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -309,7 +309,7 @@ columns: buildServerSortColumns({
       const response = await saveItem(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Saved successfully")
-        navigate("/items")
+        navigate("/Item")
         return
       }
 
@@ -349,14 +349,14 @@ columns: buildServerSortColumns({
                 onCategoryChange={handleCategoryChange}
                 onUnitChange={handleUnitChange}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/items")}
+                onClose={() => navigate("/Item")}
               />
             )
           ) : (
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/items/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Item/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Item
                   </Button>
                 </div>

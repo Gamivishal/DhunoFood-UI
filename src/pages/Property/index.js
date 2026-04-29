@@ -13,7 +13,7 @@ const Property = () => {
   const location = useLocation();
   const params = useParams();
   const propertyId = Number(params.id || 0);
-  const isFormPage = location.pathname.startsWith("/property/manage");
+  const isFormPage = location.pathname.startsWith("/Property/manage");
   const isEditMode = isFormPage && propertyId > 0;
 
   const [loading, setLoading] = useState(false);
@@ -43,11 +43,11 @@ const Property = () => {
   }, [isFormPage]);
 
   const handleAddNew = () => {
-    navigate("/property/manage");
+    navigate("/Property/manage");
   };
 
   const handleEdit = id => {
-    navigate(`/property/manage/${id}`);
+    navigate(`/Property/manage/${id}`);
   };
 
   if (isFormPage) {
@@ -55,7 +55,7 @@ const Property = () => {
       <PropertyForm
         isEditMode={isEditMode}
         propertyId={propertyId}
-        onClose={() => navigate("/property")}
+        onClose={() => navigate("/Property")}
       />
     );
   }

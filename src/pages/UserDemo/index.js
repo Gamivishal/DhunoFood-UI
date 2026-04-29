@@ -13,7 +13,7 @@ const UserDemo = () => {
   const location = useLocation();
   const params = useParams();
   const userId = Number(params.id || 0);
-  const isFormPage = location.pathname.startsWith("/userdemo/manage");
+  const isFormPage = location.pathname.startsWith("/UserDemo/manage");
   const isEditMode = isFormPage && userId > 0;
 
   const [loading, setLoading] = useState(false);
@@ -116,7 +116,7 @@ const UserDemo = () => {
       if (attachment) form.append("attachment", attachment);
       const res = await saveUserDemo(form);
       if (res?.isSuccess) {
-        navigate("/userdemo");
+        navigate("/UserDemo");
       } else {
         setFormError(res?.message || "Save failed");
       }
@@ -128,11 +128,11 @@ const UserDemo = () => {
   };
 
   const handleAddNew = () => {
-    navigate("/userdemo/manage");
+    navigate("/UserDemo/manage");
   };
 
   const handleEdit = id => {
-    navigate(`/userdemo/manage/${id}`);
+    navigate(`/UserDemo/manage/${id}`);
   };
 
   if (isFormPage) {
@@ -146,7 +146,7 @@ const UserDemo = () => {
         onChange={handleChange}
         onFileChange={handleFileChange}
         onSubmit={handleSubmit}
-        onClose={() => navigate("/userdemo")}
+        onClose={() => navigate("/UserDemo")}
       />
     );
   }

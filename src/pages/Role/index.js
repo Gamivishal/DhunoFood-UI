@@ -35,7 +35,7 @@ const Roles = props => {
   const location = useLocation()
   const params = useParams()
   const roleId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/roles/manage")
+  const isFormPage = location.pathname.startsWith("/Role/manage")
   const isEditMode = isFormPage && roleId > 0
 
   const [loading, setLoading] = useState(false)
@@ -198,7 +198,7 @@ const Roles = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/roles/manage/${item.id}`)}
+              onClick={() => navigate(`/Role/manage/${item.id}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -289,7 +289,7 @@ const Roles = props => {
       const response = await saveRole(payload)
       if (response?.statusCode === 1) {
         await showSuccess(response?.message || "Role saved successfully")
-        navigate("/roles")
+        navigate("/Role")
         return
       }
 
@@ -327,14 +327,14 @@ const Roles = props => {
                 onIsAdminToggle={handleIsAdminToggle}
                 onSelectedMenuChange={handleSelectedMenuChange}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/roles")}
+                onClose={() => navigate("/Role")}
               />
             )
           ) : (
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/roles/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Role/manage")}>
                    <i className="mdi mdi-plus me-1" />Add Role
                   </Button>
                 </div>

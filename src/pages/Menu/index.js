@@ -29,7 +29,7 @@ const Menus = props => {
   const location = useLocation()
   const params = useParams()
   const menuId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/menus/manage")
+  const isFormPage = location.pathname.startsWith("/Menu/manage")
   const isEditMode = isFormPage && menuId > 0
 
   const [loading, setLoading] = useState(false)
@@ -226,7 +226,7 @@ const Menus = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/menus/manage/${item.id}`)}
+              onClick={() => navigate(`/Menu/manage/${item.id}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -319,7 +319,7 @@ const Menus = props => {
       const response = await saveMenu(payload)
       if (response?.statusCode === 1) {
         await showSuccess(response?.message || "Menu saved successfully")
-        navigate("/menus")
+        navigate("/Menu")
         return
       }
 
@@ -357,14 +357,14 @@ const Menus = props => {
                 onParentMenuChange={handleParentMenuChange}
                 onBooleanToggle={handleBooleanToggle}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/menus")}
+                onClose={() => navigate("/Menu")}
               />
             )
           ) : (
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/menus/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Menu/manage")}>
                    <i className="mdi mdi-plus me-1" />Add Menu
                   </Button>
                 </div>

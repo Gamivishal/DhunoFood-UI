@@ -27,7 +27,7 @@ const Orders = props => {
   const location = useLocation()
   const params = useParams()
   const orderId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/orders/manage")
+  const isFormPage = location.pathname.startsWith("/Order/manage")
   const isEditMode = isFormPage && orderId > 0
 
   const [loading, setLoading] = useState(false)
@@ -250,7 +250,7 @@ const Orders = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/orders/manage/${order.orderId}`)}
+              onClick={() => navigate(`/Order/manage/${order.orderId}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -405,7 +405,7 @@ const Orders = props => {
       const response = await saveOrder(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Saved successfully")
-        navigate("/orders")
+navigate("/Order")
         return
       }
 
@@ -456,7 +456,7 @@ const Orders = props => {
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/orders/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Order/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Order
                   </Button>
                 </div>

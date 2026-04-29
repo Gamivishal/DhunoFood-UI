@@ -26,7 +26,7 @@ const Customers = props => {
   const location = useLocation()
   const params = useParams()
   const customerId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/customers/manage")
+  const isFormPage = location.pathname.startsWith("/Customer/manage")
   const isEditMode = isFormPage && customerId > 0
 
   const [loading, setLoading] = useState(false)
@@ -162,7 +162,7 @@ const Customers = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/customers/manage/${customer.customerId}`)}
+              onClick={() => navigate(`/Customer/manage/${customer.customerId}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -235,7 +235,7 @@ const Customers = props => {
       const response = await saveCustomer(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Saved successfully")
-        navigate("/customers")
+        navigate("/Customer")
         return
       }
 
@@ -271,14 +271,14 @@ const Customers = props => {
                 saving={saving}
                 onChange={handleChange}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/customers")}
+                onClose={() => navigate("/Customer")}
               />
             )
           ) : (
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/customers/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Customer/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Customer
                   </Button>
                 </div>

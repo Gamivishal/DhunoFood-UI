@@ -24,7 +24,7 @@ const Payments = props => {
   const location = useLocation()
   const params = useParams()
   const paymentId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/payments/manage")
+  const isFormPage = location.pathname.startsWith("/Payment/manage")
   const isEditMode = isFormPage && paymentId > 0
 
   const [loading, setLoading] = useState(false)
@@ -189,7 +189,7 @@ const Payments = props => {
       const response = await savePayment(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Payment saved successfully")
-        navigate("/payments")
+navigate("/Payment")
         return
       }
 
@@ -226,14 +226,14 @@ const Payments = props => {
                 saving={saving}
                 onChange={handleChange}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/payments")}
+                onClose={() => navigate("/Payment")}
               />
             )
           ) : (
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/payments/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Payment/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Payment
                   </Button>
                 </div>

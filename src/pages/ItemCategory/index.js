@@ -27,7 +27,7 @@ const ItemCategories = props => {
   const location = useLocation()
   const params = useParams()
   const itemCategoryId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/item-categories/manage")
+  const isFormPage = location.pathname.startsWith("/ItemCategory/manage")
   const isEditMode = isFormPage && itemCategoryId > 0
 
   const [loading, setLoading] = useState(false)
@@ -153,7 +153,7 @@ const ItemCategories = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/item-categories/manage/${item.itemCategoryId}`)}
+              onClick={() => navigate(`/ItemCategory/manage/${item.itemCategoryId}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -224,7 +224,7 @@ const ItemCategories = props => {
       const response = await saveItemCategory(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Saved successfully")
-        navigate("/item-categories")
+        navigate("/ItemCategory")
         return
       }
 
@@ -260,7 +260,7 @@ const ItemCategories = props => {
                 saving={saving}
                 onChange={handleChange}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/item-categories")}
+                onClose={() => navigate("/ItemCategory")}
               />
             )
           ) : (

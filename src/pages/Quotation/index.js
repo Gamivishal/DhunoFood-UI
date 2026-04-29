@@ -28,8 +28,8 @@ const Quotations = props => {
   const location = useLocation()
   const params = useParams()
   const quotationId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/quotations/manage")
-  const isConvertPagePath = location.pathname.startsWith("/quotations/convert-to-order")
+  const isFormPage = location.pathname.startsWith("/Quotation/manage")
+  const isConvertPagePath = location.pathname.startsWith("/Quotation/convert-to-order")
   const isConvertPage = isConvertPagePath && quotationId > 0
   const isEditMode = isFormPage && quotationId > 0
 
@@ -69,7 +69,7 @@ const Quotations = props => {
       if (qId > 0) {
         loadQuotationForConvert(qId)
       } else {
-        navigate("/quotations")
+        navigate("/Quotation")
       }
     }
   }, [location.pathname])
@@ -279,7 +279,7 @@ const Quotations = props => {
                   showError("This quotation is converted to order so cannot update")
                   return
                 }
-                navigate(`/quotations/manage/${quotation.quotationId}`)
+                navigate(`/Quotation/manage/${quotation.quotationId}`)
               }}
             >
               <i className="mdi mdi-pencil font-size-18" />
@@ -428,7 +428,7 @@ const Quotations = props => {
   }
 
   const handleConvertToOrder = quotation => {
-    navigate(`/quotations/convert-to-order/${quotation.quotationId}`)
+    navigate(`/Quotation/convert-to-order/${quotation.quotationId}`)
   }
 
   const handleConvertChange = event => {
@@ -518,7 +518,7 @@ const Quotations = props => {
       const response = await saveQuotation(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Converted to order successfully")
-        navigate("/quotations")
+        navigate("/Quotation")
         return
       }
 
@@ -555,7 +555,7 @@ const Quotations = props => {
       const response = await saveQuotation(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Saved successfully")
-        navigate("/quotations")
+        navigate("/Quotation")
         return
       }
 
@@ -597,7 +597,7 @@ const Quotations = props => {
                 onAddItem={addItem}
                 onRemoveItem={removeItem}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/quotations")}
+                onClose={() => navigate("/Quotation")}
                 calculateTotal={calculateTotal}
               />
             )
@@ -622,7 +622,7 @@ const Quotations = props => {
                 onAddItem={addConvertItem}
                 onRemoveItem={removeConvertItem}
                 onSubmit={handleConvertSubmit}
-                onClose={() => navigate("/quotations")}
+                onClose={() => navigate("/Quotation")}
                 calculateTotal={calculateConvertTotal}
               />
             )
@@ -630,7 +630,7 @@ const Quotations = props => {
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/quotations/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Quotation/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Quotation
                   </Button>
                 </div>

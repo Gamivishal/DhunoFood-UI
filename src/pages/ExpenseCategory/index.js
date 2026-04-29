@@ -26,7 +26,7 @@ const ExpenseCategories = props => {
   const location = useLocation()
   const params = useParams()
   const expenseCategoryId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/expense-categories/manage")
+  const isFormPage = location.pathname.startsWith("/ExpenseCategory/manage")
   const isEditMode = isFormPage && expenseCategoryId > 0
 
   const [loading, setLoading] = useState(false)
@@ -152,7 +152,7 @@ const ExpenseCategories = props => {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/expense-categories/manage/${item.expenseCategoryId}`)}
+              onClick={() => navigate(`/ExpenseCategory/manage/${item.expenseCategoryId}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -223,7 +223,7 @@ const ExpenseCategories = props => {
       const response = await saveExpenseCategory(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Saved successfully")
-        navigate("/expense-categories")
+        navigate("/ExpenseCategory")
         return
       }
 
@@ -259,7 +259,7 @@ const ExpenseCategories = props => {
                 saving={saving}
                 onChange={handleChange}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/expense-categories")}
+                onClose={() => navigate("/ExpenseCategory")}
               />
             )
           ) : (

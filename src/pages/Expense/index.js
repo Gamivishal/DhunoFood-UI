@@ -28,7 +28,7 @@ const Expenses = props => {
   const location = useLocation()
   const params = useParams()
   const expenseId = Number(params.id || 0)
-  const isFormPage = location.pathname.startsWith("/expenses/manage")
+  const isFormPage = location.pathname.startsWith("/Expense/manage")
   const isEditMode = isFormPage && expenseId > 0
 
   const [loading, setLoading] = useState(false)
@@ -249,7 +249,7 @@ if (!(response?.isSuccess)) {
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/expenses/manage/${item.expenseId}`)}
+              onClick={() => navigate(`/Expense/manage/${item.expenseId}`)}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -340,7 +340,7 @@ if (!(response?.isSuccess)) {
       const response = await saveExpense(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Saved successfully")
-        navigate("/expenses")
+        navigate("/Expense")
         return
       }
 
@@ -380,14 +380,14 @@ if (!(response?.isSuccess)) {
                 onCategoryChange={handleCategoryChange}
                 onPaymentModeChange={handlePaymentModeChange}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/expenses")}
+                onClose={() => navigate("/Expense")}
               />
             )
           ) : (
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/expenses/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Expense/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Expense
                   </Button>
                 </div>

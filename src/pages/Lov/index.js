@@ -330,7 +330,7 @@ const Lov = props => {
               className="p-0 text-info"
               title="View"
               type="button"
-              onClick={() => navigate(`/lov/details/${encodeURIComponent(item?.lov_Column || "")}`)}
+              onClick={() => navigate(`/Lov/details/${encodeURIComponent(item?.lov_Column || "")}`)}
             >
               <i className="mdi mdi-eye-outline font-size-18" />
             </Button>
@@ -368,7 +368,7 @@ const Lov = props => {
               type="button"
               onClick={() =>
                 navigate(
-                  `/lov/details/${encodeURIComponent(lovColumnParam)}/manage/${encodeURIComponent(
+                  `/Lov/details/${encodeURIComponent(lovColumnParam)}/manage/${encodeURIComponent(
                     item?.lov_Code || ""
                   )}`
                 )
@@ -500,7 +500,7 @@ const Lov = props => {
         loading={loading}
         error={error}
         onBack={() => navigate("/Lov")}
-        onAdd={() => navigate(`/lov/details/${encodeURIComponent(lovColumnParam)}/manage`)}
+        onAdd={() => navigate(`/Lov/details/${encodeURIComponent(lovColumnParam)}/manage`)}
       />
     )
   }

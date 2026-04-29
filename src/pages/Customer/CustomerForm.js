@@ -48,22 +48,23 @@ const CustomerForm = ({
               <Label>Mobile No<span style={{ color: "red" }}>*</span></Label>
               <Input
                 name="mobileNo"
-                type="tel"
-                pattern="[0-9]*"
+                type="text"
                 inputMode="numeric"
+                pattern="[0-9]*"
                 value={formData.mobileNo}
                 onChange={e => {
-                  const value = e.target.value.replace(/[^0-9]/g, "")
+                  // Allow only numbers, but let the user clear the field
+                  const value = e.target.value.replace(/[^0-9]/g, "");
                   onChange({
-                    ...e,
                     target: {
-                      ...e.target,
+                      name: "mobileNo",
                       value,
-                    },
-                  })
+                    }
+                  });
                 }}
                 placeholder="Enter mobile number"
                 maxLength={10}
+                autoComplete="off"
               />
             </Col>
             <Col md={12}>

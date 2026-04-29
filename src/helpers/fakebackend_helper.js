@@ -870,6 +870,44 @@ const deleteOrderById = async id => {
   }
 }
 
+const getPaymentPages = async ({ start = 0, length = 10, sortColumn = "paymentDate", sortColumnDir = "desc" } = {}) => {
+  try {
+    return await get("/Payment/GetAllpage", {
+      params: { start, length, sortColumn, sortColumnDir },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Payment list fetch failed"
+    )
+  }
+}
+
+const savePayment = async payload => {
+  try {
+    return await post("/Payment/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Payment save failed"
+    )
+  }
+}
+
+const getOrderDropdownList = async () => {
+  try {
+    return await get("/Dropdown/orderList", {})
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Order list fetch failed"
+    )
+  }
+}
+
 const getItemList = async () => {
   try {
     return await get("/Dropdown/ItemList", {})
@@ -1024,6 +1062,9 @@ export {
   getOrderById,
   saveOrder,
   deleteOrderById,
+  getPaymentPages,
+  savePayment,
+  getOrderDropdownList,
   getItemList,
   getCustomerList,
 }

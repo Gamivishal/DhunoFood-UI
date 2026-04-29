@@ -42,6 +42,7 @@ import Items from "../pages/Item";
 import Customers from "../pages/Customer";
 import Quotations from "../pages/Quotation";
 import Orders from "../pages/Order";
+import Payments from "../pages/Payment";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -121,6 +122,9 @@ const userRoutes = [
   { path: "/orders", component: <Orders /> },
   { path: "/orders/manage", component: <Orders /> },
   { path: "/orders/manage/:id", component: <Orders /> },
+
+  { path: "/payments", component: <Payments /> },
+  { path: "/payments/manage", component: <Payments /> },
 
   // this route should be at the end of all other routes
   {

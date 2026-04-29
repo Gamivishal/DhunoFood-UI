@@ -174,14 +174,14 @@ const SidebarContent = props => {
   }, [])
 
   const getDynamicMenuLink = child => {
-    const controller = (child?.controller || "").toLowerCase()
+    const controller = (child?.controller || "")
 
     if (child?.url && child.url !== "string") {
       return child.url.startsWith("/") ? child.url : `/${child.url}`
     }
 
     if (controller) {
-      return controller.endsWith("s") ? `/${controller}` : `/${controller}s`
+      return `/${controller}`
     }
 
     return "/#"

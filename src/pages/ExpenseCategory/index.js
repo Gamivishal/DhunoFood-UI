@@ -266,7 +266,7 @@ const ExpenseCategories = props => {
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/expense-categories/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/ExpenseCategory/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Category
                   </Button>
                 </div>

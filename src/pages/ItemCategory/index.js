@@ -267,7 +267,7 @@ const ItemCategories = props => {
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/item-categories/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/ItemCategory/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Category
                   </Button>
                 </div>

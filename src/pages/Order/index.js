@@ -448,7 +448,7 @@ navigate("/Order")
                 onAddItem={addItem}
                 onRemoveItem={removeItem}
                 onSubmit={handleSubmit}
-                onClose={() => navigate("/orders")}
+                onClose={() => navigate("/Order")}
                 calculateTotal={calculateTotal}
               />
             )

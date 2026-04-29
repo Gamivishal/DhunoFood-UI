@@ -11,19 +11,19 @@ const AdvancePaymentForm = ({
   onChange,
   onSubmit,
   onClose,
-  clientList = [],
-  onClientChange,
+  customerList = [],
+  onCustomerChange,
   statusList = [],
   onStatusChange,
   paymentModeList = [],
   onPaymentModeChange,
 }) => {
 
-  const clientSelectOptions = (clientList || []).map(client => ({
-    value: client.id,
-    label: client.name,
+  const customerSelectOptions = (customerList || []).map(customer => ({
+    value: customer.id,
+    label: customer.name,
   }));
-  const selectedClient = clientSelectOptions.find(option => Number(option.value) === Number(formData.clientId)) || null;
+  const selectedCustomer = customerSelectOptions.find(option => Number(option.value) === Number(formData.customerId)) || null;
 
   const statusSelectOptions = (statusList || []).map(status => ({
     value: status.code || status.value || status.id,
@@ -53,13 +53,13 @@ const AdvancePaymentForm = ({
         <Form onSubmit={onSubmit}>
           <Row className="g-3">
             <Col md={6}>
-              <Label>Select Client<span style={{ color: "red" }}>*</span></Label>
+              <Label>Select Customer<span style={{ color: "red" }}>*</span></Label>
               <Select
                 classNamePrefix="select2-selection"
-                placeholder="Select client"
-                options={clientSelectOptions}
-                value={selectedClient}
-                onChange={onClientChange}
+                placeholder="Select customer"
+                options={customerSelectOptions}
+                value={selectedCustomer}
+                onChange={onCustomerChange}
                 isClearable
               />
             </Col>

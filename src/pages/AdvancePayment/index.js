@@ -10,7 +10,7 @@ import { setBreadcrumbItems } from "../../store/actions";
 
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common";
-import { getAdvancePaymentsPages, deleteAdvancePaymentById, getAdvancePaymentById, saveAdvancePayment, getClientsPages } from "../../helpers/fakebackend_helper";
+import { getAdvancePaymentsPages, deleteAdvancePaymentById, getAdvancePaymentById, saveAdvancePayment } from "../../helpers/fakebackend_helper";
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService";
 import AdvancePaymentForm from "./AdvancePaymentForm";
 import axios from "axios";
@@ -44,7 +44,7 @@ const AdvancePayment = props => {
   const [formTitle, setFormTitle] = useState(isEditMode ? "Edit Advance Payment" : "Create Advance Payment");
   const [formData, setFormData] = useState({
     id: 0,
-    clientId: 0,
+    customerId: 0,
     totalAmount: 0,
     remainingAmount: 0,
     status: "",
@@ -53,9 +53,9 @@ const AdvancePayment = props => {
     remark: ""
   });
 
-  // Client dropdown state
-  const [clientList, setClientList] = useState([]);
-  const [clientListLoading, setClientListLoading] = useState(false);
+  // Customer dropdown state
+  const [customerList, setCustomerList] = useState([]);
+  const [customerListLoading, setCustomerListLoading] = useState(false);
 
   // Status dropdown state
   const [statusList, setStatusList] = useState([]);
@@ -67,17 +67,17 @@ const AdvancePayment = props => {
 
   useEffect(() => {
     if (isFormPage) {
-      setClientListLoading(true);
+      setCustomerListLoading(true);
       getCustomerList()
         .then((res) => {
           if (res.isSuccess && Array.isArray(res.data)) {
-            setClientList(res.data);
+            setCustomerList(res.data);
           } else {
-            setClientList([]);
+            setCustomerList([]);
           }
         })
-        .catch(() => setClientList([]))
-        .finally(() => setClientListLoading(false));
+        .catch(() => setCustomerList([]))
+        .finally(() => setCustomerListLoading(false));
 
       setStatusListLoading(true);
       getLovDropdownList("AdvancePaymentStatus")
@@ -177,7 +177,7 @@ const AdvancePayment = props => {
       setFormTitle("Create Advance Payment");
       setFormData({
         id: 0,
-        clientId: 0,
+customerId: 0,
         totalAmount: null,
         remainingAmount: 0,
         status: ""
@@ -238,10 +238,10 @@ const AdvancePayment = props => {
     }
   };
 
-  const handleClientChange = (option) => {
+  const handleCustomerChange = (option) => {
     setFormData(prev => ({
       ...prev,
-      clientId: option ? option.value : "",
+      customerId: option ? option.value : "",
     }));
   };
 
@@ -256,7 +256,7 @@ const AdvancePayment = props => {
     return withAutoSrColumn({
       columns: buildServerSortColumns({
         columns: [
-          { label: "Client Name", field: "clientName", sort: "asc" },
+          { label: "Customer Name", field: "customerName", sort: "asc" },
           { label: "Paid Amount", field: "totalAmount", sort: "asc" },
           { label: "Remaining Amount", field: "remainingAmount", sort: "asc" },
           { label: "Status", field: "statusName", sort: "asc" },
@@ -269,7 +269,7 @@ const AdvancePayment = props => {
       }),
       rows: rows.map(item => ({
         id: item.id,
-        clientName: item.clientName || "",
+        customerName: item.customerName || "",
         totalAmount: item.totalAmount ?? 0,
         paymentType: item.paymentType || "",
         remainingAmount: item.remainingAmount ?? 0,
@@ -339,7 +339,7 @@ action: (
       <Row>
         <Col lg={12}>
           {isFormPage ? (
-            formLoading || clientListLoading ? (
+            formLoading || customerListLoading ? (
               <Card>
                 <CardBody>
                   <div className="text-center py-5">
@@ -357,8 +357,8 @@ action: (
                 onChange={handleFormChange}
                 onSubmit={handleFormSubmit}
                 onClose={() => navigate("/AdvancePayment")}
-                clientList={clientList}
-                onClientChange={handleClientChange}
+                customerList={customerList}
+                onCustomerChange={handleCustomerChange}
                 statusList={statusList}
                 onStatusChange={handleStatusChange}
                 paymentModeList={paymentModeList}

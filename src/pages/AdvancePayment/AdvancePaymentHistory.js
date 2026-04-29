@@ -52,7 +52,7 @@ const navigate = useNavigate();
       columns: buildServerSortColumns({
         columns: [
           { label: "Invoice", field: "invoiceNumber", sort: "asc" },
-          { label: "Client Name", field: "clientName", sort: "asc" },
+          { label: "Customer Name", field: "customerName", sort: "asc" },
           { label: "Payment Date", field: "paymentDate", sort: "asc" },
           { label: "Amount", field: "amount", sort: "asc" },
           { label: "Payment Mode", field: "paymentModeName", sort: "asc" },

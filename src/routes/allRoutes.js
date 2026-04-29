@@ -28,7 +28,7 @@ import Menus from "../pages/Menu"
 import Lov from "../pages/Lov"
 import Property from "../pages/Property"
 
-
+import AdvancePayment from "../pages/AdvancePayment"
 //Extra Pages
 import PagesBlank from "../pages/Extra Pages/pages-blank";
 import Pages404 from "../pages/Extra Pages/pages-404";
@@ -46,7 +46,12 @@ import Payments from "../pages/Payment";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
-
+  // AdvancePayment routes
+  //{ path: "/AdvancePayment", component: <AdvancePayment /> },
+  { path: "/advancepayment", component: <AdvancePayment /> },
+  { path: "/AdvancePayment/manage", component: <AdvancePayment /> },
+  { path: "/AdvancePayment/manage/:id", component: <AdvancePayment /> },
+// { path: "/AdvancePaymentHistory", component: <AdvancePaymentHistory /> },
   // // //profile
   { path: "/profile", component: <MyProfile /> },
 

@@ -870,6 +870,79 @@ const deleteOrderById = async id => {
   }
 }
 
+//AdvancePayment API helpers
+const getAdvancePaymentsPages = async (params = {}) => {
+  try {
+    return await get("/AdvancePayment/GetAllpage", {
+      params: buildPageParams(params),
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "AdvancePayments API call failed"
+    )
+  }
+}
+
+const getAdvancePaymentHistoryPages = async (params = {}) => {
+  try {
+    return await get("/AdvancePayment/AdvancePaymentHistory", {
+      params: {
+        ...buildPageParams(params),
+        AdvancePaymentId: params.AdvancePaymentId || 0   // ✅ FIX
+      }
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "AdvancePayments API call failed"
+    )
+  }
+}
+
+const getAdvancePaymentById = async id => {
+  try {
+    return await get("/AdvancePayment/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "AdvancePayment fetch by id failed"
+    )
+  }
+}
+
+const saveAdvancePayment = async payload => {
+  try {
+    return await post("/AdvancePayment/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "AdvancePayment save failed"
+    )
+  }
+}
+
+const deleteAdvancePaymentById = async id => {
+  try {
+    return await del("/AdvancePayment/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "AdvancePayment delete failed"
+    )
+  }
+}
+
+
 const getPaymentPages = async ({ start = 0, length = 10, sortColumn = "paymentDate", sortColumnDir = "desc" } = {}) => {
   try {
     return await get("/Payment/GetAllpage", {
@@ -1067,4 +1140,5 @@ export {
   getOrderDropdownList,
   getItemList,
   getCustomerList,
+  getAdvancePaymentsPages,getAdvancePaymentById,saveAdvancePayment,deleteAdvancePaymentById,getAdvancePaymentHistoryPages,
 }

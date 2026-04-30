@@ -26,7 +26,7 @@ const Dashboard = (props) => {
   return (
     <React.Fragment>
 
-      
+      <p>Hello Dashboard</p>
     </React.Fragment>
   )
 }

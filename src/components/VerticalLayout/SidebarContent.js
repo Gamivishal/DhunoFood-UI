@@ -212,6 +212,13 @@ const SidebarContent = props => {
           <ul className="metismenu list-unstyled" id="side-menu">
             {/* <li className="menu-title">{props.t("Main")} </li> */}
 
+            <li>
+              <Link to="/dashboard" className="waves-effect">
+                <i className="mdi mdi-view-dashboard"></i>
+                <span>Dashboard</span>
+              </Link>
+            </li>
+
             {dynamicMenu.length > 0 && (
               <>
                 <li className="menu-title">{props.t("Menu")}</li>
@@ -242,15 +249,7 @@ const SidebarContent = props => {
               </>
             )}
 
-            {dynamicMenu.length === 0 && (
-              <li>
-                <Link to="/dashboard" className="waves-effect">
-                  <i className="mdi mdi-view-dashboard"></i>
-                  <span className="badge rounded-pill bg-primary float-end">2</span>
-                  <span>{props.t("Dashboard")}</span>
-                </Link>
-              </li>
-            )}
+            
 
             {/* <li>
               <Link to="#" className=" waves-effect">

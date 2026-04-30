@@ -816,10 +816,10 @@ const deleteQuotationById = async id => {
   }
 }
 
-const getOrderPages = async ({ start = 0, length = 10, sortColumn = "orderDate", sortColumnDir = "desc" } = {}) => {
+const getOrderPages = async ({ start = 0, length = 10, sortColumn = "orderDate", sortColumnDir = "desc", status = null } = {}) => {
   try {
     return await get("/Order/GetAllpage", {
-      params: { start, length, sortColumn, sortColumnDir },
+      params: { start, length, sortColumn, sortColumnDir, ...(status && { status }) },
     })
   } catch (error) {
     throw (

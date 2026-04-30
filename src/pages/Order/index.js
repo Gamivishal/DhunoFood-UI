@@ -38,6 +38,7 @@ const Orders = props => {
   const [rows, setRows] = useState([])
   const [sortColumn, setSortColumn] = useState(ORDER_LIST_SORT_COLUMN)
   const [sortColumnDir, setSortColumnDir] = useState(ORDER_LIST_SORT_DIR)
+  const [statusFilter, setStatusFilter] = useState("")
   const [formTitle, setFormTitle] = useState(isEditMode ? "Edit Order" : "Create Order")
   const [itemOptions, setItemOptions] = useState([])
   const [customerOptions, setCustomerOptions] = useState([])
@@ -67,6 +68,7 @@ const Orders = props => {
         length: 10,
         sortColumn,
         sortColumnDir,
+        status: statusFilter || null,
       })
 
       if (!(response?.isSuccess)) {
@@ -90,7 +92,7 @@ const Orders = props => {
     if (!isFormPage) {
       loadOrders()
     }
-  }, [isFormPage, sortColumn, sortColumnDir])
+  }, [isFormPage, sortColumn, sortColumnDir, statusFilter])
 
   const handleSortChange = fieldName => {
     const nextState = getNextSortState(sortColumn, sortColumnDir, fieldName)
@@ -464,7 +466,24 @@ navigate("/Order")
           ) : (
             <Card>
               <CardBody>
-                <div className="d-flex justify-content-end mb-3">
+                <div className="d-flex justify-content-between mb-3">
+                  <div>
+                    <Button
+                      color={statusFilter === "" ? "primary" : "secondary"}
+                      size="sm"
+                      className="me-2"
+                      onClick={() => setStatusFilter("")}
+                    >
+                      All
+                    </Button>
+                    <Button
+                      color={statusFilter === "1" ? "primary" : "secondary"}
+                      size="sm"
+                      onClick={() => setStatusFilter("1")}
+                    >
+                      Pending
+                    </Button>
+                  </div>
                   <Button color="primary" type="button" onClick={() => navigate("/Order/manage")}>
                     <i className="mdi mdi-plus me-1" />Add Order
                   </Button>

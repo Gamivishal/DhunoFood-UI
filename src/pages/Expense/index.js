@@ -180,7 +180,7 @@ if (!(response?.isSuccess)) {
 
         const expense = response?.data || {}
         const expenseDate = expense.expenseDate
-          ? new Date(expense.expenseDate).toISOString().slice(0, 16)
+          ? new Date(expense.expenseDate).toISOString().slice(0, 10)
           : ""
 
         setFormTitle("Edit Expense")
@@ -328,9 +328,9 @@ if (!(response?.isSuccess)) {
     try {
       const payload = {
         expenseId: isEditMode ? Number(formData.id) || expenseId : 0,
-        expenseDate: formData.expenseDate,
+        expenseDate: formData.expenseDate ? formData.expenseDate.slice(0, 10) : null,
         categoryId: Number(formData.categoryId) || 0,
-        amount: Number(formData.amount) || 0,
+        amount: formData.amount ? Number(formData.amount) : null,
         paymentMode: formData.paymentMode,
         description: formData.description,
         isActive: Boolean(formData.isActive),

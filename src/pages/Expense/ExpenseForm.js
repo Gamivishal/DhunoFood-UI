@@ -61,7 +61,7 @@ const ExpenseForm = ({
             <Col md={6}>
               <Label>Expense Date<span style={{ color: "red" }}>*</span></Label>
               <Input
-                type="datetime-local"
+                type="date"
                 name="expenseDate"
                 value={formData.expenseDate}
                 onChange={onChange}
@@ -83,11 +83,22 @@ const ExpenseForm = ({
             <Col md={6}>
               <Label>Amount<span style={{ color: "red" }}>*</span></Label>
               <Input
-                type="number"
+                type="text"
                 name="amount"
                 value={formData.amount}
-                onChange={onChange}
+                onChange={e => {
+                  const val = e.target.value
+                  const parts = val.split(".")
+                  if (parts[0]?.length <= 9 && (!parts[1] || parts[1].length <= 3)) {
+                    onChange(e)
+                  }
+                }}
                 placeholder="Enter amount"
+                onKeyDown={e => {
+                  if (!/[\d.]/.test(e.key) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key)) {
+                    e.preventDefault()
+                  }
+                }}
               />
             </Col>
             <Col md={6}>
@@ -111,6 +122,7 @@ const ExpenseForm = ({
                 onChange={onChange}
                 placeholder="Enter description"
                 rows={3}
+                maxLength={200}
               />
             </Col>
           </Row>

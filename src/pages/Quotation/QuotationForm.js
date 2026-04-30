@@ -31,6 +31,7 @@ const QuotationForm = ({
   onSubmit,
   onClose,
   calculateTotal,
+  onAddCustomer,
 }) => {
   const itemSelectOptions = (itemOptions || []).map(item => ({
     value: item.id,
@@ -101,17 +102,30 @@ const QuotationForm = ({
           <Row className="g-3">
             <Col md={6}>
               <Label>Customer<span style={{ color: "red" }}>*</span></Label>
-              <Select
-                classNamePrefix="select2-selection"
-                placeholder="Select customer"
-                options={customerSelectOptions}
-                value={customerSelectOptions.find(
-                  opt => Number(opt.value) === Number(formData.customerId)
-                ) || null}
-                onChange={handleCustomerSelectChange}
-                isSearchable
-                isClearable
-              />
+              <div className="d-flex align-items-center gap-2">
+                <div className="flex-grow-1">
+                  <Select
+                    classNamePrefix="select2-selection"
+                    placeholder="Select customer"
+                    options={customerSelectOptions}
+                    value={customerSelectOptions.find(
+                      opt => Number(opt.value) === Number(formData.customerId)
+                    ) || null}
+                    onChange={handleCustomerSelectChange}
+                    isSearchable
+                    isClearable
+                  />
+                </div>
+                <Button
+                  color="primary"
+                  size="sm"
+                  type="button"
+                  title="Add Customer"
+                  onClick={onAddCustomer}
+                >
+                  <i className="mdi mdi-plus" />
+                </Button>
+              </div>
             </Col>
             <Col md={6}>
               <Label>Quotation Date<span style={{ color: "red" }}>*</span></Label>

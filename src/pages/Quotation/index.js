@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { Alert, Button, Card, CardBody, Col, Row, Spinner } from "reactstrap"
+import { Alert, Button, Card, CardBody, Col, Modal, Row, Spinner } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
@@ -13,10 +13,12 @@ import {
   getQuotationById,
   getQuotationPages,
   saveQuotation,
+  saveCustomer,
 } from "../../helpers/fakebackend_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
 import QuotationForm from "./QuotationForm"
 import ConvertToOrderForm from "./ConvertToOrderForm"
+import CustomerForm from "../Customer/CustomerForm"
 
 const QUOTATION_LIST_SORT_COLUMN = "quotationDate"
 const QUOTATION_LIST_SORT_DIR = "desc"
@@ -60,6 +62,14 @@ const Quotations = props => {
     orderDate: new Date().toISOString(),
     items: [],
   })
+  const [showCustomerModal, setShowCustomerModal] = useState(false)
+  const [customerFormData, setCustomerFormData] = useState({
+    customerId: 0,
+    customerName: "",
+    mobileNo: "",
+    address: "",
+  })
+  const [customerSaving, setCustomerSaving] = useState(false)
 
   useEffect(() => {
     const pathParts = location.pathname.split("/")
@@ -569,6 +579,75 @@ const Quotations = props => {
     }
   }
 
+  const openCustomerModal = () => {
+    setCustomerFormData({
+      customerId: 0,
+      customerName: "",
+      mobileNo: "",
+      address: "",
+    })
+    setShowCustomerModal(true)
+  }
+
+  const closeCustomerModal = () => {
+    setShowCustomerModal(false)
+  }
+
+  const handleCustomerChange = event => {
+    const { name, value } = event.target
+    setCustomerFormData(previous => ({
+      ...previous,
+      [name]: value,
+    }))
+  }
+
+  const handleCustomerSubmit = async event => {
+    event.preventDefault()
+    // if (!customerFormData.customerName?.trim()) {
+    //   await showError("Customer name is required")
+    //   return
+    // }
+    // if (!customerFormData.mobileNo?.trim()) {
+    //   await showError("Mobile number is required")
+    //   return
+    // }
+
+    setCustomerSaving(true)
+    try {
+      const payload = {
+        customerId: Number(customerFormData.customerId) || 0,
+        customerName: customerFormData.customerName.trim(),
+        mobileNo: customerFormData.mobileNo.trim(),
+        address: customerFormData.address?.trim() || "",
+      }
+
+      const response = await saveCustomer(payload)
+      if (response?.isSuccess) {
+        await showSuccess(response?.message || "Customer saved successfully")
+        const customerResponse = await getCustomerList()
+        if (customerResponse?.isSuccess && Array.isArray(customerResponse?.data)) {
+          setCustomerOptions(customerResponse.data)
+          const newCustomer = customerResponse.data.find(c => c.name === customerFormData.customerName)
+          if (newCustomer) {
+            setFormData(prev => ({
+              ...prev,
+              customerId: newCustomer.id,
+            }))
+          }
+        }
+        closeCustomerModal()
+        return
+      }
+
+      throw new Error(response?.message || "Failed to save customer")
+    } catch (err) {
+      const errorMessage = err?.message || err || "Failed to save customer"
+      await showError(errorMessage)
+    } finally {
+      setCustomerSaving(false)
+    }
+  }
+
   return (
     <React.Fragment>
       <Row>
@@ -599,6 +678,7 @@ const Quotations = props => {
                 onSubmit={handleSubmit}
                 onClose={() => navigate("/Quotation")}
                 calculateTotal={calculateTotal}
+                onAddCustomer={openCustomerModal}
               />
             )
           ) : isConvertPage ? (
@@ -647,6 +727,17 @@ const Quotations = props => {
           )}
         </Col>
       </Row>
+
+      <Modal isOpen={showCustomerModal} toggle={closeCustomerModal} size="lg" centered>
+        <CustomerForm
+          title="Add Customer"
+          formData={customerFormData}
+          saving={customerSaving}
+          onChange={handleCustomerChange}
+          onSubmit={handleCustomerSubmit}
+          onClose={closeCustomerModal}
+        />
+      </Modal>
     </React.Fragment>
   )
 }

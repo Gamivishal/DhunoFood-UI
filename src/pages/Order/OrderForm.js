@@ -135,6 +135,16 @@ const OrderForm = ({
                 name="orderDate"
                 value={formData.orderDate}
                 onChange={onChange}
+                min={new Date().toLocaleDateString("en-CA")}
+              />
+            </Col>
+            <Col md={6}>
+              <Label>Order Time</Label>
+              <Input
+                type="time"
+                name="orderTime"
+                value={formData.orderTime ? formData.orderTime.substring(0, 5) : ""}
+                onChange={onChange}
               />
             </Col>
             <Col md={6}>

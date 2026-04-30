@@ -177,7 +177,8 @@ const Orders = props => {
         setFormData({
           orderId: 0,
           customerId: "",
-          orderDate: new Date().toISOString().split("T")[0],
+orderDate: new Date().toLocaleDateString("en-CA"),
+          orderTime: "",
           quotationId: "",
           totalAmount: 0,
           items: [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
@@ -189,6 +190,7 @@ const Orders = props => {
 
       try {
         const response = await getOrderById(orderId)
+        console.log("getOrderById response", response)
         if (!(response?.isSuccess)) {
           throw new Error(response?.message || "Failed to load order")
         }
@@ -200,8 +202,9 @@ const Orders = props => {
           orderId: order.orderId || 0,
           customerId: order.customerId ?? "",
           orderDate: order.orderDate
-            ? new Date(order.orderDate).toISOString().split("T")[0]
+            ? order.orderDate.split("T")[0]
             : new Date().toISOString().split("T")[0],
+          orderTime: order.orderTime || "",
           quotationId: order.quotationId ?? "",
           status: order.status || "",
           totalAmount: order.totalAmount ?? 0,
@@ -223,9 +226,11 @@ const Orders = props => {
     return withAutoSrColumn({
       columns: buildServerSortColumns({
         columns: [
+           { label: "Order No", field: "orderNo", sort: "asc" },
           { label: "Customer Name", field: "customerName", sort: "asc" },
           { label: "Order Date", field: "orderDate", sort: "asc" },
           { label: "Total Amount", field: "totalAmount", sort: "asc" },
+         
         //  { label: "Quotation", field: "quotationId", sort: "asc" },
           { label: "Status", field: "statusname", sort: "asc" },
           { label: "Action", field: "action", sort: "disabled" },
@@ -243,6 +248,7 @@ const Orders = props => {
         totalAmount: order.totalAmount ?? 0,
         quotationId: order.quotationId || "-",
         statusname: order.statusname || "",
+        orderNo: order.orderNo || "",
         action: (
           <div className="d-flex gap-2 justify-content-center">
             <Button
@@ -393,6 +399,7 @@ const Orders = props => {
         orderId: isEditMode ? Number(formData.orderId) || orderId : 0,
         customerId: Number(formData.customerId) || 0,
         orderDate: orderDateValue,
+        orderTime: formData.orderTime || null,
         quotationId: Number(formData.quotationId) || 0,
         status: formData.status || "",
         totalAmount: calculateTotal(),

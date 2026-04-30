@@ -113,7 +113,7 @@ export const withAutoSrColumn = ({ columns = [], rows = [] }) => {
 
   return {
     columns: [
-      { label: "Sr.", field: SR_AUTO_FIELD, sort: "disabled" },
+      { label: "Sr.No", field: SR_AUTO_FIELD, sort: "disabled" },
       ...normalizedColumns,
     ],
     rows: normalizedRows,

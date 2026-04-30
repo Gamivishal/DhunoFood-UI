@@ -519,7 +519,7 @@ const Lov = props => {
             <Spinner color="primary" />
           </div>
         ) : (
-          <MDBDataTable className="table-auto-sr" striped bordered small noBottomColumns data={masterTableData} />
+          <MDBDataTable className={masterTableData.rows && masterTableData.rows.length > 0 ? "table-auto-sr" : ""} striped bordered small noBottomColumns data={masterTableData} />
         )}
       </CardBody>
     </Card>

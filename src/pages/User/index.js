@@ -396,7 +396,7 @@ const handleExportPdf = async () => {
                     <Spinner color="primary" />
                   </div>
                 ) : (
-                  <MDBDataTable className="table-auto-sr" striped bordered small noBottomColumns data={data} />
+                  <MDBDataTable className={data.rows && data.rows.length > 0 ? "table-auto-sr" : ""} striped bordered small noBottomColumns data={data} />
                 )}
               </CardBody>
             </Card>

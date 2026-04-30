@@ -78,6 +78,7 @@ const Property = () => {
             bordered
             small
             noBottomColumns
+            className={rows && rows.length > 0 ? "table-auto-sr" : ""}
             data={{
               columns: [
                 { label: "ID", field: "id", sort: "asc" },

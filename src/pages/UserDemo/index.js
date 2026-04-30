@@ -164,11 +164,12 @@ const UserDemo = () => {
         {loading ? (
           <div className="text-center my-4"><Spinner /></div>
         ) : (
-          <MDBDataTable
+<MDBDataTable
             striped
             bordered
             small
             noBottomColumns
+            className={rows && rows.length > 0 ? "table-auto-sr" : ""}
             data={{
               columns: [
                 { label: "ID", field: "id", sort: "asc" },
@@ -203,9 +204,9 @@ const UserDemo = () => {
                             window.open(blobUrl, '_blank');
                           }
                         }}
-                        disabled={!row.fileData}
+                        title="View File"
                       >
-                        View
+                        <i className="mdi mdi-file font-size-16" />
                       </Button>
                     )}
                   </div>

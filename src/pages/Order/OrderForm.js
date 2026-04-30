@@ -138,7 +138,7 @@ const OrderForm = ({
               />
             </Col>
             <Col md={6}>
-              <Label>Status</Label>
+              <Label>Status<span style={{ color: "red" }}>*</span></Label>
               <Select
                 classNamePrefix="select2-selection"
                 placeholder="Select status"

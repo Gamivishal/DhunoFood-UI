@@ -387,10 +387,12 @@ const Orders = props => {
     setSaving(true)
 
     try {
+      const orderDateValue = formData.orderDate ? new Date(formData.orderDate).toISOString() : null
+
       const payload = {
         orderId: isEditMode ? Number(formData.orderId) || orderId : 0,
         customerId: Number(formData.customerId) || 0,
-        orderDate: new Date(formData.orderDate).toISOString(),
+        orderDate: orderDateValue,
         quotationId: Number(formData.quotationId) || 0,
         status: formData.status || "",
         totalAmount: calculateTotal(),

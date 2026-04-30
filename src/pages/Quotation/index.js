@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+﻿import React, { useEffect, useMemo, useState } from "react"
 import { Alert, Button, Card, CardBody, Col, Modal, Row, Spinner } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
@@ -59,7 +59,8 @@ const Quotations = props => {
     customerName: "",
     quotationDate: "",
     totalAmount: 0,
-    orderDate: new Date().toISOString(),
+    orderDate: "",
+    orderTime: "",
     items: [],
   })
   const [showCustomerModal, setShowCustomerModal] = useState(false)
@@ -88,8 +89,7 @@ const Quotations = props => {
     setLoading(true)
     setFormError("")
     setFormTitle("Convert to Order")
-
-    try {
+      try {
       const response = await getQuotationById(qId)
       if (!(response?.isSuccess)) {
         throw new Error(response?.message || "Failed to load quotation")
@@ -102,7 +102,8 @@ const Quotations = props => {
         customerName: quotation.customerName || "",
         quotationDate: quotation.quotationDate || "",
         totalAmount: quotation.totalAmount ?? 0,
-        orderDate: new Date().toISOString(),
+        orderDate: "",
+        orderTime: quotation.orderTime || "",
         items: Array.isArray(quotation.items) && quotation.items.length > 0
           ? quotation.items
           : [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
@@ -122,8 +123,7 @@ const Quotations = props => {
   const loadQuotations = async () => {
     setLoading(true)
     setError("")
-
-    try {
+      try {
       const response = await getQuotationPages({
         start: 0,
         length: 10,
@@ -217,7 +217,7 @@ const Quotations = props => {
         setFormData({
           quotationId: 0,
           customerId: "",
-          quotationDate: new Date().toISOString().split("T")[0],
+quotationDate: "",
           totalAmount: 0,
           items: [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
         })
@@ -238,9 +238,9 @@ const Quotations = props => {
         setFormData({
           quotationId: quotation.quotationId || 0,
           customerId: quotation.customerId ?? "",
-          quotationDate: quotation.quotationDate
-            ? new Date(quotation.quotationDate).toISOString().split("T")[0]
-            : new Date().toISOString().split("T")[0],
+          quotationDate: quotation.quotationDate && !isNaN(new Date(quotation.quotationDate).getTime())
+              ? new Date(quotation.quotationDate).toISOString().split("T")[0]
+              : null,
           totalAmount: quotation.totalAmount ?? 0,
           items: Array.isArray(quotation.items) && quotation.items.length > 0
             ? quotation.items
@@ -273,7 +273,7 @@ const Quotations = props => {
       rows: rows.map(quotation => ({
         quotationId: quotation.quotationId,
         customerName: quotation.customerName || "",
-        quotationDate: quotation.quotationDate
+        quotationDate: quotation.quotationDate && !isNaN(new Date(quotation.quotationDate).getTime())
           ? new Date(quotation.quotationDate).toLocaleDateString()
           : "",
         totalAmount: quotation.totalAmount ?? 0,
@@ -509,14 +509,15 @@ const Quotations = props => {
 
     setSaving(true)
 
-    try {
+try {
       const payload = {
         quotationId: Number(convertFormData.quotationId) || 0,
         customerId: Number(convertFormData.customerId) || 0,
-        quotationDate: new Date(convertFormData.quotationDate).toISOString(),
+        quotationDate: convertFormData.quotationDate || null,
         totalAmount: calculateConvertTotal(),
         isConvert: true,
-        orderDate: new Date(convertFormData.orderDate).toISOString(),
+        orderDate: convertFormData.orderDate || null,
+        orderTime: convertFormData.orderTime || null,
         items: convertFormData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
           quantity: Number(item.quantity) || 0,
@@ -547,12 +548,13 @@ const Quotations = props => {
     setFormError("")
 
     setSaving(true)
-
-    try {
+      try {
       const payload = {
         quotationId: isEditMode ? Number(formData.quotationId) || quotationId : 0,
         customerId: Number(formData.customerId) || 0,
-        quotationDate: new Date(formData.quotationDate).toISOString(),
+        quotationDate: (formData.quotationDate && !isNaN(new Date(formData.quotationDate).getTime()))
+          ? new Date(formData.quotationDate).toISOString()
+          : null,
         totalAmount: calculateTotal(),
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,

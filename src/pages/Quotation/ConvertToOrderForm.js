@@ -29,25 +29,16 @@ const ConvertToOrderForm = ({
   calculateTotal,
 }) => {
   const handleOrderDateChange = e => {
-    let value = e.target.value
-    if (value) {
-      const date = new Date(value)
-      value = date.toISOString()
-    }
     onChange({
       target: {
         name: "orderDate",
-        value: value,
+        value: e.target.value,
       },
     })
   }
 
   const getOrderDateValue = () => {
-    if (formData.orderDate) {
-      const date = new Date(formData.orderDate)
-      return date.toISOString().slice(0, 16)
-    }
-    return ""
+    return formData.orderDate || ""
   }
 
   return (
@@ -67,12 +58,21 @@ const ConvertToOrderForm = ({
               <Input type="text" value={formData.customerName || ""} readOnly />
             </Col>
             <Col md={6}>
-              <Label>Order Date<span style={{ color: "red" }}>*</span></Label>
+              <Label>Order Date</Label>
               <Input
-                type="datetime-local"
+                type="date"
                 name="orderDate"
                 value={getOrderDateValue()}
                 onChange={handleOrderDateChange}
+              />
+            </Col>
+            <Col md={6}>
+              <Label>Order Time</Label>
+              <Input
+                type="time"
+                name="orderTime"
+                value={formData.orderTime || ""}
+                onChange={onChange}
               />
             </Col>
           </Row>

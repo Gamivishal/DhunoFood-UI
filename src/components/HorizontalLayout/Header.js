@@ -16,9 +16,10 @@ import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDr
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 
 // import megamenuImg from "../../assets/images/megamenu-img.png"
-import logo from "../../assets/images/logo-sm.png"
-import logoLight from "../../assets/images/logo-light.png"
-import logoDark from "../../assets/images/logo-dark.png"
+//import logo from "../../assets/images/logo-sm.png"
+import logo from "../../assets/images/DhunoFood/NewLogo.png"
+import logoLight from "../../assets/images/DhunoFood/NewLogo.png"
+import logoDark from "../../assets/images/DhunoFood/NewLogo.png"
 
 //i18n
 import { withTranslation } from "react-i18next"

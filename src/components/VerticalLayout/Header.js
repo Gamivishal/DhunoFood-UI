@@ -74,10 +74,15 @@ const Header = props => {
             <div className="navbar-brand-box">
               <Link to="/" className="logo logo-dark">
                 <span className="logo-sm">
-                  <img src={logo} alt="" height="22" />
+                  <img src={DhunoLogo} alt="" height="22" />
                 </span>
                 <span className="logo-lg">
-                  <img src={DhunoLogo} alt="" height="17" />
+                  {/* <img src={DhunoLogo} alt="" height="17" /> */}
+                    <img
+    src={DhunoLogo}
+    alt="logo"
+    style={{ height: "68px", width: "119px" }}
+  />
                 </span>
               </Link>
 

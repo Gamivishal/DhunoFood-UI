@@ -85,16 +85,38 @@ const Login = props => {
                         <Card className="overflow-hidden">
                             <CardBody className="pt-0">
 
-                                <h3 className="text-center mt-5 mb-4">
+                                {/* <h3 className="text-center mt-5 mb-4">
                                     <Link to="/" className="d-block auth-logo">
-                                        <img src={DhunoLogo} alt="" height="30" className="auth-logo-dark" />
-                                        <img src={DhunoLogo} alt="" height="30" className="auth-logo-light" />
+                                        <img src={DhunoLogo} alt="" height="30px" width="25px" className="auth-logo-dark" />
+                                        <img src={DhunoLogo} alt="" height="30" width="25" className="auth-logo-light" />
                                     </Link>
-                                </h3>
+                                </h3> */}
+                                  <style>
+    {`
+      .auth-logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .login-logo {
+        width: 200px;
+        height: auto;
+      }
+    `}
+  </style>
+                                <h3 className="text-center mt-4 mb-4">
+  <Link to="/" className="auth-logo d-inline-block">
+    <img 
+      src={DhunoLogo} 
+      alt="Logo" 
+      className="login-logo"
+    />
+  </Link>
+</h3>
 
                                 <div className="p-3">
-                                    <h4 className="text-muted font-size-18 mb-1 text-center">Welcome Back !</h4>
-                                    <p className="text-muted text-center">Sign in to continue to Lexa.</p>
                                     <Form
                                       className="form-horizontal mt-4"
                                       onSubmit={(e) => {

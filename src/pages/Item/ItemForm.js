@@ -92,13 +92,23 @@ const ItemForm = ({
               />
             </Col>
             <Col md={6}>
-              <Label>Price<span style={{ color: "red" }}>*</span></Label>
+              <Label>Base Price<span style={{ color: "red" }}>*</span></Label>
               <Input
                 type="number"
                 name="price"
                 value={formData.price}
                 onChange={onChange}
                 placeholder="Enter price"
+              />
+            </Col>
+            <Col md={6}>
+              <Label>Base Qty<span style={{ color: "red" }}>*</span></Label>
+              <Input
+                type="number"
+                name="baseQty"
+                value={formData.baseQty}
+                onChange={onChange}
+                placeholder="Enter base qty"
               />
             </Col>
           </Row>

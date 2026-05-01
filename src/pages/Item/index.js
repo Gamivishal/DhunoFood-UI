@@ -49,6 +49,7 @@ const Items = props => {
     categoryId: "",
     unit: "",
     price: "",
+    baseQty: 0,
   })
 
   const breadcrumbItems = [
@@ -160,6 +161,7 @@ const Items = props => {
           categoryId: "",
           unit: "",
           price: "",
+          baseQty: 0,
         })
         return
       }
@@ -181,6 +183,7 @@ const Items = props => {
           categoryId: item.categoryId ?? "",
           unit: item.unit ?? "",
           price: item.price ?? "",
+          baseQty: item.baseQty ?? 0,
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load item")
@@ -304,6 +307,7 @@ columns: buildServerSortColumns({
         categoryId: Number(formData.categoryId) || 0,
         unit: formData.unit,
         price: Number(formData.price) || 0,
+        baseQty: Number(formData.baseQty) || 0,
       }
 
       const response = await saveItem(payload)

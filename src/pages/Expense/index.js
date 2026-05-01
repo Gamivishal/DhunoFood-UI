@@ -4,7 +4,7 @@ import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { DASHBOARD_NAME } from "../../config";
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
+import { buildServerSortColumns, formatDate, getNextSortState, withAutoSrColumn } from "../../common/common"
 
 import { setBreadcrumbItems } from "../../store/actions"
 import {
@@ -204,10 +204,14 @@ if (!(response?.isSuccess)) {
     loadExpense()
   }, [isFormPage, isEditMode, expenseId])
 
-  const formatDate = dateString => {
+  const formatExpenseDate = dateString => {
     if (!dateString) return ""
     const date = new Date(dateString)
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    if (isNaN(date.getTime())) return ""
+    const day = String(date.getDate()).padStart(2, "0")
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const year = date.getFullYear()
+    return `${day}-${month}-${year}`
   }
 
   // const formatPaymentMode = mode => {
@@ -236,7 +240,7 @@ if (!(response?.isSuccess)) {
       }),
       rows: rows.map(item => ({
         expenseId: item.expenseId,
-        expenseDate: formatDate(item.expenseDate),
+        expenseDate: formatExpenseDate(item.expenseDate),
         categoryName: item.categoryName || "",
         amount: item.amount ?? "",
         paymentName: item.paymentName || "",

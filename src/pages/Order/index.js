@@ -3,7 +3,7 @@ import { Alert, Button, Card, CardBody, Col, Row, Spinner } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
+import { buildServerSortColumns, formatDate, getNextSortState, withAutoSrColumn } from "../../common/common"
 import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import {
@@ -247,9 +247,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
       rows: rows.map(order => ({
         orderId: order.orderId,
         customerName: order.customerName || "",
-        orderDate: order.orderDate
-          ? new Date(order.orderDate).toLocaleDateString()
-          : "",
+        orderDate: formatDate(order.orderDate),
         totalAmount: order.totalAmount ?? 0,
         quotationId: order.quotationId || "-",
         statusname: order.statusname || "",

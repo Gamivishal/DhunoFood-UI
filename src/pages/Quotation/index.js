@@ -3,7 +3,7 @@ import { Alert, Button, Card, CardBody, Col, Modal, Row, Spinner } from "reactst
 import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
+import { buildServerSortColumns, formatDate, getNextSortState, withAutoSrColumn } from "../../common/common"
 import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import {
@@ -283,9 +283,7 @@ quotationDate: "",
       rows: rows.map(quotation => ({
         quotationId: quotation.quotationId,
         customerName: quotation.customerName || "",
-        quotationDate: quotation.quotationDate && !isNaN(new Date(quotation.quotationDate).getTime())
-          ? new Date(quotation.quotationDate).toLocaleDateString()
-          : "",
+        quotationDate: formatDate(quotation.quotationDate),
         totalAmount: quotation.totalAmount ?? 0,
         action: (
           <div className="d-flex gap-2 justify-content-center">

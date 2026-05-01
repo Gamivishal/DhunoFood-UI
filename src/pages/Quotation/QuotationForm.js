@@ -75,7 +75,7 @@ const QuotationForm = ({
     })
   }
 
-  const handleBaseQtyChange = (index, e) => {
+  const handleQuantityChange = (index, e) => {
     let qty = Number(e.target.value) || 0
     if (qty < 1) qty = 1
     const updatedItems = [...formData.items]
@@ -83,12 +83,12 @@ const QuotationForm = ({
     const ratePerUnit = currentItem.ratePerUnit || 0
     updatedItems[index] = {
       ...currentItem,
-      baseQty: qty,
+      quantity: qty,
       amount: ratePerUnit * qty,
     }
     onItemChange(index, {
       target: {
-        name: "baseQty",
+        name: "quantity",
         value: qty
       }
     })
@@ -158,7 +158,7 @@ const QuotationForm = ({
                     <tr>
                       <th style={{ width: "180px" }}>Item</th>
                       <th style={{ width: "100px" }}>Price</th>
-                      <th style={{ width: "100px" }}>Base Qty</th>
+                      <th style={{ width: "100px" }}>Quantity</th>
                       <th style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
@@ -191,9 +191,9 @@ const QuotationForm = ({
                         <td>
                           <Input
                             type="number"
-                            name="baseQty"
-                            value={item.baseQty || 0}
-                            onChange={e => handleBaseQtyChange(index, e)}
+                            name="quantity"
+                            value={item.quantity || 0}
+                            onChange={e => handleQuantityChange(index, e)}
                             min={1}
                           />
                         </td>

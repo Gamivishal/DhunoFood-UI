@@ -183,7 +183,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           orderTime: "",
           quotationId: "",
           totalAmount: 0,
-          items: [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+          items: [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
         return
       }
@@ -213,9 +213,9 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           items: Array.isArray(order.items) && order.items.length > 0
             ? order.items.map(item => ({
               ...item,
-              amount: (Number(item.baseQty) || 0) * (Number(item.ratePerUnit) || 0),
+              amount: (Number(item.quantity) || 0) * (Number(item.ratePerUnit) || 0),
             }))
-            : [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
+            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load order")
@@ -301,14 +301,17 @@ orderDate: new Date().toLocaleDateString("en-CA"),
       const itemData = JSON.parse(value || "{}");
       updatedItems[index] = {
         ...updatedItems[index],
-        ...itemData, // Update all fields
+        ...itemData,
+        quantity: itemData.baseQty || 1,
+        amount: (itemData.baseQty || 1) * (itemData.ratePerUnit || 0),
       };
-    } else if (name === "baseQty") {
+    } else if (name === "quantity") {
       const qty = Number(value) || 0;
+      if (qty < 1) qty = 1;
       const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
-        baseQty: qty,
+        quantity: qty,
         amount: ratePerUnit * qty,
       };
     } else {
@@ -344,7 +347,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 },
       ],
     }))
   }
@@ -404,7 +407,8 @@ orderDate: new Date().toLocaleDateString("en-CA"),
         totalAmount: calculateTotal(),
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
-          baseQty: Number(item.baseQty) || 0,
+          quantity: Number(item.quantity) || 0,
+          ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
           amount: Number(item.amount) || 0,
         })),

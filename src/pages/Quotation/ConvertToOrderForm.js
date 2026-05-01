@@ -34,14 +34,14 @@ const ConvertToOrderForm = ({
     value: item.itemId || item.id,
     label: item.itemName || item.name,
     price: item.price,
-    baseQty: item.baseQty,
+    quantity: item.baseQty,
     ratePerUnit: item.ratePerUnit,
   }))
 
   const handleItemSelectChange = (index, option) => {
     const selectedItem = itemSelectOptions.find(opt => Number(opt.value) === Number(option?.value))
     const currentItem = formData.items[index] || {}
-    const baseQty = selectedItem?.baseQty || 0
+    const quantity = selectedItem?.quantity || 0
     const ratePerUnit = selectedItem?.ratePerUnit || 0
     onItemChange(index, {
       target: {
@@ -50,9 +50,9 @@ const ConvertToOrderForm = ({
           itemId: option?.value || 0,
           itemName: option?.label || "",
           price: selectedItem?.price || 0,
-          baseQty: baseQty,
+          quantity: quantity,
           ratePerUnit: ratePerUnit,
-          amount: ratePerUnit * baseQty,
+          amount: ratePerUnit * quantity,
         })
       }
     })
@@ -120,7 +120,7 @@ const ConvertToOrderForm = ({
                     <tr>
                       <th style={{ width: "180px" }}>Item Name</th>
                       <th style={{ width: "100px" }}>Price</th>
-                      <th style={{ width: "100px" }}>Base Qty</th>
+                      <th style={{ width: "100px" }}>Quantity</th>
                       <th style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
@@ -153,13 +153,13 @@ const ConvertToOrderForm = ({
                         <td>
                           <Input
                             type="number"
-                            name="baseQty"
-                            value={item.baseQty || 0}
+                            name="quantity"
+                            value={item.quantity || 0}
                             onChange={e => {
                               let qty = Number(e.target.value) || 0;
                               if (qty < 1) qty = 1;
-                              const updated = { ...item, baseQty: qty, amount: (item.ratePerUnit || 0) * qty };
-                              onItemChange(index, { target: { name: "baseQty", value: qty, updated } });
+                              const updated = { ...item, quantity: qty, amount: (item.ratePerUnit || 0) * qty };
+                              onItemChange(index, { target: { name: "quantity", value: qty, updated } });
                             }}
                             min={1}
                           />

@@ -107,11 +107,11 @@ const Quotations = props => {
         items: Array.isArray(quotation.items) && quotation.items.length > 0
           ? quotation.items.map(item => ({
             ...item,
-            baseQty: item.baseQty || item.quantity || 1,
+            quantity: item.quantity || item.baseQty || 1,
             ratePerUnit: item.ratePerUnit || 0,
-            amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
+            amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
           }))
-          : [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+          : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
       })
     } catch (err) {
       setFormError(err?.message || err || "Failed to load quotation")
@@ -224,7 +224,7 @@ const Quotations = props => {
           customerId: "",
 quotationDate: "",
           totalAmount: 0,
-          items: [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+          items: [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
         return
       }
@@ -250,11 +250,11 @@ quotationDate: "",
           items: Array.isArray(quotation.items) && quotation.items.length > 0
             ? quotation.items.map(item => ({
               ...item,
-              baseQty: item.baseQty || item.quantity || 1,
+              quantity: item.quantity || item.baseQty || 1,
               ratePerUnit: item.ratePerUnit || 0,
-              amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
+              amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
             }))
-            : [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load quotation")
@@ -400,7 +400,7 @@ quotationDate: "",
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 },
       ],
     }))
   }
@@ -461,14 +461,15 @@ quotationDate: "",
       const itemData = JSON.parse(value || "{}");
       updatedItems[index] = {
         ...updatedItems[index],
-        ...itemData, // Update all fields
+        ...itemData,
       };
-    } else if (name === "baseQty") {
+    } else if (name === "quantity") {
       const qty = Number(value) || 0;
+      if (qty < 1) qty = 1;
       const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
-        baseQty: qty,
+        quantity: qty,
         amount: ratePerUnit * qty,
       };
     } else {
@@ -489,7 +490,7 @@ quotationDate: "",
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 },
       ],
     }))
   }

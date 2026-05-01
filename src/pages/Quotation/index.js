@@ -105,8 +105,13 @@ const Quotations = props => {
         orderDate: "",
         orderTime: quotation.orderTime || "",
         items: Array.isArray(quotation.items) && quotation.items.length > 0
-          ? quotation.items
-          : [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
+          ? quotation.items.map(item => ({
+            ...item,
+            baseQty: item.baseQty || item.quantity || 1,
+            ratePerUnit: item.ratePerUnit || 0,
+            amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
+          }))
+          : [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
       })
     } catch (err) {
       setFormError(err?.message || err || "Failed to load quotation")
@@ -162,7 +167,7 @@ const Quotations = props => {
 
   useEffect(() => {
     const loadItemOptions = async () => {
-      if (!isFormPage) {
+      if (!isFormPage && !isConvertPage) {
         return
       }
 
@@ -180,7 +185,7 @@ const Quotations = props => {
     }
 
     loadItemOptions()
-  }, [isFormPage])
+  }, [isFormPage, isConvertPage])
 
   useEffect(() => {
     const loadCustomerOptions = async () => {
@@ -219,7 +224,7 @@ const Quotations = props => {
           customerId: "",
 quotationDate: "",
           totalAmount: 0,
-          items: [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
+          items: [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
         return
       }
@@ -243,8 +248,13 @@ quotationDate: "",
               : null,
           totalAmount: quotation.totalAmount ?? 0,
           items: Array.isArray(quotation.items) && quotation.items.length > 0
-            ? quotation.items
-            : [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
+            ? quotation.items.map(item => ({
+              ...item,
+              baseQty: item.baseQty || item.quantity || 1,
+              ratePerUnit: item.ratePerUnit || 0,
+              amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
+            }))
+            : [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load quotation")
@@ -390,7 +400,7 @@ quotationDate: "",
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 },
       ],
     }))
   }
@@ -479,7 +489,7 @@ quotationDate: "",
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 },
       ],
     }))
   }
@@ -513,7 +523,8 @@ try {
         orderTime: convertFormData.orderTime || null,
         items: convertFormData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
-          quantity: Number(item.quantity) || 0,
+          baseQty: Number(item.baseQty) || 0,
+          ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
           amount: Number(item.amount) || 0,
         })),
@@ -551,7 +562,8 @@ try {
         totalAmount: calculateTotal(),
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
-          quantity: Number(item.quantity) || 0,
+          baseQty: Number(item.baseQty) || 0,
+          ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
           amount: Number(item.amount) || 0,
         })),
@@ -690,6 +702,7 @@ try {
                 title={formTitle}
                 formError={formError}
                 formData={convertFormData}
+                itemOptions={itemOptions}
                 isEditMode={isEditMode}
                 saving={saving}
                 onChange={handleConvertChange}

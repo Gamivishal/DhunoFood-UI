@@ -1,4 +1,5 @@
 import React from "react"
+import Select from "react-select"
 import {
   Alert,
   Button,
@@ -18,6 +19,7 @@ const ConvertToOrderForm = ({
   title,
   formError,
   formData,
+  itemOptions,
   isEditMode,
   saving,
   onChange,
@@ -28,6 +30,33 @@ const ConvertToOrderForm = ({
   onClose,
   calculateTotal,
 }) => {
+  const itemSelectOptions = (itemOptions || []).map(item => ({
+    value: item.itemId || item.id,
+    label: item.itemName || item.name,
+    price: item.price,
+    baseQty: item.baseQty,
+    ratePerUnit: item.ratePerUnit,
+  }))
+
+  const handleItemSelectChange = (index, option) => {
+    const selectedItem = itemSelectOptions.find(opt => Number(opt.value) === Number(option?.value))
+    const currentItem = formData.items[index] || {}
+    const baseQty = selectedItem?.baseQty || 0
+    const ratePerUnit = selectedItem?.ratePerUnit || 0
+    onItemChange(index, {
+      target: {
+        name: "itemSelected",
+        value: JSON.stringify({
+          itemId: option?.value || 0,
+          itemName: option?.label || "",
+          price: selectedItem?.price || 0,
+          baseQty: baseQty,
+          ratePerUnit: ratePerUnit,
+          amount: ratePerUnit * baseQty,
+        })
+      }
+    })
+  }
   const handleOrderDateChange = e => {
     onChange({
       target: {
@@ -101,11 +130,16 @@ const ConvertToOrderForm = ({
                     {(formData.items || []).map((item, index) => (
                       <tr key={index}>
                         <td>
-                          <Input
-                            type="text"
-                            name="itemName"
-                            value={item.itemName || ""}
-                            readOnly
+                          <Select
+                            classNamePrefix="select2-selection"
+                            placeholder="Select item"
+                            options={itemSelectOptions}
+                            value={itemSelectOptions.find(
+                              opt => Number(opt.value) === Number(item.itemId)
+                            ) || null}
+                            onChange={option => handleItemSelectChange(index, option)}
+                            isSearchable
+                            isClearable
                           />
                         </td>
                         <td>

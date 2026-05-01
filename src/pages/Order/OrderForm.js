@@ -80,6 +80,7 @@ const OrderForm = ({
           itemId: option?.value || 0,
           itemName: option?.label || "",
           price: selectedItem?.price || 0,
+           baseQty: baseQty,
           quantity: baseQty,
           ratePerUnit: ratePerUnit,
           amount: ratePerUnit * baseQty,

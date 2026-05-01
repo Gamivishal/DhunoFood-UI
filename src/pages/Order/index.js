@@ -183,7 +183,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           orderTime: "",
           quotationId: "",
           totalAmount: 0,
-          items: [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
+          items: [{ itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
         return
       }
@@ -211,7 +211,10 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           status: order.status || "",
           totalAmount: order.totalAmount ?? 0,
           items: Array.isArray(order.items) && order.items.length > 0
-            ? order.items
+            ? order.items.map(item => ({
+              ...item,
+              amount: (Number(item.baseQty) || 0) * (Number(item.ratePerUnit) || 0),
+            }))
             : [{ itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 }],
         })
       } catch (err) {
@@ -341,7 +344,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", quantity: 1, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", baseQty: 1, ratePerUnit: 0, price: 0, amount: 0 },
       ],
     }))
   }
@@ -401,7 +404,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
         totalAmount: calculateTotal(),
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
-          quantity: Number(item.quantity) || 0,
+          baseQty: Number(item.baseQty) || 0,
           price: Number(item.price) || 0,
           amount: Number(item.amount) || 0,
         })),

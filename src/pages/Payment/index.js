@@ -137,11 +137,12 @@ const Payments = props => {
       columns: buildServerSortColumns({
         columns: [
           { label: "Order No", field: "orderNo", sort: "asc" },
-            { label: "Customer Name", field: "customerName", sort: "asc" },
+          { label: "Customer Name", field: "customerName", sort: "asc" },
           { label: "Payment Date", field: "paymentDate", sort: "asc" },
           { label: "Amount", field: "amount", sort: "asc" },
           { label: "Payment Mode", field: "paymentModeName", sort: "asc" },
           { label: "Remarks", field: "remarks", sort: "asc" },
+          { label: "Action", field: "action", sort: "disabled" },
         ],
         onSort: handleSortChange,
         activeSortColumn: sortColumn,
@@ -151,13 +152,18 @@ const Payments = props => {
         paymentId: payment.paymentId,
         orderId: payment.orderId || "-",
         customerName: payment.customerName || "",
-         orderNo: payment.orderNo || "-",
+        orderNo: payment.orderNo || "-",
         paymentDate: payment.paymentDate
           ? new Date(payment.paymentDate).toLocaleDateString()
           : "",
         amount: payment.amount ?? 0,
         paymentModeName: payment.paymentModeName || "-",
         remarks: payment.remarks || "-",
+        action: (
+          <Button color="success" size="sm" onClick={() => navigate(`/Payment/manage?orderId=${payment.orderId}`)}>
+            Add Payment
+          </Button>
+        ),
       })),
     })
   }, [rows, sortColumn, sortColumnDir])

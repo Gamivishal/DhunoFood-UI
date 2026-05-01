@@ -89,9 +89,10 @@ const ConvertToOrderForm = ({
                 <Table className="table-sm table-bordered" striped>
                   <thead>
                     <tr>
-                      <th style={{ width: "250px" }}>Item Name</th>
-                      <th style={{ width: "120px" }}>Price</th>
-                      <th style={{ width: "120px" }}>Quantity</th>
+                      <th style={{ width: "180px" }}>Item Name</th>
+                      <th style={{ width: "100px" }}>Price</th>
+                      <th style={{ width: "100px" }}>Base Qty</th>
+                      <th style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
                     </tr>
@@ -104,8 +105,7 @@ const ConvertToOrderForm = ({
                             type="text"
                             name="itemName"
                             value={item.itemName || ""}
-                            onChange={e => onItemChange(index, e)}
-                            placeholder="Enter item name"
+                            readOnly
                           />
                         </td>
                         <td>
@@ -113,17 +113,29 @@ const ConvertToOrderForm = ({
                             type="number"
                             name="price"
                             value={item.price || 0}
-                            onChange={e => onItemChange(index, e)}
-                            min={0}
+                            readOnly
                           />
                         </td>
                         <td>
                           <Input
                             type="number"
-                            name="quantity"
-                            value={item.quantity || 1}
-                            onChange={e => onItemChange(index, e)}
+                            name="baseQty"
+                            value={item.baseQty || 0}
+                            onChange={e => {
+                              let qty = Number(e.target.value) || 0;
+                              if (qty < 1) qty = 1;
+                              const updated = { ...item, baseQty: qty, amount: (item.ratePerUnit || 0) * qty };
+                              onItemChange(index, { target: { name: "baseQty", value: qty, updated } });
+                            }}
                             min={1}
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            type="number"
+                            name="ratePerUnit"
+                            value={item.ratePerUnit || 0}
+                            readOnly
                           />
                         </td>
                         <td>

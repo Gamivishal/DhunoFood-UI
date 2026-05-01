@@ -34,9 +34,11 @@ const OrderForm = ({
   calculateTotal,
 }) => {
   const itemSelectOptions = (itemOptions || []).map(item => ({
-    value: item.id,
-    label: item.name,
+    value: item.itemId || item.id,
+    label: item.itemName || item.name,
     price: item.price,
+    baseQty: item.baseQty,
+    ratePerUnit: item.ratePerUnit,
   }))
 
   const customerSelectOptions = (customerOptions || []).map(customer => ({
@@ -69,37 +71,40 @@ const OrderForm = ({
 
   const handleItemSelectChange = (index, option) => {
     const selectedItem = itemSelectOptions.find(opt => Number(opt.value) === Number(option?.value))
-    const itemPrice = selectedItem?.price || 0
-    const currentItem = formData.items[index] || {}
-    const qty = currentItem.quantity || 1
-    
-    onItemChange(index, { 
-      target: { 
-        name: "itemSelected", 
+    const baseQty = selectedItem?.baseQty || 0
+    const ratePerUnit = selectedItem?.ratePerUnit || 0
+    onItemChange(index, {
+      target: {
+        name: "itemSelected",
         value: JSON.stringify({
           itemId: option?.value || 0,
           itemName: option?.label || "",
-          price: itemPrice,
-          quantity: qty,
-          amount: itemPrice * qty,
+          price: selectedItem?.price || 0,
+          baseQty: baseQty,
+          ratePerUnit: ratePerUnit,
+          amount: ratePerUnit * baseQty,
         })
-      } 
+      }
     })
   }
 
-  const handleQuantityChange = (index, e) => {
+  const handleBaseQtyChange = (index, e) => {
     let qty = Number(e.target.value) || 0
     if (qty < 1) qty = 1
     const updatedItems = [...formData.items]
     const currentItem = formData.items[index] || {}
-    const currentQty = currentItem.quantity || 1
-    const itemPrice = currentItem.price || 0
+    const ratePerUnit = currentItem.ratePerUnit || 0
     updatedItems[index] = {
       ...currentItem,
-      quantity: qty,
-      amount: qty * itemPrice,
+      baseQty: qty,
+      amount: ratePerUnit * qty,
     }
-    onQuantityChange(index, qty)
+    onItemChange(index, {
+      target: {
+        name: "baseQty",
+        value: qty
+      }
+    })
   }
 
   return (
@@ -175,9 +180,10 @@ const OrderForm = ({
                 <Table className="table-sm table-bordered" striped>
                   <thead>
                     <tr>
-                      <th style={{ width: "200px" }}>Item</th>
-                      <th style={{ width: "120px" }}>Price</th>
-                      <th style={{ width: "120px" }}>Quantity</th>
+                      <th style={{ width: "180px" }}>Item</th>
+                      <th style={{ width: "100px" }}>Price</th>
+                      <th style={{ width: "100px" }}>Base Qty</th>
+                      <th style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
                     </tr>
@@ -209,10 +215,18 @@ const OrderForm = ({
                         <td>
                           <Input
                             type="number"
-                            name="quantity"
-                            value={item.quantity || 1}
-                            onChange={e => handleQuantityChange(index, e)}
+                            name="baseQty"
+                            value={item.baseQty || 0}
+                            onChange={e => handleBaseQtyChange(index, e)}
                             min={1}
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            type="number"
+                            name="ratePerUnit"
+                            value={item.ratePerUnit || 0}
+                            readOnly
                           />
                         </td>
                         <td>

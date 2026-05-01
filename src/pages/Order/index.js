@@ -291,40 +291,34 @@ orderDate: new Date().toLocaleDateString("en-CA"),
   }
 
   const handleItemChange = (index, event) => {
-    const { name, value } = event.target
-    const updatedItems = [...formData.items]
-    
+    const { name, value } = event.target;
+    const updatedItems = [...formData.items];
+
     if (name === "itemSelected") {
-      const itemData = JSON.parse(value || "{}")
+      const itemData = JSON.parse(value || "{}");
       updatedItems[index] = {
         ...updatedItems[index],
-        itemId: itemData.itemId || 0,
-        itemName: itemData.itemName || "",
-        price: itemData.price || 0,
-        quantity: itemData.quantity || 1,
-        amount: itemData.amount || 0,
-      }
-    } else if (name === "itemId") {
+        ...itemData, // Update all fields
+      };
+    } else if (name === "baseQty") {
+      const qty = Number(value) || 0;
+      const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
-        itemId: Number(value) || 0,
-      }
+        baseQty: qty,
+        amount: ratePerUnit * qty,
+      };
     } else {
       updatedItems[index] = {
         ...updatedItems[index],
-        [name]: name === "itemName" ? value : Number(value) || 0,
-      }
-
-      if (name === "quantity" || name === "price") {
-        updatedItems[index].amount =
-          (Number(updatedItems[index].quantity) || 0) * (Number(updatedItems[index].price) || 0)
-      }
+        [name]: value,
+      };
     }
 
     setFormData(previous => ({
       ...previous,
       items: updatedItems,
-    }))
+    }));
   }
 
   const handleQuantityChange = (index, quantity) => {

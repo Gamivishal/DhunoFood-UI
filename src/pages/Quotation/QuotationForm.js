@@ -83,12 +83,12 @@ const QuotationForm = ({
     const ratePerUnit = currentItem.ratePerUnit || 0
     updatedItems[index] = {
       ...currentItem,
-      quantity: qty,
+      baseQty: qty,
       amount: ratePerUnit * qty,
     }
     onItemChange(index, {
       target: {
-        name: "quantity",
+        name: "baseQty",
         value: qty
       }
     })
@@ -191,8 +191,8 @@ const QuotationForm = ({
                         <td>
                           <Input
                             type="number"
-                            name="quantity"
-                            value={item.quantity || 0}
+                            name="baseQty"
+                            value={item.baseQty || 0}
                             onChange={e => handleQuantityChange(index, e)}
                             min={1}
                           />

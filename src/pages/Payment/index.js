@@ -236,11 +236,6 @@ navigate("/Payment")
           ) : (
             <Card>
               <CardBody>
-                <div className="d-flex justify-content-end mb-3">
-                  <Button color="primary" type="button" onClick={() => navigate("/Payment/manage")}>
-                    <i className="mdi mdi-plus me-1" />Add Payment
-                  </Button>
-                </div>
                 {error ? <Alert color="danger">{error}</Alert> : null}
                 {loading ? (
                   <div className="text-center py-5">

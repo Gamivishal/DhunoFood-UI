@@ -882,6 +882,18 @@ const deleteOrderById = async id => {
   }
 }
 
+const updateOrderStatus = async (id, status, reason = "") => {
+  try {
+    return await post("/Order/UpdateStatus", { orderId: id, status, reason })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Order status update failed"
+    )
+  }
+}
+
 //AdvancePayment API helpers
 const getAdvancePaymentsPages = async (params = {}) => {
   try {
@@ -1160,6 +1172,7 @@ export {
   getOrderById,
   saveOrder,
   deleteOrderById,
+  updateOrderStatus,
   getPaymentPages,
   savePayment,
   getOrderDropdownList,

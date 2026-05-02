@@ -13,6 +13,7 @@ import {
   getOrderById,
   getOrderPages,
   saveOrder,
+  updateOrderStatus,
 } from "../../helpers/fakebackend_helper"
 import { getLovDropdownList } from "../../helpers/api_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
@@ -434,6 +435,32 @@ navigate("/Order")
     }
   }
 
+  const handleCancelOrder = async reason => {
+    if (!reason?.trim()) return
+    setSaving(true)
+    try {
+      await updateOrderStatus(formData.orderId, "2", reason)
+      await showSuccess("Order cancelled successfully")
+      navigate("/Order")
+    } catch (err) {
+      await showError(err?.message || "Failed to cancel order")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleCompleteOrder = async () => {
+    setSaving(true)
+    try {
+      await updateOrderStatus(formData.orderId, "3", "")
+      await showSuccess("Order completed successfully")
+    } catch (err) {
+      await showError(err?.message || "Failed to complete order")
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <React.Fragment>
       <Row>
@@ -465,6 +492,8 @@ navigate("/Order")
                 onSubmit={handleSubmit}
                 onClose={() => navigate("/Order")}
                 calculateTotal={calculateTotal}
+                onCancelOrder={handleCancelOrder}
+                onCompleteOrder={handleCompleteOrder}
               />
             )
           ) : (

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Select from "react-select"
 import {
   Alert,
@@ -10,6 +10,10 @@ import {
   Form,
   Input,
   Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Row,
   Spinner,
   Table,
@@ -32,7 +36,12 @@ const OrderForm = ({
   onSubmit,
   onClose,
   calculateTotal,
+  onCancelOrder,
+  onCompleteOrder,
 }) => {
+  const [cancelModal, setCancelModal] = useState(false)
+  const [cancelReason, setCancelReason] = useState("")
+
   const itemSelectOptions = (itemOptions || []).map(item => ({
     value: item.itemId || item.id,
     label: item.itemName || item.name,
@@ -157,7 +166,7 @@ const OrderForm = ({
               />
             </Col>
             {isEditMode && (
-              <Col md={6}>
+              <Col md={6} className="d-none">
                 <Label>Status<span style={{ color: "red" }}>*</span></Label>
                 <Select
                   classNamePrefix="select2-selection"
@@ -272,10 +281,20 @@ const OrderForm = ({
             </Col>
           </Row>
 
-          <div className="app-form-actions">
+<div className="app-form-actions">
             <Button color="light" type="button" onClick={onClose}>
               Cancel
             </Button>
+            {isEditMode && (
+              <>
+                <Button color="warning" type="button" onClick={() => setCancelModal(true)}>
+                  Cancel Order
+                </Button>
+                <Button color="success" type="button" onClick={onCompleteOrder} disabled={saving}>
+                  Complete Order
+                </Button>
+              </>
+            )}
             <Button color="success" type="submit" disabled={saving}>
               {saving ? <Spinner size="sm" className="me-2" /> : null}
               Save
@@ -283,6 +302,28 @@ const OrderForm = ({
           </div>
         </Form>
       </CardBody>
+
+      <Modal isOpen={cancelModal} toggle={() => setCancelModal(false)}>
+        <ModalHeader toggle={() => setCancelModal(false)}>Cancel Order</ModalHeader>
+        <ModalBody>
+          <Label>Reason for cancellation</Label>
+          <Input
+            type="textarea"
+            rows="4"
+            value={cancelReason}
+            onChange={e => setCancelReason(e.target.value)}
+            placeholder="Enter reason for cancellation"
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="light" type="button" onClick={() => setCancelModal(false)}>
+            No
+          </Button>
+          <Button color="warning" type="button" onClick={() => { onCancelOrder(cancelReason); setCancelModal(false); }} disabled={!cancelReason.trim()}>
+            Yes, Cancel Order
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Card>
   )
 }

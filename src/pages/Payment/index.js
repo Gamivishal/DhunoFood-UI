@@ -36,6 +36,7 @@ const Payments = props => {
   const [sortColumnDir, setSortColumnDir] = useState(PAYMENT_LIST_SORT_DIR)
   const [formTitle, setFormTitle] = useState("Add Payment")
   const [paymentModeOptions, setPaymentModeOptions] = useState([])
+  const [paymentTypeOptions, setPaymentTypeOptions] = useState([])
   const [formData, setFormData] = useState({
     paymentId: 0,
     orderId: "",
@@ -48,6 +49,7 @@ const Payments = props => {
     paymentDate: new Date().toISOString().split("T")[0],
     amount: "",
     paymentMode: "",
+    paymentType: "",
     remarks: "",
   })
 
@@ -118,6 +120,7 @@ const Payments = props => {
             paymentDate: new Date().toISOString().split("T")[0],
             amount: "",
             paymentMode: "",
+            paymentType: "",
             remarks: "",
           })
           return
@@ -154,6 +157,28 @@ const Payments = props => {
     }
 
     loadPaymentModeOptions()
+  }, [isFormPage])
+
+  useEffect(() => {
+    const loadPaymentTypeOptions = async () => {
+      if (!isFormPage) {
+        return
+      }
+
+      try {
+        const response = await getLovDropdownList("Paymenttype")
+        if (response?.isSuccess && Array.isArray(response?.data)) {
+          setPaymentTypeOptions(response.data)
+          return
+        }
+
+        throw new Error(response?.message || "Failed to load payment types")
+      } catch (err) {
+        setFormError(err?.message || err || "Failed to load payment types")
+      }
+    }
+
+    loadPaymentTypeOptions()
   }, [isFormPage])
 
   const data = useMemo(() => {
@@ -214,13 +239,19 @@ const Payments = props => {
     setSaving(true)
 
     try {
+      const paymentDateValue = formData.paymentDate 
+        ? new Date(formData.paymentDate).toISOString() 
+        : null
+
       const payload = {
         paymentId: 0,
         orderId: Number(formData.orderId) || 0,
         customerId: Number(formData.customerId) || 0,
-        paymentDate: new Date(formData.paymentDate).toISOString(),
+        paymentDate: paymentDateValue,
         amount: Number(formData.amount) || 0,
         paymentMode: formData.paymentMode || "",
+        paymentType: formData.paymentType || "",
+        pendingAmount: Number(formData.pendingAmount) || 0,
         remarks: formData.remarks || "",
       }
 
@@ -260,6 +291,7 @@ navigate("/Payment")
                 formError={formError}
                 formData={formData}
                 paymentModeOptions={paymentModeOptions}
+                paymentTypeOptions={paymentTypeOptions}
                 saving={saving}
                 onChange={handleChange}
                 onSubmit={handleSubmit}

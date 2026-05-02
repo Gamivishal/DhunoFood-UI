@@ -19,15 +19,21 @@ const PaymentForm = ({
   formError,
   formData,
   paymentModeOptions,
+  paymentTypeOptions,
   saving,
   onChange,
   onSubmit,
   onClose,
 }) => {
 
-  const paymentModeSelectOptions = (paymentModeOptions || []).map(mode => ({
+const paymentModeSelectOptions = (paymentModeOptions || []).map(mode => ({
     value: mode.code,
     label: mode.name,
+  }))
+
+  const paymentTypeSelectOptions = (paymentTypeOptions || []).map(type => ({
+    value: type.code,
+    label: type.name,
   }))
 
   const handlePaymentModeSelectChange = option => {
@@ -38,6 +44,16 @@ const PaymentForm = ({
       },
     })
   }
+
+  const handlePaymentTypeSelectChange = option => {
+    onChange({
+      target: {
+        name: "paymentType",
+        value: option?.value || "",
+      },
+    })
+  }
+
 
   return (
     <Card className="mb-4 app-form-card">
@@ -127,6 +143,20 @@ const PaymentForm = ({
                   opt => opt.value === formData.paymentMode
                 ) || null}
                 onChange={handlePaymentModeSelectChange}
+                isSearchable
+                isClearable
+              />
+            </Col>
+            <Col md={6}>
+              <Label>Payment Type<span style={{ color: "red" }}>*</span></Label>
+              <Select
+                classNamePrefix="select2-selection"
+                placeholder="Select payment type"
+                options={paymentTypeSelectOptions}
+                value={paymentTypeSelectOptions.find(
+                  opt => opt.value === formData.paymentType
+                ) || null}
+                onChange={handlePaymentTypeSelectChange}
                 isSearchable
                 isClearable
               />

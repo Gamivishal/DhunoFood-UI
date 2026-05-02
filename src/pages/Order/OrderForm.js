@@ -189,7 +189,7 @@ const OrderForm = ({
                       <th style={{ width: "180px" }}>Item</th>
                       <th style={{ width: "150px" }}>Price (Qty-UOM)</th>
                       <th style={{ width: "100px" }}>Quantity</th>
-                      <th className="d-done" style={{ width: "100px" }}>Rate/Unit</th>
+                      <th className="d-none" style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
                     </tr>
@@ -228,7 +228,7 @@ const OrderForm = ({
                             min={1}
                           />
                         </td>
-                        <td>
+                        <td className="d-none">
                           <Input
                             type="number"
                             name="ratePerUnit"

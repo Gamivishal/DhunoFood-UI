@@ -969,6 +969,18 @@ const savePayment = async payload => {
   }
 }
 
+const getOrderDetailsById = async (id) => {
+  try {
+    return await get(`/Payment/GetbyorderId?id=${id}`, {})
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Order details fetch failed"
+    )
+  }
+}
+
 const getOrderDropdownList = async () => {
   try {
     return await get("/Dropdown/orderList", {})
@@ -1138,6 +1150,7 @@ export {
   getPaymentPages,
   savePayment,
   getOrderDropdownList,
+  getOrderDetailsById,
   getItemList,
   getCustomerList,
   getAdvancePaymentsPages,getAdvancePaymentById,saveAdvancePayment,deleteAdvancePaymentById,getAdvancePaymentHistoryPages,

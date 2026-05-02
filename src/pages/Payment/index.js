@@ -8,6 +8,7 @@ import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import {
   getOrderDropdownList,
+  getOrderDetailsById,
   getPaymentPages,
   savePayment,
 } from "../../helpers/fakebackend_helper"
@@ -15,7 +16,7 @@ import { getLovDropdownList } from "../../helpers/api_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
 import PaymentForm from "./PaymentForm"
 
-const PAYMENT_LIST_SORT_COLUMN = "paymentDate"
+const PAYMENT_LIST_SORT_COLUMN = "orderNo"
 const PAYMENT_LIST_SORT_DIR = "desc"
 
 const Payments = props => {
@@ -40,6 +41,11 @@ const Payments = props => {
   const [formData, setFormData] = useState({
     paymentId: 0,
     orderId: "",
+    orderNo: "",
+    customerName: "",
+    totalAmount: "",
+    paidAmount: "",
+    pendingAmount: "",
     paymentDate: new Date().toISOString().split("T")[0],
     amount: "",
     paymentMode: "",
@@ -111,6 +117,42 @@ const Payments = props => {
   }, [isFormPage])
 
   useEffect(() => {
+    const loadOrderDetails = async () => {
+      const orderIdFromParams = Number(new URLSearchParams(location.search).get("orderId"))
+      if (!isFormPage || !orderIdFromParams) {
+        return
+      }
+
+      setLoading(true)
+      try {
+        const response = await getOrderDetailsById(orderIdFromParams)
+        if (response?.isSuccess && response?.data) {
+          const data = response.data
+          console.log("Fetched order details:", data)
+          setFormData(prev => ({
+            ...prev,
+            orderId: data.orderId,
+            orderNo: data.orderNo || "",
+            customerName: data.customerName || "",
+            totalAmount: data.totalAmount || "",
+            paidAmount: data.paidAmount || "",
+            pendingAmount: data.pendingAmount || "",
+          }))
+          return
+        }
+
+        throw new Error(response?.message || "Failed to load order details")
+      } catch (err) {
+        setFormError(err?.message || err || "Failed to load order details")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadOrderDetails()
+  }, [isFormPage, location.search])
+
+  useEffect(() => {
     const loadPaymentModeOptions = async () => {
       if (!isFormPage) {
         return
@@ -138,10 +180,15 @@ const Payments = props => {
         columns: [
           { label: "Order No", field: "orderNo", sort: "asc" },
           { label: "Customer Name", field: "customerName", sort: "asc" },
-          { label: "Payment Date", field: "paymentDate", sort: "asc" },
-          { label: "Amount", field: "amount", sort: "asc" },
-          { label: "Payment Mode", field: "paymentModeName", sort: "asc" },
-          { label: "Remarks", field: "remarks", sort: "asc" },
+          { label: "OrderDate", field: "orderDate", sort: "asc" },
+          { label: "Order Amount", field: "totalAmount", sort: "asc" },
+
+  { label: "Paid Amount", field: "paidAmount", sort: "asc" },
+
+    { label: "Pending Amount", field: "pendingAmount", sort: "asc" },
+
+         // { label: "Payment Mode", field: "paymentModeName", sort: "asc" },
+        //  { label: "Remarks", field: "remarks", sort: "asc" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
         onSort: handleSortChange,
@@ -153,8 +200,12 @@ const Payments = props => {
         orderId: payment.orderId || "-",
         customerName: payment.customerName || "",
         orderNo: payment.orderNo || "-",
-        paymentDate: formatDate(payment.paymentDate),
-        amount: payment.amount ?? 0,
+        orderDate: formatDate(payment.orderDate),
+        totalAmount: payment.totalAmount ?? 0,
+
+        paidAmount: payment.paidAmount ?? 0,
+        pendingAmount: payment.pendingAmount ?? 0,
+
         paymentModeName: payment.paymentModeName || "-",
         remarks: payment.remarks || "-",
         action: (

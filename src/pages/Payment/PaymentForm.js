@@ -90,6 +90,36 @@ const PaymentForm = ({
             </Col>
           </Row>
 
+          {formData.orderNo ? (
+            <Row className="g-3 mt-2">
+              <Col md={6}>
+                <Label>Order No</Label>
+                <Input value={formData.orderNo} disabled />
+              </Col>
+              <Col md={6}>
+                <Label>Customer Name</Label>
+                <Input value={formData.customerName} disabled />
+              </Col>
+            </Row>
+          ) : null}
+
+          {formData.orderNo ? (
+            <Row className="g-3 mt-2">
+              <Col md={4}>
+                <Label>Order Amount</Label>
+                <Input value={formData.totalAmount} disabled />
+              </Col>
+              <Col md={4}>
+                <Label>Paid Amount</Label>
+                <Input value={formData.paidAmount} disabled />
+              </Col>
+              <Col md={4}>
+                <Label>Pending Amount</Label>
+                <Input value={formData.pendingAmount} disabled />
+              </Col>
+            </Row>
+          ) : null}
+
           <Row className="g-3 mt-2">
             <Col md={6}>
               <Label>Amount<span style={{ color: "red" }}>*</span></Label>

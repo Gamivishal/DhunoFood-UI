@@ -211,11 +211,15 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           status: order.status || "",
           totalAmount: order.totalAmount ?? 0,
           items: Array.isArray(order.items) && order.items.length > 0
-            ? order.items.map(item => ({
-              ...item,
-              amount: (Number(item.quantity) || 0) * (Number(item.ratePerUnit) || 0),
-            }))
-            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+            ? order.items.map(item => {
+              const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+              return {
+                ...item,
+                amount: (Number(item.quantity) || 0) * (Number(item.ratePerUnit) || 0),
+                unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
+              }
+            })
+            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "" }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load order")
@@ -409,6 +413,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
           amount: Number(item.amount) || 0,
+          unit: item.unit || "",
         })),
       }
 

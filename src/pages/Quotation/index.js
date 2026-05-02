@@ -106,13 +106,17 @@ const Quotations = props => {
         orderDate: "",
         orderTime: quotation.orderTime || "",
         items: Array.isArray(quotation.items) && quotation.items.length > 0
-          ? quotation.items.map(item => ({
-            ...item,
-            quantity: item.quantity || item.baseQty || 1,
-            ratePerUnit: item.ratePerUnit || 0,
-            amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
-          }))
-          : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+          ? quotation.items.map(item => {
+            const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+            return {
+              ...item,
+              quantity: item.quantity || item.baseQty || 1,
+              ratePerUnit: item.ratePerUnit || 0,
+              amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
+              unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
+            }
+          })
+          : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "" }],
       })
     } catch (err) {
       setFormError(err?.message || err || "Failed to load quotation")
@@ -189,6 +193,25 @@ const Quotations = props => {
   }, [isFormPage, isConvertPage])
 
   useEffect(() => {
+    if (!isFormPage || !itemOptions.length || !formData.items?.length) {
+      return
+    }
+    const hasMissingUnit = formData.items.some(item => item.itemId && !item.unit)
+    if (hasMissingUnit) {
+      const updatedItems = formData.items.map(item => {
+        if (!item.unit && item.itemId) {
+          const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+          if (matchedItem?.unit) {
+            return { ...item, unit: matchedItem.unit }
+          }
+        }
+        return item
+      })
+      setFormData(prev => ({ ...prev, items: updatedItems }))
+    }
+  }, [itemOptions])
+
+  useEffect(() => {
     const loadCustomerOptions = async () => {
       if (!isFormPage) {
         return
@@ -249,13 +272,17 @@ quotationDate: "",
               : null,
           totalAmount: quotation.totalAmount ?? 0,
           items: Array.isArray(quotation.items) && quotation.items.length > 0
-            ? quotation.items.map(item => ({
-              ...item,
-              quantity: item.quantity || item.baseQty || 1,
-              ratePerUnit: item.ratePerUnit || 0,
-              amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
-            }))
-            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+            ? quotation.items.map(item => {
+                const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+                return {
+                  ...item,
+                  quantity: item.quantity || item.baseQty || 1,
+                  ratePerUnit: item.ratePerUnit || 0,
+                  amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
+                  unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
+                }
+              })
+            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "" }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load quotation")
@@ -551,6 +578,7 @@ try {
           ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
           amount: Number(item.amount) || 0,
+          unit: item.unit || "",
         })),
       }
 
@@ -590,6 +618,7 @@ try {
           ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
           amount: Number(item.amount) || 0,
+          unit: item.unit || "",
         })),
       }
 

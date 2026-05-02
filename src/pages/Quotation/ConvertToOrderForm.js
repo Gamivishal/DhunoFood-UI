@@ -36,6 +36,7 @@ const ConvertToOrderForm = ({
     price: item.price,
     quantity: item.baseQty,
     ratePerUnit: item.ratePerUnit,
+    unit: item.unit,
   }))
 
   const handleItemSelectChange = (index, option) => {
@@ -43,6 +44,7 @@ const ConvertToOrderForm = ({
     const currentItem = formData.items[index] || {}
     const quantity = selectedItem?.quantity || 0
     const ratePerUnit = selectedItem?.ratePerUnit || 0
+    const unit = selectedItem?.unit || ""
     onItemChange(index, {
       target: {
         name: "itemSelected",
@@ -53,6 +55,7 @@ const ConvertToOrderForm = ({
           quantity: quantity,
           ratePerUnit: ratePerUnit,
           amount: ratePerUnit * quantity,
+          unit: unit,
         })
       }
     })
@@ -119,9 +122,9 @@ const ConvertToOrderForm = ({
                   <thead>
                     <tr>
                       <th style={{ width: "180px" }}>Item Name</th>
-                      <th style={{ width: "100px" }}>Price</th>
+                      <th style={{ width: "130px" }}>Price (Qty-UOM)</th>
                       <th style={{ width: "100px" }}>Quantity</th>
-                      <th style={{ width: "100px" }}>Rate/Unit</th>
+                      <th className="d-none" style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
                     </tr>
@@ -144,9 +147,9 @@ const ConvertToOrderForm = ({
                         </td>
                         <td>
                           <Input
-                            type="number"
+                            type="text"
                             name="price"
-                            value={item.price || 0}
+                            value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
                             readOnly
                           />
                         </td>
@@ -164,7 +167,7 @@ const ConvertToOrderForm = ({
                             min={1}
                           />
                         </td>
-                        <td>
+                        <td className="d-none">
                           <Input
                             type="number"
                             name="ratePerUnit"

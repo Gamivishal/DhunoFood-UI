@@ -39,6 +39,7 @@ const QuotationForm = ({
     price: item.price,
     baseQty: item.baseQty,
     ratePerUnit: item.ratePerUnit,
+    unit: item.unit,
   }))
 
   const customerSelectOptions = (customerOptions || []).map(customer => ({
@@ -60,6 +61,7 @@ const QuotationForm = ({
     const currentItem = formData.items[index] || {}
     const baseQty = selectedItem?.baseQty || 0
     const ratePerUnit = selectedItem?.ratePerUnit || 0
+    const unit = selectedItem?.unit || ""
     onItemChange(index, {
       target: {
         name: "itemSelected",
@@ -70,6 +72,7 @@ const QuotationForm = ({
           baseQty: baseQty,
           ratePerUnit: ratePerUnit,
           amount: ratePerUnit * baseQty,
+          unit: unit,
         })
       }
     })
@@ -157,9 +160,9 @@ const QuotationForm = ({
                   <thead>
                     <tr>
                       <th style={{ width: "180px" }}>Item</th>
-                      <th style={{ width: "100px" }}>Price</th>
+                      <th style={{ width: "130px" }}>Price (Qty-UOM)</th>
                       <th style={{ width: "100px" }}>Quantity</th>
-                      <th style={{ width: "100px" }}>Rate/Unit</th>
+                      <th className="d-none" style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
                     </tr>
@@ -180,14 +183,23 @@ const QuotationForm = ({
                             isClearable
                           />
                         </td>
-                        <td>
+                        {/* <td>
                           <Input
                             type="number"
                             name="price"
                             value={item.price || 0}
                             readOnly
                           />
-                        </td>
+                        </td> */}
+                         <td>
+                                                  <Input
+                                                    type="text"
+                                                    name="price"
+                                                    // value={`${item.baseQty} ${item.unit}---${item.price || 0}`}
+                                                     value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
+                                                    readOnly
+                                                  />
+                                                </td>
                         <td>
                           <Input
                             type="number"
@@ -197,7 +209,7 @@ const QuotationForm = ({
                             min={1}
                           />
                         </td>
-                        <td>
+                        <td className="d-none">
                           <Input
                             type="number"
                             name="ratePerUnit"

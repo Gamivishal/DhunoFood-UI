@@ -37,7 +37,8 @@ export async function exportToFile(url, filename, config = {}) {
 }
 
 //apply base url for axios
-const API_URL = "https://localhost:7281/api";
+//const API_URL = "https://localhost:7281/api";
+const API_URL = "https://dhunofood.bsite.net/api";
 
 const axiosApi = axios.create({
   baseURL: API_URL,

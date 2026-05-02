@@ -38,7 +38,7 @@ const Orders = props => {
   const [rows, setRows] = useState([])
   const [sortColumn, setSortColumn] = useState(ORDER_LIST_SORT_COLUMN)
   const [sortColumnDir, setSortColumnDir] = useState(ORDER_LIST_SORT_DIR)
-  const [statusFilter, setStatusFilter] = useState("")
+  const [statusFilter, setStatusFilter] = useState("1")
   const [formTitle, setFormTitle] = useState(isEditMode ? "Edit Order" : "Create Order")
   const [itemOptions, setItemOptions] = useState([])
   const [customerOptions, setCustomerOptions] = useState([])
@@ -467,6 +467,16 @@ navigate("/Order")
               <CardBody>
                 <div className="d-flex justify-content-between mb-3">
                   <div>
+                    
+                    <Button
+                      color={statusFilter === "1" ? "primary" : "secondary"}
+                      size="sm"
+                          className="me-2"
+                      onClick={() => setStatusFilter("1")}
+                    >
+                      Pending
+                    </Button>
+
                     <Button
                       color={statusFilter === "" ? "primary" : "secondary"}
                       size="sm"
@@ -474,13 +484,6 @@ navigate("/Order")
                       onClick={() => setStatusFilter("")}
                     >
                       All
-                    </Button>
-                    <Button
-                      color={statusFilter === "1" ? "primary" : "secondary"}
-                      size="sm"
-                      onClick={() => setStatusFilter("1")}
-                    >
-                      Pending
                     </Button>
                   </div>
                   <Button color="primary" type="button" onClick={() => navigate("/Order/manage")}>

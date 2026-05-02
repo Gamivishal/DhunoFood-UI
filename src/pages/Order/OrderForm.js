@@ -153,20 +153,22 @@ const OrderForm = ({
                 onChange={onChange}
               />
             </Col>
-            <Col md={6}>
-              <Label>Status<span style={{ color: "red" }}>*</span></Label>
-              <Select
-                classNamePrefix="select2-selection"
-                placeholder="Select status"
-                options={statusSelectOptions}
-                value={statusSelectOptions.find(
-                  opt => opt.value === formData.status
-                ) || null}
-                onChange={handleStatusSelectChange}
-                isSearchable
-                isClearable
-              />
-            </Col>
+            {isEditMode && (
+              <Col md={6}>
+                <Label>Status<span style={{ color: "red" }}>*</span></Label>
+                <Select
+                  classNamePrefix="select2-selection"
+                  placeholder="Select status"
+                  options={statusSelectOptions}
+                  value={statusSelectOptions.find(
+                    opt => opt.value === formData.status
+                  ) || null}
+                  onChange={handleStatusSelectChange}
+                  isSearchable
+                  isClearable
+                />
+              </Col>
+            )}
           </Row>
 
           <Row className="mt-3">

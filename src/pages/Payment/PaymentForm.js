@@ -18,31 +18,17 @@ const PaymentForm = ({
   title,
   formError,
   formData,
-  orderOptions,
   paymentModeOptions,
   saving,
   onChange,
   onSubmit,
   onClose,
 }) => {
-  const orderSelectOptions = (orderOptions || []).map(order => ({
-    value: order.id,
-    label: order.name,
-  }))
 
   const paymentModeSelectOptions = (paymentModeOptions || []).map(mode => ({
     value: mode.code,
     label: mode.name,
   }))
-
-  const handleOrderSelectChange = option => {
-    onChange({
-      target: {
-        name: "orderId",
-        value: option?.value || "",
-      },
-    })
-  }
 
   const handlePaymentModeSelectChange = option => {
     onChange({
@@ -64,21 +50,7 @@ const PaymentForm = ({
       <CardBody className="app-form-body">
         {formError ? <Alert color="danger">{formError}</Alert> : null}
         <Form onSubmit={onSubmit}>
-          <Row className="g-3">
-            <Col md={6}>
-              <Label>Order<span style={{ color: "red" }}>*</span></Label>
-              <Select
-                classNamePrefix="select2-selection"
-                placeholder="Select order"
-                options={orderSelectOptions}
-                value={orderSelectOptions.find(
-                  opt => Number(opt.value) === Number(formData.orderId)
-                ) || null}
-                onChange={handleOrderSelectChange}
-                isSearchable
-                isClearable
-              />
-            </Col>
+          {/* <Row className="g-3">
             <Col md={6}>
               <Label>Payment Date<span style={{ color: "red" }}>*</span></Label>
               <Input
@@ -88,7 +60,7 @@ const PaymentForm = ({
                 onChange={onChange}
               />
             </Col>
-          </Row>
+          </Row> */}
 
           {formData.orderNo ? (
             <Row className="g-3 mt-2">
@@ -105,22 +77,26 @@ const PaymentForm = ({
 
           {formData.orderNo ? (
             <Row className="g-3 mt-2">
-              <Col md={4}>
+              <Col md={6}>
                 <Label>Order Amount</Label>
                 <Input value={formData.totalAmount} disabled />
               </Col>
-              <Col md={4}>
+              <Col md={6}>
                 <Label>Paid Amount</Label>
                 <Input value={formData.paidAmount} disabled />
               </Col>
-              <Col md={4}>
+              {/* <Col md={4}>
                 <Label>Pending Amount</Label>
                 <Input value={formData.pendingAmount} disabled />
-              </Col>
+              </Col> */}
             </Row>
           ) : null}
 
           <Row className="g-3 mt-2">
+             <Col md={6}>
+                <Label>Pending Amount</Label>
+                <Input value={formData.pendingAmount} disabled />
+              </Col>
             <Col md={6}>
               <Label>Amount<span style={{ color: "red" }}>*</span></Label>
               <Input
@@ -130,6 +106,15 @@ const PaymentForm = ({
                 onChange={onChange}
                 placeholder="Enter amount"
                 min={0}
+              />
+            </Col>
+             <Col md={6}>
+              <Label>Payment Date<span style={{ color: "red" }}>*</span></Label>
+              <Input
+                type="date"
+                name="paymentDate"
+                value={formData.paymentDate}
+                onChange={onChange}
               />
             </Col>
             <Col md={6}>

@@ -7,7 +7,6 @@ import { buildServerSortColumns, formatDate, getNextSortState, withAutoSrColumn 
 import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import {
-  getOrderDropdownList,
   getOrderDetailsById,
   getPaymentPages,
   savePayment,
@@ -36,11 +35,11 @@ const Payments = props => {
   const [sortColumn, setSortColumn] = useState(PAYMENT_LIST_SORT_COLUMN)
   const [sortColumnDir, setSortColumnDir] = useState(PAYMENT_LIST_SORT_DIR)
   const [formTitle, setFormTitle] = useState("Add Payment")
-  const [orderOptions, setOrderOptions] = useState([])
   const [paymentModeOptions, setPaymentModeOptions] = useState([])
   const [formData, setFormData] = useState({
     paymentId: 0,
     orderId: "",
+    customerId: "",
     orderNo: "",
     customerName: "",
     totalAmount: "",
@@ -95,28 +94,6 @@ const Payments = props => {
   }
 
   useEffect(() => {
-    const loadOrderOptions = async () => {
-      if (!isFormPage) {
-        return
-      }
-
-      try {
-        const response = await getOrderDropdownList()
-        if (response?.isSuccess && Array.isArray(response?.data)) {
-          setOrderOptions(response.data)
-          return
-        }
-
-        throw new Error(response?.message || "Failed to load orders")
-      } catch (err) {
-        setFormError(err?.message || err || "Failed to load orders")
-      }
-    }
-
-    loadOrderOptions()
-  }, [isFormPage])
-
-  useEffect(() => {
     const loadOrderDetails = async () => {
       const orderIdFromParams = Number(new URLSearchParams(location.search).get("orderId"))
       if (!isFormPage || !orderIdFromParams) {
@@ -129,15 +106,20 @@ const Payments = props => {
         if (response?.isSuccess && response?.data) {
           const data = response.data
           console.log("Fetched order details:", data)
-          setFormData(prev => ({
-            ...prev,
+          setFormData({
+            paymentId: 0,
             orderId: data.orderId,
+            customerId: data.customerId || "",
             orderNo: data.orderNo || "",
             customerName: data.customerName || "",
             totalAmount: data.totalAmount || "",
             paidAmount: data.paidAmount || "",
             pendingAmount: data.pendingAmount || "",
-          }))
+            paymentDate: new Date().toISOString().split("T")[0],
+            amount: "",
+            paymentMode: "",
+            remarks: "",
+          })
           return
         }
 
@@ -235,6 +217,7 @@ const Payments = props => {
       const payload = {
         paymentId: 0,
         orderId: Number(formData.orderId) || 0,
+        customerId: Number(formData.customerId) || 0,
         paymentDate: new Date(formData.paymentDate).toISOString(),
         amount: Number(formData.amount) || 0,
         paymentMode: formData.paymentMode || "",
@@ -276,7 +259,6 @@ navigate("/Payment")
                 title={formTitle}
                 formError={formError}
                 formData={formData}
-                orderOptions={orderOptions}
                 paymentModeOptions={paymentModeOptions}
                 saving={saving}
                 onChange={handleChange}

@@ -164,3 +164,15 @@ export async function saveOrUpdateProperty(formData) {
 export async function getLovDropdownList(lovColumn) {
   return await get(`/Dropdown/LovMaster?Lov_column=${encodeURIComponent(lovColumn)}`);
 }
+
+// Download PDF from backend
+export async function downloadPDF(url, filename) {
+  const response = await getBlob(url);
+  const blob = new Blob([response.data], { type: "application/pdf" });
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.setAttribute("download", filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

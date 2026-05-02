@@ -816,6 +816,18 @@ const deleteQuotationById = async id => {
   }
 }
 
+const downloadQuotationPdf = async id => {
+  try {
+    return await getBlob(`/Quotation/DownloadQuotationPdf?id=${id}`)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Quotation PDF download failed"
+    )
+  }
+}
+
 const getOrderPages = async ({ start = 0, length = 10, sortColumn = "orderDate", sortColumnDir = "desc", status = null } = {}) => {
   try {
     return await get("/Order/GetAllpage", {
@@ -1143,6 +1155,7 @@ export {
   getQuotationById,
   saveQuotation,
   deleteQuotationById,
+  downloadQuotationPdf,
   getOrderPages,
   getOrderById,
   saveOrder,

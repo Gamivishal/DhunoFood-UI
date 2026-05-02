@@ -14,6 +14,7 @@ import {
   getQuotationPages,
   saveQuotation,
   saveCustomer,
+  downloadQuotationPdf,
 } from "../../helpers/fakebackend_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
 import QuotationForm from "./QuotationForm"
@@ -313,6 +314,30 @@ quotationDate: "",
                 <i className="mdi mdi-cart-plus font-size-18" />
               </Button>
             )}
+            <Button
+              color="link"
+              className="p-0 text-info"
+              title="Download PDF"
+              type="button"
+              onClick={async () => {
+                try {
+                  const response = await downloadQuotationPdf(quotation.quotationId)
+                  const blob = new Blob([response.data], { type: "application/pdf" })
+                  const url = window.URL.createObjectURL(blob)
+                  const link = document.createElement("a")
+                  link.href = url
+                  link.download = `Quotation_${quotation.quotationId}.pdf`
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
+                  window.URL.revokeObjectURL(url)
+                } catch (error) {
+                  showError("Failed to download PDF")
+                }
+              }}
+            >
+              <i className="mdi mdi-file-pdf-box font-size-18" />
+            </Button>
             <Button
               color="link"
               className="p-0 text-danger"

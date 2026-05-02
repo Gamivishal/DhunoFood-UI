@@ -39,6 +39,7 @@ const OrderForm = ({
     price: item.price,
     baseQty: item.baseQty,
     ratePerUnit: item.ratePerUnit,
+    unit: item.unit,
   }))
 
   const customerSelectOptions = (customerOptions || []).map(customer => ({
@@ -73,6 +74,7 @@ const OrderForm = ({
     const selectedItem = itemSelectOptions.find(opt => Number(opt.value) === Number(option?.value))
     const baseQty = selectedItem?.baseQty || 0
     const ratePerUnit = selectedItem?.ratePerUnit || 0
+    const unit = selectedItem?.unit || ""
     onItemChange(index, {
       target: {
         name: "itemSelected",
@@ -80,10 +82,11 @@ const OrderForm = ({
           itemId: option?.value || 0,
           itemName: option?.label || "",
           price: selectedItem?.price || 0,
-           baseQty: baseQty,
+          baseQty: baseQty,
           quantity: baseQty,
           ratePerUnit: ratePerUnit,
           amount: ratePerUnit * baseQty,
+          unit: unit,
         })
       }
     })
@@ -184,9 +187,9 @@ const OrderForm = ({
                   <thead>
                     <tr>
                       <th style={{ width: "180px" }}>Item</th>
-                      <th style={{ width: "100px" }}>Price</th>
+                      <th style={{ width: "150px" }}>Price (Qty-UOM)</th>
                       <th style={{ width: "100px" }}>Quantity</th>
-                      <th style={{ width: "100px" }}>Rate/Unit</th>
+                      <th className="d-done" style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
                     </tr>
@@ -209,9 +212,10 @@ const OrderForm = ({
                         </td>
                         <td>
                           <Input
-                            type="number"
+                            type="text"
                             name="price"
-                            value={item.price || 0}
+                            // value={`${item.baseQty} ${item.unit}---${item.price || 0}`}
+                             value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
                             readOnly
                           />
                         </td>

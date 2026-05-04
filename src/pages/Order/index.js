@@ -264,7 +264,13 @@ orderDate: new Date().toLocaleDateString("en-CA"),
               className="p-0 text-primary"
               title="Edit"
               type="button"
-              onClick={() => navigate(`/Order/manage/${order.orderId}`)}
+              onClick={() => {
+                if (order.status !== 1 && order.status !== "1") {
+                  showError(`You can't edit this record, this order is already ${order.statusname || "completed"}`)
+                  return
+                }
+                navigate(`/Order/manage/${order.orderId}`)
+              }}
             >
               <i className="mdi mdi-pencil font-size-18" />
             </Button>
@@ -274,7 +280,13 @@ orderDate: new Date().toLocaleDateString("en-CA"),
               title="Delete"
               type="button"
               disabled={deletingId === order.orderId}
-              onClick={() => handleDelete(order.orderId)}
+              onClick={() => {
+                if (order.status !== 1 && order.status !== "1") {
+                  showError(`You can't delete this record, this order is already ${order.statusname || "completed"}`)
+                  return
+                }
+                handleDelete(order.orderId)
+              }}
             >
               {deletingId === order.orderId ? (
                 <Spinner size="sm" />

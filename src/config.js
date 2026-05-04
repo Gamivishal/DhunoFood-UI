@@ -1,3 +1,3 @@
 // src/config.js
 
-export const DASHBOARD_NAME = "Dhono Food";
+export const DASHBOARD_NAME = "Dhuno Food";

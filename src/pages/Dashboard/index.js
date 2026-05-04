@@ -4,14 +4,12 @@ import { Button, Card, CardBody, Col, Row } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { setBreadcrumbItems } from "../../store/actions"
 import { getDashboardSummary, getNext7DaysOrders, getNext7DaysOrderItems } from "../../helpers/api_helper"
+import { DASHBOARD_NAME } from "../../config";
 
 const Dashboard = (props) => {
-  document.title = "Dashboard | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+  // document.title = "Dashboard |  ${DASHBOARD_NAME}"
+    document.title = `Dashboard | ${DASHBOARD_NAME}`
 
-  const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
-    { title: "Dashboard", link: "#" }
-  ]
 
   const [summary, setSummary] = useState(null)
   const [next7DaysOrders, setNext7DaysOrders] = useState([])
@@ -22,7 +20,7 @@ const Dashboard = (props) => {
   const [selectedView, setSelectedView] = useState("summary")
 
   useEffect(() => {
-    props.setBreadcrumbItems('Dashboard', breadcrumbItems)
+    props.setBreadcrumbItems('Dashboard')
     handleGetSummary()
   }, [])
 
@@ -170,7 +168,7 @@ const Dashboard = (props) => {
         </Row>
       )}
 
-      {selectedView === "orders" && next7DaysOrders.length > 0 && (
+      {selectedView === "orders" && (
         <Row className="mt-3">
           <Col>
             <Card>
@@ -189,7 +187,7 @@ const Dashboard = (props) => {
         </Row>
       )}
 
-      {selectedView === "orderItems" && next7DaysOrderItems.length > 0 && (
+      {selectedView === "orderItems" && (
         <Row className="mt-3">
           <Col>
             <Card>

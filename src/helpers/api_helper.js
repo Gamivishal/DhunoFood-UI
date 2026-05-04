@@ -176,3 +176,16 @@ export async function downloadPDF(url, filename) {
   link.click();
   document.body.removeChild(link);
 }
+
+// Dashboard API helpers
+export async function getDashboardSummary() {
+  return await get("/Dashboard/GetSummary");
+}
+
+export async function getNext7DaysOrders(sortColumn = "orderNo", sortColumnDir = "asc") {
+  return await get(`/Dashboard/GetNext7DaysOrders?sortColumn=${sortColumn}&sortColumnDir=${sortColumnDir}`);
+}
+
+export async function getNext7DaysOrderItems(sortColumn = "itemName", sortColumnDir = "asc") {
+  return await get(`/Dashboard/GetNext7DaysOrderItems?sortColumn=${sortColumn}&sortColumnDir=${sortColumnDir}`);
+}

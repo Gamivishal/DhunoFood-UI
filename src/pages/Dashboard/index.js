@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { connect } from "react-redux"
 import { Button, Card, CardBody, Col, Row } from "reactstrap"
+import { MDBDataTable } from "mdbreact"
 import { setBreadcrumbItems } from "../../store/actions"
-import { getDashboardSummary } from "../../helpers/api_helper"
+import { getDashboardSummary, getNext7DaysOrders, getNext7DaysOrderItems } from "../../helpers/api_helper"
 
 const Dashboard = (props) => {
   document.title = "Dashboard | Lexa - Responsive Bootstrap 5 Admin Dashboard"
@@ -13,14 +14,18 @@ const Dashboard = (props) => {
   ]
 
   const [summary, setSummary] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [next7DaysOrders, setNext7DaysOrders] = useState([])
+  const [next7DaysOrderItems, setNext7DaysOrderItems] = useState([])
+  const [loadingSummary, setLoadingSummary] = useState(false)
+  const [loadingOrders, setLoadingOrders] = useState(false)
+  const [loadingOrderItems, setLoadingOrderItems] = useState(false)
 
   useEffect(() => {
     props.setBreadcrumbItems('Dashboard', breadcrumbItems)
   }, [])
 
   const handleGetSummary = async () => {
-    setLoading(true)
+    setLoadingSummary(true)
     try {
       const response = await getDashboardSummary()
       if (response?.isSuccess && response?.data) {
@@ -29,16 +34,82 @@ const Dashboard = (props) => {
     } catch (err) {
       console.error("Failed to load summary", err)
     } finally {
-      setLoading(false)
+      setLoadingSummary(false)
     }
+  }
+
+  const handleGetNext7DaysOrders = async () => {
+    setLoadingOrders(true)
+    try {
+      const response = await getNext7DaysOrders()
+      if (response?.isSuccess && response?.data?.data) {
+        setNext7DaysOrders(response.data.data)
+      }
+    } catch (err) {
+      console.error("Failed to load next 7 days orders", err)
+    } finally {
+      setLoadingOrders(false)
+    }
+  }
+
+  const handleGetNext7DaysOrderItems = async () => {
+    setLoadingOrderItems(true)
+    try {
+      const response = await getNext7DaysOrderItems()
+      if (response?.isSuccess && response?.data?.data) {
+        setNext7DaysOrderItems(response.data.data)
+      }
+    } catch (err) {
+      console.error("Failed to load next 7 days order items", err)
+    } finally {
+      setLoadingOrderItems(false)
+    }
+  }
+
+  const orderData = {
+    columns: [
+      { label: "Order No", field: "orderNo", sort: "asc" },
+      { label: "Order Date", field: "orderDate", sort: "asc" },
+      { label: "Order Time", field: "orderTime", sort: "asc" },
+      { label: "Customer Name", field: "customerName", sort: "asc" },
+      { label: "Total Amount", field: "totalAmount", sort: "asc" },
+      { label: "Status", field: "statusName", sort: "asc" },
+    ],
+    rows: next7DaysOrders.map(order => ({
+      orderNo: order.orderNo || "-",
+      orderDate: order.orderDate ? order.orderDate.split("T")[0] : "-",
+      orderTime: order.orderTime || "-",
+      customerName: order.customerName || "-",
+      totalAmount: order.totalAmount || 0,
+      statusName: order.statusName || "-",
+    }))
+  }
+
+  const orderItemsData = {
+    columns: [
+      { label: "Item Name", field: "itemName", sort: "asc" },
+      { label: "Unit", field: "unitName", sort: "asc" },
+      { label: "Total Quantity", field: "totalQuantity", sort: "asc" },
+    ],
+    rows: next7DaysOrderItems.map(item => ({
+      itemName: item.itemName || "-",
+      unitName: item.unitName || "-",
+      totalQuantity: item.totalQuantity || 0,
+    }))
   }
 
   return (
     <React.Fragment>
       <Row>
         <Col>
-          <Button color="primary" onClick={handleGetSummary} disabled={loading}>
-            {loading ? "Loading..." : "Summary"}
+          <Button color="primary" className="me-2" onClick={handleGetSummary} disabled={loadingSummary}>
+            {loadingSummary ? "Loading..." : "Summary"}
+          </Button>
+          <Button color="primary" className="me-2" onClick={handleGetNext7DaysOrders} disabled={loadingOrders}>
+            {loadingOrders ? "Loading..." : "Next 7 Days Order"}
+          </Button>
+          <Button color="primary" onClick={handleGetNext7DaysOrderItems} disabled={loadingOrderItems}>
+            {loadingOrderItems ? "Loading..." : "Next 7 Days Order Items"}
           </Button>
         </Col>
       </Row>
@@ -74,6 +145,44 @@ const Dashboard = (props) => {
               <CardBody>
                 <h5>Total Expense</h5>
                 <h3>{summary.totalExpense}</h3>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      )}
+
+      {next7DaysOrders.length > 0 && (
+        <Row className="mt-3">
+          <Col>
+            <Card>
+              <CardBody>
+                <h5 className="mb-3">Next 7 Days Orders</h5>
+                <MDBDataTable
+                  striped
+                  bordered
+                  small
+                  noBottomColumns
+                  data={orderData}
+                />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      )}
+
+      {next7DaysOrderItems.length > 0 && (
+        <Row className="mt-3">
+          <Col>
+            <Card>
+              <CardBody>
+                <h5 className="mb-3">Next 7 Days Order Items</h5>
+                <MDBDataTable
+                  striped
+                  bordered
+                  small
+                  noBottomColumns
+                  data={orderItemsData}
+                />
               </CardBody>
             </Card>
           </Col>

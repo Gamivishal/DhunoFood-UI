@@ -585,6 +585,7 @@ try {
       const response = await saveQuotation(payload)
       if (response?.isSuccess) {
         await showSuccess(response?.message || "Converted to order successfully")
+        await loadQuotations()
         navigate("/Quotation")
         return
       }

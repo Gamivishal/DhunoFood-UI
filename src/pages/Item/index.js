@@ -306,8 +306,8 @@ columns: buildServerSortColumns({
         itemName: formData.itemName,
         categoryId: Number(formData.categoryId) || 0,
         unit: formData.unit,
-        price: Number(formData.price) || 0,
-        baseQty: Number(formData.baseQty) || 0,
+        price: Number(formData.price) || null,
+        baseQty: Number(formData.baseQty) || null,
       }
 
       const response = await saveItem(payload)

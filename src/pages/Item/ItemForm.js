@@ -65,6 +65,7 @@ const ItemForm = ({
                 value={formData.itemName}
                 onChange={onChange}
                 placeholder="Enter item name"
+                maxLength={80}
               />
             </Col>
             <Col md={6}>
@@ -91,24 +92,45 @@ const ItemForm = ({
                 isClearable
               />
             </Col>
-            <Col md={6}>
-              <Label>Base Price<span style={{ color: "red" }}>*</span></Label>
+<Col md={6}>
+              <Label>Price<span style={{ color: "red" }}>*</span></Label>
               <Input
-                type="number"
+                type="text"
                 name="price"
                 value={formData.price}
-                onChange={onChange}
+                onChange={e => {
+                  const val = e.target.value
+                  const parts = val.split(".")
+                  if (parts[0]?.length <= 8 && (!parts[1] || parts[1].length <= 2)) {
+                    onChange(e)
+                  }
+                }}
                 placeholder="Enter price"
+                onKeyDown={e => {
+                  if (!/[\d.]/.test(e.key) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key)) {
+                    e.preventDefault()
+                  }
+                }}
               />
             </Col>
             <Col md={6}>
               <Label>Base Qty<span style={{ color: "red" }}>*</span></Label>
               <Input
-                type="number"
+                type="text"
                 name="baseQty"
                 value={formData.baseQty}
-                onChange={onChange}
+                onChange={e => {
+                  const val = e.target.value
+                  if (val.length <= 9) {
+                    onChange(e)
+                  }
+                }}
                 placeholder="Enter base qty"
+                onKeyDown={e => {
+                  if (!/\d/.test(e.key) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"].includes(e.key)) {
+                    e.preventDefault()
+                  }
+                }}
               />
             </Col>
           </Row>

@@ -981,6 +981,60 @@ const getPaymentPages = async ({ start = 0, length = 10, sortColumn = "paymentDa
   }
 }
 
+const getInvoicePages = async ({ start = 0, length = 10, sortColumn = "invoiceId", sortColumnDir = "desc" } = {}) => {
+  try {
+    return await get("/Invoice/GetAllpage", {
+      params: { start, length, sortColumn, sortColumnDir },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Invoice list fetch failed"
+    )
+  }
+}
+
+const getInvoiceById = async id => {
+  try {
+    return await get("/Invoice/GetById", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Invoice fetch failed"
+    )
+  }
+}
+
+const saveInvoice = async payload => {
+  try {
+    return await post("/Invoice/Add", payload)
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Invoice save failed"
+    )
+  }
+}
+
+const deleteInvoiceById = async id => {
+  try {
+    return await del("/Invoice/Delete", {
+      params: { id },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Invoice delete failed"
+    )
+  }
+}
+
 const savePayment = async payload => {
   try {
     return await post("/Payment/Add", payload)
@@ -1180,4 +1234,8 @@ export {
   getItemList,
   getCustomerList,
   getAdvancePaymentsPages,getAdvancePaymentById,saveAdvancePayment,deleteAdvancePaymentById,getAdvancePaymentHistoryPages,
+  getInvoicePages,
+  getInvoiceById,
+  saveInvoice,
+  deleteInvoiceById,
 }

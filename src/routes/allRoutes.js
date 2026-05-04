@@ -43,6 +43,7 @@ import Customers from "../pages/Customer";
 import Quotations from "../pages/Quotation";
 import Orders from "../pages/Order";
 import Payments from "../pages/Payment";
+import Invoices from "../pages/Invoice";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -114,6 +115,10 @@ const userRoutes = [
 
   { path: "/Payment", component: <Payments /> },
   { path: "/Payment/manage", component: <Payments /> },
+
+  { path: "/Invoice", component: <Invoices /> },
+  { path: "/Invoice/manage", component: <Invoices /> },
+  { path: "/Invoice/manage/:id", component: <Invoices /> },
 
   // this route should be at the end of all other routes
   {

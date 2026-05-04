@@ -42,6 +42,7 @@ const ItemCategoryForm = ({
                 value={formData.categoryName}
                 onChange={onChange}
                 placeholder="Enter category name"
+                maxLength={100}
               />
             </Col>
           </Row>

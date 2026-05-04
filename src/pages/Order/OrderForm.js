@@ -283,14 +283,9 @@ const OrderForm = ({
           </Row>
 
 <div className="app-form-actions">
-            <Button color="light" type="button" onClick={onClose}>
-              Cancel
-            </Button>
+            
             {isEditMode && (
               <>
-                <Button color="warning" type="button" onClick={() => setConfirmCancelModal(true)}>
-                  Cancel Order
-                </Button>
                 <Button color="success" type="button" onClick={onCompleteOrder} disabled={saving}>
                   Complete Order
                 </Button>
@@ -300,6 +295,17 @@ const OrderForm = ({
               {saving ? <Spinner size="sm" className="me-2" /> : null}
               Save
             </Button>
+            <Button color="light" type="button" onClick={onClose}>
+              Cancel
+            </Button>
+             {isEditMode && (
+              <>
+                <Button color="danger" type="button" onClick={() => setConfirmCancelModal(true)}>
+                  Cancel Order
+                </Button>
+
+              </>
+            )}
           </div>
         </Form>
       </CardBody>

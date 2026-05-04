@@ -37,12 +37,13 @@ const LovDetailForm = ({ title, formData, saving, formError, onChange, onSubmit,
           </Row>
 
           <div className="app-form-actions">
-            <Button color="light" type="button" onClick={onCancel}>
-              Cancel
-            </Button>
+          
             <Button color="success" type="submit" disabled={saving}>
               {saving ? <Spinner size="sm" className="me-2" /> : null}
               Save
+            </Button>
+              <Button color="light" type="button" onClick={onCancel}>
+              Cancel
             </Button>
           </div>
         </Form>

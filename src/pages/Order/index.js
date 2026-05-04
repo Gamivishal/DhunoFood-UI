@@ -439,8 +439,12 @@ navigate("/Order")
     if (!reason?.trim()) return
     setSaving(true)
     try {
-      await updateOrderStatus(formData.orderId, "2", reason)
-      await showSuccess("Order cancelled successfully")
+      const response = await updateOrderStatus(formData.orderId, "2", reason)
+      if (response?.statusCode === 1) {
+        await showSuccess(response.message || "Order cancelled successfully")
+      } else {
+        throw new Error(response?.message || "Failed to cancel order")
+      }
       navigate("/Order")
     } catch (err) {
       await showError(err?.message || "Failed to cancel order")
@@ -452,8 +456,13 @@ navigate("/Order")
   const handleCompleteOrder = async () => {
     setSaving(true)
     try {
-      await updateOrderStatus(formData.orderId, "3", "")
-      await showSuccess("Order completed successfully")
+      const response = await updateOrderStatus(formData.orderId, "3", "")
+      if (response?.statusCode === 1) {
+        await showSuccess(response.message || "Order completed successfully")
+        navigate("/Order")
+      } else {
+        throw new Error(response?.message || "Failed to complete order")
+      }
     } catch (err) {
       await showError(err?.message || "Failed to complete order")
     } finally {

@@ -19,12 +19,15 @@ const Dashboard = (props) => {
   const [loadingSummary, setLoadingSummary] = useState(false)
   const [loadingOrders, setLoadingOrders] = useState(false)
   const [loadingOrderItems, setLoadingOrderItems] = useState(false)
+  const [selectedView, setSelectedView] = useState("summary")
 
   useEffect(() => {
     props.setBreadcrumbItems('Dashboard', breadcrumbItems)
+    handleGetSummary()
   }, [])
 
   const handleGetSummary = async () => {
+    setSelectedView("summary")
     setLoadingSummary(true)
     try {
       const response = await getDashboardSummary()
@@ -39,6 +42,7 @@ const Dashboard = (props) => {
   }
 
   const handleGetNext7DaysOrders = async () => {
+    setSelectedView("orders")
     setLoadingOrders(true)
     try {
       const response = await getNext7DaysOrders()
@@ -53,6 +57,7 @@ const Dashboard = (props) => {
   }
 
   const handleGetNext7DaysOrderItems = async () => {
+    setSelectedView("orderItems")
     setLoadingOrderItems(true)
     try {
       const response = await getNext7DaysOrderItems()
@@ -102,19 +107,33 @@ const Dashboard = (props) => {
     <React.Fragment>
       <Row>
         <Col>
-          <Button color="primary" className="me-2" onClick={handleGetSummary} disabled={loadingSummary}>
+          <Button
+            color={selectedView === "summary" ? "success" : "secondary"}
+            className="me-2"
+            onClick={handleGetSummary}
+            disabled={loadingSummary}
+          >
             {loadingSummary ? "Loading..." : "Summary"}
           </Button>
-          <Button color="primary" className="me-2" onClick={handleGetNext7DaysOrders} disabled={loadingOrders}>
+          <Button
+            color={selectedView === "orders" ? "success" : "secondary"}
+            className="me-2"
+            onClick={handleGetNext7DaysOrders}
+            disabled={loadingOrders}
+          >
             {loadingOrders ? "Loading..." : "Next 7 Days Order"}
           </Button>
-          <Button color="primary" onClick={handleGetNext7DaysOrderItems} disabled={loadingOrderItems}>
+          <Button
+            color={selectedView === "orderItems" ? "success" : "secondary"}
+            onClick={handleGetNext7DaysOrderItems}
+            disabled={loadingOrderItems}
+          >
             {loadingOrderItems ? "Loading..." : "Next 7 Days Order Items"}
           </Button>
         </Col>
       </Row>
 
-      {summary && (
+      {selectedView === "summary" && summary && (
         <Row className="mt-3">
           <Col md={3}>
             <Card>
@@ -151,7 +170,7 @@ const Dashboard = (props) => {
         </Row>
       )}
 
-      {next7DaysOrders.length > 0 && (
+      {selectedView === "orders" && next7DaysOrders.length > 0 && (
         <Row className="mt-3">
           <Col>
             <Card>
@@ -170,7 +189,7 @@ const Dashboard = (props) => {
         </Row>
       )}
 
-      {next7DaysOrderItems.length > 0 && (
+      {selectedView === "orderItems" && next7DaysOrderItems.length > 0 && (
         <Row className="mt-3">
           <Col>
             <Card>

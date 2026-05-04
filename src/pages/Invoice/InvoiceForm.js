@@ -10,6 +10,7 @@ import {
   Input,
   Label,
   Row,
+  Table,
 } from "reactstrap"
 import { Spinner } from "reactstrap"
 import Select from "react-select"
@@ -21,6 +22,7 @@ const InvoiceForm = ({
   orderOptions,
   invoiceTypeOptions,
   orderItems,
+  totalAmount,
   isEditMode,
   saving,
   onChange,
@@ -134,15 +136,16 @@ const InvoiceForm = ({
 
           {orderItems && orderItems.length > 0 && (
             <>
-              <h5 className="mt-4">Order Items</h5>
+              <h5 className="mt-4 mb-3">Order Items</h5>
               <div className="table-responsive">
-                <table className="table table-bordered table-sm mb-0">
+                <Table className="table-sm table-bordered" striped>
                   <thead>
                     <tr>
-                      <th>Item Name</th>
-                      <th>Price (UMO)</th>
-                      <th>Quantity</th>
-                      <th>Price</th>
+                      <th style={{ width: "35%" }}>Item Name</th>
+                      <th style={{ width: "25%" }}>Price (UMO)</th>
+                      <th style={{ width: "15%" }}>Quantity</th>
+                      <th style={{ width: "15%" }}>Amount</th>
+                      {/* <th style={{ width: "10%" }}>Total</th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -152,10 +155,16 @@ const InvoiceForm = ({
                         <td>{item.priceUMO || "-"}</td>
                         <td>{item.quantity || 0}</td>
                         <td>{item.price || 0}</td>
+                        <td className="text-muted">-</td>
                       </tr>
                     ))}
+                    <tr>
+                      <td colSpan={4} className="text-end fw-bold">Total Amount</td>
+                      <td className="fw-bold">{totalAmount || 0}</td>
+                      <td></td>
+                    </tr>
                   </tbody>
-                </table>
+                </Table>
               </div>
             </>
           )}

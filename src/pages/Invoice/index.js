@@ -42,6 +42,7 @@ const Invoices = props => {
   const [orderOptions, setOrderOptions] = useState([])
   const [invoiceTypeOptions, setInvoiceTypeOptions] = useState([])
   const [orderItems, setOrderItems] = useState([])
+  const [totalAmount, setTotalAmount] = useState(0)
   const [formData, setFormData] = useState({
     invoiceId: 0,
     orderId: "",
@@ -160,13 +161,17 @@ const Invoices = props => {
       try {
         const response = await getOrderById(formData.orderId)
         if (response?.isSuccess && response?.data) {
+          console.log("getOrderById response", response)
           const items = response.data.items || []
           setOrderItems(items)
+          setTotalAmount(response.data.totalAmount || 0)
           return
         }
         setOrderItems([])
+        setTotalAmount(0)
       } catch (err) {
         setOrderItems([])
+        setTotalAmount(0)
       }
     }
 
@@ -395,6 +400,7 @@ const Invoices = props => {
                 orderOptions={orderOptions}
                 invoiceTypeOptions={invoiceTypeOptions}
                 orderItems={orderItems}
+                totalAmount={totalAmount}
                 isEditMode={isEditMode}
                 saving={saving}
                 onChange={handleChange}

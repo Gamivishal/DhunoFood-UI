@@ -45,7 +45,7 @@ const CustomerForm = ({
               />
             </Col>
             <Col md={6}>
-              <Label>Mobile No<span style={{ color: "red" }}>*</span></Label>
+              <Label>Mobile Number<span style={{ color: "red" }}>*</span></Label>
               <Input
                 name="mobileNo"
                 type="text"
@@ -76,6 +76,7 @@ const CustomerForm = ({
                 value={formData.address}
                 onChange={onChange}
                 placeholder="Enter address"
+                maxLength={200}
               />
             </Col>
           </Row>

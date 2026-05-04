@@ -41,6 +41,7 @@ const OrderForm = ({
 }) => {
   const [cancelModal, setCancelModal] = useState(false)
   const [cancelReason, setCancelReason] = useState("")
+  const [confirmCancelModal, setConfirmCancelModal] = useState(false)
 
   const itemSelectOptions = (itemOptions || []).map(item => ({
     value: item.itemId || item.id,
@@ -287,7 +288,7 @@ const OrderForm = ({
             </Button>
             {isEditMode && (
               <>
-                <Button color="warning" type="button" onClick={() => setCancelModal(true)}>
+                <Button color="warning" type="button" onClick={() => setConfirmCancelModal(true)}>
                   Cancel Order
                 </Button>
                 <Button color="success" type="button" onClick={onCompleteOrder} disabled={saving}>
@@ -302,6 +303,21 @@ const OrderForm = ({
           </div>
         </Form>
       </CardBody>
+
+      <Modal isOpen={confirmCancelModal} toggle={() => setConfirmCancelModal(false)}>
+        <ModalHeader toggle={() => setConfirmCancelModal(false)}>Cancel Order</ModalHeader>
+        <ModalBody>
+          <p>Are you sure you want to cancel this order?</p>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="light" type="button" onClick={() => setConfirmCancelModal(false)}>
+            No
+          </Button>
+          <Button color="warning" type="button" onClick={() => { setConfirmCancelModal(false); setCancelModal(true); }}>
+            Yes
+          </Button>
+        </ModalFooter>
+      </Modal>
 
       <Modal isOpen={cancelModal} toggle={() => setCancelModal(false)}>
         <ModalHeader toggle={() => setCancelModal(false)}>Cancel Order</ModalHeader>

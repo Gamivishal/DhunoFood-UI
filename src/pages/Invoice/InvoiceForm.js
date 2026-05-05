@@ -1,5 +1,6 @@
 import React from "react"
 import {
+    Alert,
   Button,
   Card,
   CardBody,
@@ -32,13 +33,16 @@ const InvoiceForm = ({
   onClose,
 }) => {
   return (
-    <Card>
-      <CardHeader>
+     <Card className="mb-4 app-form-card">
+           <CardHeader className="bg-white d-flex align-items-center justify-content-between">
         <h4 className="card-title mb-0">{title}</h4>
+              <Button color="link" className="p-0" type="button" onClick={onClose}>
+          Close
+        </Button>
       </CardHeader>
-      <CardBody>
+        <CardBody className="app-form-body">
         {formError ? (
-          <div className="alert alert-danger">{formError}</div>
+                 <Alert color="danger">{formError}</Alert>
         ) : null}
 
         <Form onSubmit={onSubmit}>
@@ -69,7 +73,7 @@ const InvoiceForm = ({
                   id="invoiceNumber"
                   value={formData.invoiceNumber}
                   onChange={onChange}
-                  required
+                  readOnly
                 />
               </FormGroup>
             </Col>
@@ -169,28 +173,15 @@ const InvoiceForm = ({
             </>
           )}
 
-          <div className="d-flex justify-content-end gap-2">
-            <Button
-              color="secondary"
-              type="button"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="primary"
-              type="submit"
-              disabled={saving}
-            >
-              {saving ? (
-                <>
-                  <Spinner size="sm" className="me-1" />
-                  Saving...
-                </>
-              ) : (
-                isEditMode ? "Update" : "Save"
-              )}
-            </Button>
+           <div className="app-form-actions">
+            <Button color="success" type="submit" disabled={saving}>
+                          {saving ? <Spinner size="sm" className="me-2" /> : null}
+                          Save
+                        </Button>
+            
+                         <Button color="light" type="button" onClick={onClose}>
+                          Cancel
+                        </Button>
           </div>
         </Form>
       </CardBody>

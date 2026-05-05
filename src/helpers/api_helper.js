@@ -37,8 +37,8 @@ export async function exportToFile(url, filename, config = {}) {
 }
 
 //apply base url for axios
-//const API_URL = "https://localhost:7281/api";
-const API_URL = "https://dhunofood.bsite.net/api";
+const API_URL = "https://localhost:7281/api";
+//const API_URL = "https://dhunofood.bsite.net/api";
 
 const axiosApi = axios.create({
   baseURL: API_URL,
@@ -189,3 +189,9 @@ export async function getNext7DaysOrders(sortColumn = "orderNo", sortColumnDir =
 export async function getNext7DaysOrderItems(sortColumn = "itemName", sortColumnDir = "asc") {
   return await get(`/Dashboard/GetNext7DaysOrderItems?sortColumn=${sortColumn}&sortColumnDir=${sortColumnDir}`);
 }
+export function getInvoicePdfUrl(invoiceId) {
+  return `${API_URL}/Invoice/ViewInvoicePdf?id=${invoiceId}`;
+}
+// export function getInvoicePdfUrl(invoiceId) {
+//   return `https://localhost:7281/api/Invoice/ViewInvoicePdf?id=${invoiceId}`;
+// }

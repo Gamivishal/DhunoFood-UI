@@ -14,7 +14,7 @@ import {
   getOrderDropdownList,
   saveInvoice,
 } from "../../helpers/fakebackend_helper"
-import { getLovDropdownList } from "../../helpers/api_helper"
+import { getLovDropdownList,getInvoicePdfUrl } from "../../helpers/api_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
 import InvoiceForm from "./InvoiceForm"
 
@@ -188,6 +188,23 @@ const Invoices = props => {
 
       if (!isEditMode) {
         setFormTitle("Create Invoice")
+                try {
+          const response = await getInvoiceById(-1)
+          if (response?.isSuccess && response?.data) {
+            setFormData({
+              invoiceId: 0,
+              orderId: "",
+              invoiceNumber: response.data.invoiceNumber || "",
+              invoiceType: "",
+              invoiceDate: new Date().toISOString().split("T")[0],
+              dueDate: new Date().toISOString().split("T")[0],
+              notes: "",
+            })
+            return
+          }
+        } catch (err) {
+          console.error("Failed to get auto invoice number:", err)
+        }
         setFormData({
           invoiceId: 0,
           orderId: "",
@@ -263,6 +280,19 @@ const Invoices = props => {
         status: invoice.status || "",
         action: (
           <div className="d-flex gap-2 justify-content-center">
+           
+                       <Button
+              color="link"
+              className="p-0 text-info"
+              title="View PDF"
+              type="button"
+              onClick={() => {
+                window.open(getInvoicePdfUrl(invoice.invoiceId), '_blank', 'noopener,noreferrer');
+              }}
+            >
+              <i className="mdi mdi-eye font-size-18" />
+            </Button>
+
             <Button
               color="link"
               className="p-0 text-primary"

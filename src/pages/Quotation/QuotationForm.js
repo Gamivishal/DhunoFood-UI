@@ -41,6 +41,7 @@ const QuotationForm = ({
     baseQty: item.baseQty,
     ratePerUnit: item.ratePerUnit,
     unit: item.unit,
+    priceUMO: item.priceUMO,
   }))
 
   const customerSelectOptions = (customerOptions || []).map(customer => ({
@@ -63,6 +64,7 @@ const QuotationForm = ({
     const baseQty = selectedItem?.baseQty || 0
     const ratePerUnit = selectedItem?.ratePerUnit || 0
     const unit = selectedItem?.unit || ""
+     const priceUMO = selectedItem?.priceUMO || ""
     onItemChange(index, {
       target: {
         name: "itemSelected",
@@ -74,6 +76,7 @@ const QuotationForm = ({
           ratePerUnit: ratePerUnit,
           amount: ratePerUnit * baseQty,
           unit: unit,
+          priceUMO: priceUMO,
         })
       }
     })
@@ -196,8 +199,8 @@ const QuotationForm = ({
                                                   <Input
                                                     type="text"
                                                     name="price"
-                                                    // value={`${item.baseQty} ${item.unit}---${item.price || 0}`}
-                                                     value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
+                                                   value={item.priceUMO || 0}
+                                                    // value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
                                                     readOnly
                                                   />
                                                 </td>

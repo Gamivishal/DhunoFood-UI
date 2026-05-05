@@ -37,6 +37,7 @@ const ConvertToOrderForm = ({
     quantity: item.baseQty,
     ratePerUnit: item.ratePerUnit,
     unit: item.unit,
+      priceUMO: item.priceUMO,
   }))
 
   const handleItemSelectChange = (index, option) => {
@@ -45,6 +46,7 @@ const ConvertToOrderForm = ({
     const quantity = selectedItem?.quantity || 0
     const ratePerUnit = selectedItem?.ratePerUnit || 0
     const unit = selectedItem?.unit || ""
+    const priceUMO = selectedItem?.priceUMO || ""
     onItemChange(index, {
       target: {
         name: "itemSelected",
@@ -56,6 +58,7 @@ const ConvertToOrderForm = ({
           ratePerUnit: ratePerUnit,
           amount: ratePerUnit * quantity,
           unit: unit,
+            priceUMO: priceUMO,
         })
       }
     })
@@ -149,7 +152,8 @@ const ConvertToOrderForm = ({
                           <Input
                             type="text"
                             name="price"
-                            value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
+                              value={item.priceUMO || 0}
+                          //  value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
                             readOnly
                           />
                         </td>

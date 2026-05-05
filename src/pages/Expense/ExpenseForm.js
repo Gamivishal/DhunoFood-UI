@@ -1,5 +1,6 @@
 import React from "react"
 import Select from "react-select"
+import { FaTimes } from "react-icons/fa";
 import {
   Alert,
   Button,
@@ -51,7 +52,7 @@ const ExpenseForm = ({
       <CardHeader className="bg-white d-flex align-items-center justify-content-between">
         <h5 className="mb-0">{title}</h5>
         <Button color="link" className="p-0" type="button" onClick={onClose}>
-          Close
+          <FaTimes color="red" size={18} />
         </Button>
       </CardHeader>
       <CardBody className="app-form-body">

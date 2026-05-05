@@ -1,4 +1,5 @@
 import React from "react"
+import { FaTimes } from "react-icons/fa";
 import {
     Alert,
   Button,
@@ -37,7 +38,7 @@ const InvoiceForm = ({
            <CardHeader className="bg-white d-flex align-items-center justify-content-between">
         <h4 className="card-title mb-0">{title}</h4>
               <Button color="link" className="p-0" type="button" onClick={onClose}>
-          Close
+          <FaTimes color="red" size={18} />
         </Button>
       </CardHeader>
         <CardBody className="app-form-body">
@@ -47,6 +48,19 @@ const InvoiceForm = ({
 
         <Form onSubmit={onSubmit}>
           <Row>
+              <Col md={6}>
+              <FormGroup>
+                <Label for="invoiceNumber">Invoice Number <span className="text-danger">*</span></Label>
+                <Input
+                  type="text"
+                  name="invoiceNumber"
+                  id="invoiceNumber"
+                  value={formData.invoiceNumber}
+                  onChange={onChange}
+                  readOnly
+                />
+              </FormGroup>
+            </Col>
             <Col md={6}>
               <FormGroup>
                 <Label>Order <span style={{ color: "red" }}>*</span></Label>
@@ -64,19 +78,7 @@ const InvoiceForm = ({
               </FormGroup>
             </Col>
 
-            <Col md={6}>
-              <FormGroup>
-                <Label for="invoiceNumber">Invoice Number <span className="text-danger">*</span></Label>
-                <Input
-                  type="text"
-                  name="invoiceNumber"
-                  id="invoiceNumber"
-                  value={formData.invoiceNumber}
-                  onChange={onChange}
-                  readOnly
-                />
-              </FormGroup>
-            </Col>
+          
 
             <Col md={6}>
               <FormGroup>
@@ -122,20 +124,6 @@ const InvoiceForm = ({
                 />
               </FormGroup>
             </Col>
-
-            <Col md={6}>
-              <FormGroup>
-                <Label for="notes">Notes</Label>
-                <Input
-                  type="textarea"
-                  name="notes"
-                  id="notes"
-                  rows="3"
-                  value={formData.notes || ""}
-                  onChange={onChange}
-                />
-              </FormGroup>
-            </Col>
           </Row>
 
           {orderItems && orderItems.length > 0 && (
@@ -159,17 +147,45 @@ const InvoiceForm = ({
                         <td>{item.priceUMO || "-"}</td>
                         <td>{item.quantity || 0}</td>
                         <td>{item.price || 0}</td>
-                        <td className="text-muted">-</td>
                       </tr>
                     ))}
                     <tr>
-                      <td colSpan={4} className="text-end fw-bold">Total Amount</td>
+                      <td colSpan={3} className="text-end fw-bold">Total Amount</td>
                       <td className="fw-bold">{totalAmount || 0}</td>
-                      <td></td>
                     </tr>
                   </tbody>
                 </Table>
               </div>
+              {/* <div className="mb-3">
+                <Input
+                  type="text"
+                  readOnly
+                  value={`Total Amount: ${totalAmount || 0}`}
+                />
+              </div> */}
+                <Row>
+                   <Col md={6}>
+              <FormGroup>
+                <Label for="dueDate">Amount <span className="text-danger">*</span></Label>
+                <Input
+                  type="text"           
+                   value={totalAmount || 0}
+                readOnly
+                />
+              </FormGroup>
+            </Col>
+                </Row>
+              <FormGroup className="mt-3">
+                <Label for="notes">Notes</Label>
+                <Input
+                  type="textarea"
+                  name="notes"
+                  id="notes"
+                  rows="3"
+                  value={formData.notes || ""}
+                  onChange={onChange}
+                />
+              </FormGroup>
             </>
           )}
 

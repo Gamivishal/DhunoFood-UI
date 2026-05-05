@@ -1,4 +1,5 @@
 import React, { useMemo } from "react"
+import { FaTimes } from "react-icons/fa";
 import {
   Alert,
   Button,
@@ -160,9 +161,17 @@ const RoleForm = ({
     <Card className="mb-4 app-form-card">
       <CardHeader className="bg-white d-flex align-items-center justify-content-between">
         <h5 className="mb-0">{title}</h5>
-        <Button color="link" className="p-0" type="button" onClick={onClose}>
+        {/* <Button color="link" className="p-0" type="button" onClick={onClose}>
           Close
-        </Button>
+        </Button> */}
+       <Button
+  color="link"
+  className="p-0"
+  type="button"
+  onClick={onClose}
+>
+  <FaTimes color="red" size={18} />
+</Button>
       </CardHeader>
       <CardBody className="app-form-body">
         {formError ? <Alert color="danger">{formError}</Alert> : null}

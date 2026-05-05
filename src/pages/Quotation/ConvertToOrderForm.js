@@ -1,5 +1,6 @@
 import React from "react"
 import Select from "react-select"
+import { FaTimes } from "react-icons/fa";
 import {
   Alert,
   Button,
@@ -80,20 +81,23 @@ const ConvertToOrderForm = ({
     <Card className="mb-4 app-form-card">
       <CardHeader className="bg-white d-flex align-items-center justify-content-between">
         <h5 className="mb-0">{title}</h5>
-        <Button color="link" className="p-0" type="button" onClick={onClose}>
+        {/* <Button color="link" className="p-0" type="button" onClick={onClose}>
           Close
-        </Button>
+        </Button> */}
+         <Button color="link" className="p-0" type="button" onClick={onClose}>
+                  <FaTimes color="red" size={18} />
+                </Button>
       </CardHeader>
       <CardBody className="app-form-body">
         {formError ? <Alert color="danger">{formError}</Alert> : null}
         <Form onSubmit={onSubmit}>
           <Row className="g-3">
             <Col md={6}>
-              <Label>Customer</Label>
+              <Label>Customer<span style={{ color: "red" }}>*</span></Label>
               <Input type="text" value={formData.customerName || ""} readOnly />
             </Col>
             <Col md={6}>
-              <Label>Order Date</Label>
+              <Label>Order Date<span style={{ color: "red" }}>*</span></Label>
               <Input
                 type="date"
                 name="orderDate"
@@ -102,7 +106,7 @@ const ConvertToOrderForm = ({
               />
             </Col>
             <Col md={6}>
-              <Label>Order Time</Label>
+              <Label>Order Time<span style={{ color: "red" }}>*</span></Label>
               <Input
                 type="time"
                 name="orderTime"

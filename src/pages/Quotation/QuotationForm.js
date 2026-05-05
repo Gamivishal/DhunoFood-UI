@@ -183,6 +183,11 @@ const QuotationForm = ({
                               opt => Number(opt.value) === Number(item.itemId)
                             ) || null}
                             onChange={option => handleItemSelectChange(index, option)}
+                                                        menuPlacement="auto"
+                            menuShouldScrollIntoView={false}
+                            styles={{ menu: (provided) => ({ ...provided, maxHeight: 300, zIndex: 9999 }) }}
+                            menuPortalTarget={typeof window !== 'undefined' ? window.document.body : null}
+                            menuPosition="fixed"
                             isSearchable
                             isClearable
                           />

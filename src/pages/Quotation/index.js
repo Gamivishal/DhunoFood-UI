@@ -613,6 +613,7 @@ try {
           ? new Date(formData.quotationDate).toISOString()
           : null,
         totalAmount: calculateTotal(),
+        isConvert: false,
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
           baseQty: Number(item.baseQty) || 0,

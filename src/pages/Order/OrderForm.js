@@ -222,6 +222,11 @@ const OrderForm = ({
                             onChange={option => handleItemSelectChange(index, option)}
                             isSearchable
                             isClearable
+                            menuPlacement="auto"
+                            menuShouldScrollIntoView={false}
+                            styles={{ menu: (provided) => ({ ...provided, maxHeight: 300, zIndex: 9999 }) }}
+                            menuPortalTarget={typeof window !== 'undefined' ? window.document.body : null}
+                            menuPosition="fixed"
                           />
                         </td>
                         <td>

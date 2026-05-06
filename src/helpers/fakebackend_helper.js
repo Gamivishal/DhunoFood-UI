@@ -895,6 +895,31 @@ const updateOrderStatus = async (id, status, reason = "") => {
 }
 
 //AdvancePayment API helpers
+
+// OrderReport API
+const getOrderReportPages = async ({ start = 0, length = 10, sortColumn = "orderDate", sortColumnDir = "desc", searchValue = "", fromDate = null, toDate = null, customerId = null, status = null } = {}) => {
+  try {
+    return await get("/OrderReport/GetAllpage", {
+      params: {
+        start,
+        length,
+        sortColumn,
+        sortColumnDir,
+        searchValue,
+        fromDate,
+        toDate,
+        customerId,
+        status,
+      },
+    });
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "OrderReport list fetch failed"
+    );
+  }
+};
 const getAdvancePaymentsPages = async (params = {}) => {
   try {
     return await get("/AdvancePayment/GetAllpage", {
@@ -1238,4 +1263,5 @@ export {
   getInvoiceById,
   saveInvoice,
   deleteInvoiceById,
+  getOrderReportPages,
 }

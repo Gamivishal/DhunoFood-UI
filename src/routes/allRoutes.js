@@ -45,6 +45,8 @@ import Orders from "../pages/Order";
 import Payments from "../pages/Payment";
 import Invoices from "../pages/Invoice";
 
+import OrderReport from "../pages/OrderReport";
+
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   // AdvancePayment routes
@@ -55,6 +57,9 @@ const userRoutes = [
 // { path: "/AdvancePaymentHistory", component: <AdvancePaymentHistory /> },
   // // //profile
   { path: "/profile", component: <MyProfile /> },
+
+  // OrderReport routes
+  { path: "/OrderReport", component: <OrderReport /> },
 
   { path: "/User", component: <Users /> },
   { path: "/User/manage", component: <Users /> },

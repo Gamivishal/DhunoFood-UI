@@ -83,7 +83,7 @@ const Items = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Items")
+    props.setBreadcrumbItems("Item")
   }, [])
 
   useEffect(() => {

@@ -80,7 +80,7 @@ const Payments = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Payments")
+    props.setBreadcrumbItems("Payment")
   }, [])
 
   useEffect(() => {

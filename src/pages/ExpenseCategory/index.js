@@ -74,7 +74,7 @@ const ExpenseCategories = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Expense Categories")
+    props.setBreadcrumbItems("Expense Categorie")
   }, [])
 
   useEffect(() => {

@@ -133,7 +133,7 @@ const Dashboard = (props) => {
 
       {selectedView === "summary" && summary && (
         <Row className="mt-3">
-          <Col md={3}>
+          <Col xs={12} sm={6} md={3} className="mb-3">
             <Card>
               <CardBody>
                 <h5>Total Orders</h5>
@@ -141,7 +141,7 @@ const Dashboard = (props) => {
               </CardBody>
             </Card>
           </Col>
-          <Col md={3}>
+          <Col xs={12} sm={6} md={3} className="mb-3">
             <Card>
               <CardBody>
                 <h5>Pending Orders</h5>
@@ -149,7 +149,7 @@ const Dashboard = (props) => {
               </CardBody>
             </Card>
           </Col>
-          <Col md={3}>
+          <Col xs={12} sm={6} md={3} className="mb-3">
             <Card>
               <CardBody>
                 <h5>Total Pending Amount</h5>
@@ -157,7 +157,7 @@ const Dashboard = (props) => {
               </CardBody>
             </Card>
           </Col>
-          <Col md={3}>
+          <Col xs={12} sm={6} md={3} className="mb-3">
             <Card>
               <CardBody>
                 <h5>Total Expense</h5>
@@ -174,13 +174,15 @@ const Dashboard = (props) => {
             <Card>
               <CardBody>
                 <h5 className="mb-3">Next 7 Days Orders</h5>
-                <MDBDataTable
-                  striped
-                  bordered
-                  small
-                  noBottomColumns
-                  data={orderData}
-                />
+                <div className="table-responsive">
+                  <MDBDataTable
+                    striped
+                    bordered
+                    small
+                    noBottomColumns
+                    data={orderData}
+                  />
+                </div>
               </CardBody>
             </Card>
           </Col>
@@ -193,13 +195,15 @@ const Dashboard = (props) => {
             <Card>
               <CardBody>
                 <h5 className="mb-3">Next 7 Days Order Items</h5>
-                <MDBDataTable
-                  striped
-                  bordered
-                  small
-                  noBottomColumns
-                  data={orderItemsData}
-                />
+                <div className="table-responsive">
+                  <MDBDataTable
+                    striped
+                    bordered
+                    small
+                    noBottomColumns
+                    data={orderItemsData}
+                  />
+                </div>
               </CardBody>
             </Card>
           </Col>

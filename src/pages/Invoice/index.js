@@ -84,7 +84,7 @@ const Invoices = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Invoices")
+    props.setBreadcrumbItems("Invoice")
   }, [])
 
   useEffect(() => {

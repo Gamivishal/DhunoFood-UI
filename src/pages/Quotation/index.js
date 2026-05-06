@@ -155,7 +155,7 @@ const Quotations = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Quotations")
+    props.setBreadcrumbItems("Quotation")
   }, [])
 
   useEffect(() => {

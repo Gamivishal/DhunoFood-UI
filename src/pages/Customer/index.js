@@ -76,7 +76,7 @@ const Customers = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Customers")
+    props.setBreadcrumbItems("Customer")
   }, [])
 
   useEffect(() => {

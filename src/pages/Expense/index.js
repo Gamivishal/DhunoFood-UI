@@ -85,7 +85,7 @@ if (!(response?.isSuccess)) {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Expenses")
+    props.setBreadcrumbItems("Expense")
   }, [])
 
   useEffect(() => {

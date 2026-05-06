@@ -149,6 +149,26 @@ export const OrderReportExportToPdf = async (params = {}) => {
   return await exportToExcel("/OrderReport/ExportOrderPdf", "OrderReport.pdf", { params });
 };
 
+// Expense Report API
+export const getExpenseReportPages = async (params = {}) => {
+  return await get("/ExpenseReport/GetAllpage", {
+    params,
+  });
+};
+
+// Export expense report to Excel
+export const ExpenseReportExportToExcel = async (params = {}) => {
+  return await exportToExcel("/ExpenseReport/ExportExpenseExcel", "ExpenseReport.xlsx", { params });
+};
+
+// Export expense report to PDF
+
+
+// Export expense report to PDF
+export const ExpenseReportExportToPdf = async (params = {}) => {
+  return await exportToExcel("/ExpenseReport/ExportExpensePdf", "ExpenseReport.pdf", { params });
+};
+
 // using into ROle For Get value into Dropdown
 const getMenuPages = async () => {
   try {

@@ -46,6 +46,7 @@ import Payments from "../pages/Payment";
 import Invoices from "../pages/Invoice";
 
 import OrderReport from "../pages/OrderReport";
+import ExpenseReport from "../pages/ExpenseReport";
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -60,6 +61,8 @@ const userRoutes = [
 
   // OrderReport routes
   { path: "/OrderReport", component: <OrderReport /> },
+  // ExpenseReport routes
+  { path: "/ExpenseReport", component: <ExpenseReport /> },
 
   { path: "/User", component: <Users /> },
   { path: "/User/manage", component: <Users /> },

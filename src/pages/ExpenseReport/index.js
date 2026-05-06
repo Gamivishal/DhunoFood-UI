@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Alert, Button, Card, CardBody, Col, Row, Spinner } from "reactstrap";
+import { Alert, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Spinner } from "reactstrap";
 import { MDBDataTable } from "mdbreact";
+import Select from "react-select";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common";
@@ -22,6 +23,7 @@ const ExpenseReport = props => {
   const [categoryList, setCategoryList] = useState([]);
   const [paymentModeList, setPaymentModeList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState("");
   const [rows, setRows] = useState([]);
   const [sortColumn, setSortColumn] = useState(EXPENSE_REPORT_LIST_SORT_COLUMN);
@@ -30,16 +32,21 @@ const ExpenseReport = props => {
   useEffect(() => {
     props.setBreadcrumbItems("Expense Report");
     getExpenseCategoryPages({ length: 100 }).then(res => {
-      if (res.isSuccess && res.data && res.data.data) setCategoryList(res.data.data);
+      if (res.isSuccess && res.data && res.data.data) {
+        setCategoryList(res.data.data.map(c => ({ value: c.expenseCategoryId, label: c.categoryName })));
+      }
     });
     getLovDropdownList("PaymentMode").then(res => {
-      if (res.isSuccess && Array.isArray(res.data)) setPaymentModeList(res.data);
+      if (res.isSuccess && Array.isArray(res.data)) {
+        setPaymentModeList(res.data.map(p => ({ value: p.code, label: p.name })));
+      }
     });
   }, []);
 
   const loadExpenseReports = async () => {
     setLoading(true);
     setError("");
+    setHasSearched(true);
     try {
       const response = await getExpenseReportPages({
         start: 0,
@@ -62,14 +69,16 @@ const ExpenseReport = props => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    loadExpenseReports();
-  }, [sortColumn, sortColumnDir]);
-
   const handleSortChange = fieldName => {
     const nextState = getNextSortState(sortColumn, sortColumnDir, fieldName);
     setSortColumn(nextState.sortColumn);
     setSortColumnDir(nextState.sortColumnDir);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "fromDate") setFromDate(value);
+    if (name === "toDate") setToDate(value);
   };
 
   const data = useMemo(() => {
@@ -100,60 +109,77 @@ const ExpenseReport = props => {
         <Col lg={12}>
           <Card>
             <CardBody>
-              <Row className="mb-3">
-                <Col md={3}>
-                  <label>From Date</label>
-                  <input type="date" className="form-control" value={fromDate} onChange={e => setFromDate(e.target.value)} />
-                </Col>
-                <Col md={3}>
-                  <label>To Date</label>
-                  <input type="date" className="form-control" value={toDate} onChange={e => setToDate(e.target.value)} />
-                </Col>
-                <Col md={3}>
-                  <label>Category</label>
-                  <select className="form-control" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
-                    <option value="">All</option>
-                    {categoryList.map(c => (
-                      <option key={c.expenseCategoryId} value={c.expenseCategoryId}>{c.categoryName}</option>
-                    ))}
-                  </select>
-                </Col>
-                <Col md={3}>
-                  <label>Payment Mode</label>
-                  <select className="form-control" value={paymentMode} onChange={e => setPaymentMode(e.target.value)}>
-                    <option value="">All</option>
-                    {paymentModeList.map(p => (
-                      <option key={p.code} value={p.code}>{p.name}</option>
-                    ))}
-                  </select>
-                </Col>
-              </Row>
-              <div className="d-flex justify-content-end mb-3 gap-2">
-                <Button color="primary" type="button" onClick={loadExpenseReports}>
-                  <i className="mdi mdi-magnify me-1" />Search
-                </Button>
-                <Button color="info" type="button" onClick={() => ExpenseReportExportToPdf({ fromDate, toDate, categoryId, paymentMode })}>
-                  <i className="mdi mdi-file-pdf-box me-1" />PDF
-                </Button>
-                <Button color="success" type="button" onClick={() => ExpenseReportExportToExcel({ fromDate, toDate, categoryId, paymentMode })}>
-                  <i className="mdi mdi-file-excel me-1" />Excel
-                </Button>
-              </div>
-              {error ? <Alert color="danger">{error}</Alert> : null}
-              {loading ? (
-                <div className="text-center py-5">
-                  <Spinner color="primary" />
+              <Form onSubmit={(e) => { e.preventDefault(); loadExpenseReports(); }}>
+                <Row>
+                  <Col md={3}>
+                    <FormGroup>
+                      <Label>From Date</Label>
+                      <Input type="date" name="fromDate" value={fromDate} onChange={handleChange} />
+                    </FormGroup>
+                  </Col>
+                  <Col md={3}>
+                    <FormGroup>
+                      <Label>To Date</Label>
+                      <Input type="date" name="toDate" value={toDate} onChange={handleChange} />
+                    </FormGroup>
+                  </Col>
+                  <Col md={3}>
+                    <FormGroup>
+                      <Label>Category</Label>
+                      <Select
+                        classNamePrefix="select2-selection"
+                        placeholder="Select Category"
+                        options={categoryList}
+                        value={categoryList.find(c => c.value === categoryId) || null}
+                        onChange={option => setCategoryId(option ? option.value : "")}
+                        isClearable
+                      />
+                    </FormGroup>
+                  </Col>
+                  
+                  <Col md={3}>
+                    <FormGroup>
+                      <Label>&nbsp;</Label>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={loading}
+                        className="w-100"
+                        style={{ height: "38px", borderRadius: "0.375rem" }}
+                      >
+                        {loading ? "..." : "Search"}
+                      </Button>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </Form>
+              {hasSearched && rows && rows.length > 0 && (
+                <div className="d-flex justify-content-end mb-3 gap-2">
+                  <Button color="info" type="button" onClick={() => ExpenseReportExportToPdf({ fromDate, toDate, categoryId, paymentMode })}>
+                    <i className="mdi mdi-file-pdf-box me-1" />PDF
+                  </Button>
+                  <Button color="success" type="button" onClick={() => ExpenseReportExportToExcel({ fromDate, toDate, categoryId, paymentMode })}>
+                    <i className="mdi mdi-file-excel me-1" />Excel
+                  </Button>
                 </div>
-              ) : (
-                <MDBDataTable
-                  striped
-                  bordered
-                  small
-                  noBottomColumns
-                  data={data}
-                  className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
-                  noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
-                />
+              )}
+              {error ? <Alert color="danger">{error}</Alert> : null}
+              {hasSearched && (
+                loading ? (
+                  <div className="text-center py-5">
+                    <Spinner color="primary" />
+                  </div>
+                ) : (
+                  <MDBDataTable
+                    striped
+                    bordered
+                    small
+                    noBottomColumns
+                    data={data}
+                    className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
+                    noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
+                  />
+                )
               )}
             </CardBody>
           </Card>

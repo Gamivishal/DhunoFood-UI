@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Alert, Button, Card, CardBody, Col, Row, Spinner } from "reactstrap";
+import { Alert, Button, Card, CardBody, Col, Form, FormGroup, Input, Label, Row, Spinner } from "reactstrap";
 import { MDBDataTable } from "mdbreact";
+import Select from "react-select";
 import { connect } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common";
 import { setBreadcrumbItems } from "../../store/actions";
 import { getCustomerList, getOrderReportPages, OrderReportExportToExcel, OrderReportExportToPdf } from "../../helpers/fakebackend_helper";
 import { getLovDropdownList } from "../../helpers/api_helper";
-import { showError } from "../../Pop_show/alertService";
 
 const ORDER_REPORT_LIST_SORT_COLUMN = "orderDate";
 const ORDER_REPORT_LIST_SORT_DIR = "desc";
@@ -17,14 +17,14 @@ const OrderReport = props => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Filters
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [customerId, setCustomerId] = useState("");
-  const [status, setStatus] = useState("1");
+  const [status, setStatus] = useState("");
   const [customerList, setCustomerList] = useState([]);
   const [statusList, setStatusList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState("");
   const [rows, setRows] = useState([]);
   const [sortColumn, setSortColumn] = useState(ORDER_REPORT_LIST_SORT_COLUMN);
@@ -33,16 +33,21 @@ const OrderReport = props => {
   useEffect(() => {
     props.setBreadcrumbItems("Order Report");
     getCustomerList().then(res => {
-      if (res.isSuccess && Array.isArray(res.data)) setCustomerList(res.data);
+      if (res.isSuccess && Array.isArray(res.data)) {
+        setCustomerList(res.data.map(c => ({ value: c.id || c.customerId, label: c.name || c.customerName })));
+      }
     });
     getLovDropdownList("PaymentStatus").then(res => {
-      if (res.isSuccess && Array.isArray(res.data)) setStatusList(res.data);
+      if (res.isSuccess && Array.isArray(res.data)) {
+        setStatusList(res.data.map(s => ({ value: s.code, label: s.name })));
+      }
     });
   }, []);
 
   const loadOrderReports = async () => {
     setLoading(true);
     setError("");
+    setHasSearched(true);
     try {
       const response = await getOrderReportPages({
         start: 0,
@@ -66,14 +71,16 @@ const OrderReport = props => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    loadOrderReports();
-  }, [sortColumn, sortColumnDir]);
-
   const handleSortChange = fieldName => {
     const nextState = getNextSortState(sortColumn, sortColumnDir, fieldName);
     setSortColumn(nextState.sortColumn);
     setSortColumnDir(nextState.sortColumnDir);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "fromDate") setFromDate(value);
+    if (name === "toDate") setToDate(value);
   };
 
   const data = useMemo(() => {
@@ -106,60 +113,89 @@ const OrderReport = props => {
         <Col lg={12}>
           <Card>
             <CardBody>
-              <Row className="mb-3">
-                <Col md={3}>
-                  <label>From Date</label>
-                  <input type="date" className="form-control" value={fromDate} onChange={e => setFromDate(e.target.value)} />
-                </Col>
-                <Col md={3}>
-                  <label>To Date</label>
-                  <input type="date" className="form-control" value={toDate} onChange={e => setToDate(e.target.value)} />
-                </Col>
-                <Col md={3}>
-                  <label>Customer</label>
-                  <select className="form-control" value={customerId} onChange={e => setCustomerId(e.target.value)}>
-                    <option value="">All</option>
-                    {customerList.map(c => (
-                      <option key={c.id || c.customerId} value={c.id || c.customerId}>{c.name || c.customerName}</option>
-                    ))}
-                  </select>
-                </Col>
-                <Col md={3}>
-                  <label>Status</label>
-                  <select className="form-control" value={status} onChange={e => setStatus(e.target.value)}>
-                    <option value="">All</option>
-                    {statusList.map(s => (
-                      <option key={s.code} value={s.code}>{s.name}</option>
-                    ))}
-                  </select>
-                </Col>
-              </Row>
-              <div className="d-flex justify-content-end mb-3 gap-2">
-                <Button color="primary" type="button" onClick={loadOrderReports}>
-                  <i className="mdi mdi-magnify me-1" />Search
-                </Button>
-                <Button color="info" type="button" onClick={() => OrderReportExportToPdf({ fromDate, toDate, customerId, status })}>
-                  <i className="mdi mdi-file-pdf-box me-1" />PDF
-                </Button>
-                <Button color="success" type="button" onClick={() => OrderReportExportToExcel({ fromDate, toDate, customerId, status })}>
-                  <i className="mdi mdi-file-excel me-1" />Excel
-                </Button>
-              </div>
-              {error ? <Alert color="danger">{error}</Alert> : null}
-              {loading ? (
-                <div className="text-center py-5">
-                  <Spinner color="primary" />
+              <Form onSubmit={(e) => { e.preventDefault(); loadOrderReports(); }}>
+               <Row>
+                <Col >
+                    <FormGroup>
+                      <Label>From Date</Label>
+                      <Input type="date" name="fromDate" value={fromDate} onChange={handleChange} />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Label>To Date</Label>
+                      <Input type="date" name="toDate" value={toDate} onChange={handleChange} />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Label>Customer</Label>
+                      <Select
+                        classNamePrefix="select2-selection"
+                        placeholder="Select Customer"
+                        options={customerList}
+                        value={customerList.find(c => c.value === customerId) || null}
+                        onChange={option => setCustomerId(option ? option.value : "")}
+                        isClearable
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Label>Status</Label>
+                      <Select
+                        classNamePrefix="select2-selection"
+                        placeholder="Select Status"
+                        options={statusList}
+                        value={statusList.find(s => s.value === status) || null}
+                        onChange={option => setStatus(option ? option.value : "")}
+                        isClearable
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Label>&nbsp;</Label>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={loading}
+                        className="w-100"
+                        style={{ height: "38px", borderRadius: "0.375rem" }}
+                      >
+                        {loading ? "..." : "Search"}
+                      </Button>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </Form>
+              {hasSearched && rows && rows.length > 0 && (
+                <div className="d-flex justify-content-end mb-3 gap-2">
+                  <Button color="info" type="button" onClick={() => OrderReportExportToPdf({ fromDate, toDate, customerId, status })}>
+                    <i className="mdi mdi-file-pdf-box me-1" />PDF
+                  </Button>
+                  <Button color="success" type="button" onClick={() => OrderReportExportToExcel({ fromDate, toDate, customerId, status })}>
+                    <i className="mdi mdi-file-excel me-1" />Excel
+                  </Button>
                 </div>
-              ) : (
-                <MDBDataTable
-                  striped
-                  bordered
-                  small
-                  noBottomColumns
-                  data={data}
-                  className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
-                  noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
-                />
+              )}
+              {error ? <Alert color="danger">{error}</Alert> : null}
+              {hasSearched && (
+                loading ? (
+                  <div className="text-center py-5">
+                    <Spinner color="primary" />
+                  </div>
+                ) : (
+                  <MDBDataTable
+                    striped
+                    bordered
+                    small
+                    noBottomColumns
+                    data={data}
+                    className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
+                    noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
+                  />
+                )
               )}
             </CardBody>
           </Card>

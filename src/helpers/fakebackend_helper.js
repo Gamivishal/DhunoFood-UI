@@ -139,6 +139,16 @@ export const exportUsersPdf = async (params = {}) => {
   return await exportToExcel("/User/ExportToPdf", "Users.pdf", { params });
 };
 
+// Export order report to Excel
+export const OrderReportExportToExcel = async (params = {}) => {
+  return await exportToExcel("/OrderReport/ExportOrderExcel", "OrderReport.xlsx", { params });
+};
+
+// Export order report to PDF
+export const OrderReportExportToPdf = async (params = {}) => {
+  return await exportToExcel("/OrderReport/ExportOrderPdf", "OrderReport.pdf", { params });
+};
+
 // using into ROle For Get value into Dropdown
 const getMenuPages = async () => {
   try {

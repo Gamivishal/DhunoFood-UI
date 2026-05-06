@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common";
 import { setBreadcrumbItems } from "../../store/actions";
-import { getCustomerList, getOrderReportPages } from "../../helpers/fakebackend_helper";
+import { getCustomerList, getOrderReportPages, OrderReportExportToExcel, OrderReportExportToPdf } from "../../helpers/fakebackend_helper";
 import { getLovDropdownList } from "../../helpers/api_helper";
 import { showError } from "../../Pop_show/alertService";
 
@@ -134,9 +134,15 @@ const OrderReport = props => {
                   </select>
                 </Col>
               </Row>
-              <div className="d-flex justify-content-end mb-3">
+              <div className="d-flex justify-content-end mb-3 gap-2">
                 <Button color="primary" type="button" onClick={loadOrderReports}>
                   <i className="mdi mdi-magnify me-1" />Search
+                </Button>
+                <Button color="info" type="button" onClick={() => OrderReportExportToPdf({ fromDate, toDate, customerId, status })}>
+                  <i className="mdi mdi-file-pdf-box me-1" />PDF
+                </Button>
+                <Button color="success" type="button" onClick={() => OrderReportExportToExcel({ fromDate, toDate, customerId, status })}>
+                  <i className="mdi mdi-file-excel me-1" />Excel
                 </Button>
               </div>
               {error ? <Alert color="danger">{error}</Alert> : null}

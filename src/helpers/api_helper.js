@@ -2,19 +2,31 @@ import axios from "axios";
 
 // Download a file (e.g., Excel) from the backend and trigger browser download
 export async function exportToExcel(url, filename = "data.xlsx", config = {}) {
-  const response = await axiosApi.get(url, {
-    ...config,
-    responseType: "blob",
-  });
-  const blob = new Blob([response.data], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  });
-  const link = document.createElement("a");
-  link.href = window.URL.createObjectURL(blob);
-  link.setAttribute("download", filename);
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
+  try {
+    const response = await axiosApi.get(url, {
+      ...config,
+      responseType: "blob",
+    });
+    const contentType = response.headers["content-type"] || "";
+    if (contentType.includes("application/json")) {
+      const text = await new Blob([response.data], { type: "text/plain" }).text();
+      if (text.toLowerCase().includes("download") || text.toLowerCase().includes("file")) {
+        console.warn("Export endpoint may not be implemented:", text);
+        return;
+      }
+    }
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    console.error("Export failed:", error);
+  }
 }
 
 export async function exportToFile(url, filename, config = {}) {
@@ -37,8 +49,8 @@ export async function exportToFile(url, filename, config = {}) {
 }
 
 //apply base url for axios
-//const API_URL = "https://localhost:7281/api";
-const API_URL = "https://dhunofood.bsite.net/api";
+const API_URL = "https://localhost:7281/api";
+//const API_URL = "https://dhunofood.bsite.net/api";
 
 const axiosApi = axios.create({
   baseURL: API_URL,

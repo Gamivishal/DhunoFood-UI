@@ -96,9 +96,9 @@ const OrderForm = ({
           itemName: option?.label || "",
           price: selectedItem?.price || 0,
           baseQty: baseQty,
-          quantity: baseQty,
+          quantity: null,
           ratePerUnit: ratePerUnit,
-          amount: ratePerUnit * baseQty,
+          amount: null,
           unit: unit,
           priceUMO: priceUMO,
         })
@@ -107,15 +107,16 @@ const OrderForm = ({
   }
 
   const handleQuantityChange = (index, e) => {
-    let qty = Number(e.target.value) || 0
-    if (qty < 1) qty = 1
+    const val = e.target.value
+    let qty = val === "" ? null : Number(val)
+    if (qty !== null && (isNaN(qty) || qty < 1)) qty = 1
     const updatedItems = [...formData.items]
     const currentItem = formData.items[index] || {}
     const ratePerUnit = currentItem.ratePerUnit || 0
     updatedItems[index] = {
       ...currentItem,
       quantity: qty,
-      amount: ratePerUnit * qty,
+      amount: qty !== null ? ratePerUnit * qty : null,
     }
     onItemChange(index, {
       target: {
@@ -240,11 +241,10 @@ const OrderForm = ({
                         </td>
                         <td>
                           <Input
-                            type="number"
+                            type="text"
                             name="quantity"
-                            value={item.quantity || 0}
-                            onChange={e => handleQuantityChange(index, e)}
-                            min={1}
+                            value={item.quantity ?? ""}
+onChange={e => handleQuantityChange(index, e)}
                           />
                         </td>
                         <td className="d-none">
@@ -259,7 +259,7 @@ const OrderForm = ({
                           <Input
                             type="number"
                             name="amount"
-                            value={item.amount || 0}
+                            value={item.amount ?? ""}
                             readOnly
                           />
                         </td>

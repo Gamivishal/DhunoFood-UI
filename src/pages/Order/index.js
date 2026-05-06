@@ -184,7 +184,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           orderTime: "",
           quotationId: "",
           totalAmount: 0,
-          items: [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+          items: [{ itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null }],
         })
         return
       }
@@ -220,7 +220,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
                 unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
               }
             })
-            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "" }],
+            : [{ itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null, unit: "" }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load order")
@@ -321,13 +321,16 @@ orderDate: new Date().toLocaleDateString("en-CA"),
         amount: (itemData.baseQty || 1) * (itemData.ratePerUnit || 0),
       };
     } else if (name === "quantity") {
-      const qty = Number(value) || 0;
-      if (qty < 1) qty = 1;
+      const val = value;
+      const qty = val === "" || val === null || val === undefined ? null : Number(val);
+      if (qty !== null && (isNaN(qty) || qty < 1)) {
+        return;
+      }
       const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
         quantity: qty,
-        amount: ratePerUnit * qty,
+        amount: qty !== null ? ratePerUnit * qty : null,
       };
     } else {
       updatedItems[index] = {
@@ -344,12 +347,15 @@ orderDate: new Date().toLocaleDateString("en-CA"),
 
   const handleQuantityChange = (index, quantity) => {
     const updatedItems = [...formData.items]
-    let qty = Number(quantity) || 0
-    if (qty < 1) qty = 1
+    const val = quantity;
+    const qty = val === "" || val === null || val === undefined ? null : Number(val);
+    if (qty !== null && (isNaN(qty) || qty < 1)) {
+      return;
+    }
     updatedItems[index] = {
       ...updatedItems[index],
       quantity: qty,
-      amount: qty * (Number(updatedItems[index].price) || 0),
+      amount: qty !== null ? qty * (Number(updatedItems[index].ratePerUnit) || 0) : null,
     }
     setFormData(previous => ({
       ...previous,
@@ -362,7 +368,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null },
       ],
     }))
   }

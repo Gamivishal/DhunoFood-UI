@@ -162,7 +162,7 @@ const ExpenseReport = props => {
                     <i className="mdi mdi-file-excel me-1" />Excel
                   </Button>
                 </div>
-              )}
+)}
               {error ? <Alert color="danger">{error}</Alert> : null}
               {hasSearched && (
                 loading ? (
@@ -170,15 +170,25 @@ const ExpenseReport = props => {
                     <Spinner color="primary" />
                   </div>
                 ) : (
-                  <MDBDataTable
-                    striped
-                    bordered
-                    small
-                    noBottomColumns
-                    data={data}
-                    className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
-                    noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
-                  />
+                  <>
+                    {rows && rows.length > 0 && rows[0].totalExpenseAmount !== undefined && (
+                      <div className="d-flex justify-content-end mb-2">
+                        <span className="badge bg-success" style={{ fontSize: "14px", padding: "8px 16px" }}>
+                          Total: ₹{rows[0].totalExpenseAmount?.toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    <MDBDataTable
+                      striped
+                      bordered
+                      small
+                      noBottomColumns
+                      data={data}
+                      className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
+                      noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
+                    />
+                    
+                  </>
                 )
               )}
             </CardBody>

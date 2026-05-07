@@ -112,7 +112,8 @@ const Quotations = props => {
               ...item,
               quantity: item.quantity || item.baseQty || 1,
               ratePerUnit: item.ratePerUnit || 0,
-              amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
+        //      amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
+              amount: Number(item.amount) || 0,
               unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
             }
           })
@@ -125,10 +126,6 @@ const Quotations = props => {
     }
   }
 
-  const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
-    { title: "Quotations", link: "#" },
-  ]
 
   const loadQuotations = async () => {
     setLoading(true)
@@ -246,7 +243,7 @@ const Quotations = props => {
         setFormData({
           quotationId: 0,
           customerId: "",
-quotationDate: new Date().toISOString().split("T")[0],
+          quotationDate: new Date().toISOString().split("T")[0],
           totalAmount: 0,
           items: [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })
@@ -265,6 +262,7 @@ quotationDate: new Date().toISOString().split("T")[0],
 
         setFormTitle("Edit Quotation")
         setFormData({
+          
           quotationId: quotation.quotationId || 0,
           customerId: quotation.customerId ?? "",
           quotationDate: quotation.quotationDate && !isNaN(new Date(quotation.quotationDate).getTime())
@@ -279,7 +277,8 @@ quotationDate: new Date().toISOString().split("T")[0],
                   quantity: item.quantity || item.baseQty || 1,
                   baseQty: item.baseQty ?? item.quantity ?? null,
                   ratePerUnit: item.ratePerUnit || 0,
-                  amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
+                //  amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
+                amount: Number(item.amount) || 0,
                   unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
                 }
               })

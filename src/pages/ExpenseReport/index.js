@@ -75,6 +75,12 @@ const ExpenseReport = props => {
     setSortColumnDir(nextState.sortColumnDir);
   };
 
+  useEffect(() => {
+    if (hasSearched) {
+      loadExpenseReports();
+    }
+  }, [sortColumn, sortColumnDir]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "fromDate") setFromDate(value);
@@ -155,10 +161,10 @@ const ExpenseReport = props => {
               </Form>
               {hasSearched && rows && rows.length > 0 && (
                 <div className="d-flex justify-content-end mb-3 gap-2">
-                  <Button color="info" type="button" onClick={() => ExpenseReportExportToPdf({ fromDate, toDate, categoryId, paymentMode })}>
+                  <Button color="info" type="button" onClick={() => ExpenseReportExportToPdf({ fromDate, toDate, categoryId, paymentMode, sortColumn, sortColumnDir })}>
                     <i className="mdi mdi-file-pdf-box me-1" />PDF
                   </Button>
-                  <Button color="success" type="button" onClick={() => ExpenseReportExportToExcel({ fromDate, toDate, categoryId, paymentMode })}>
+                  <Button color="success" type="button" onClick={() => ExpenseReportExportToExcel({ fromDate, toDate, categoryId, paymentMode, sortColumn, sortColumnDir })}>
                     <i className="mdi mdi-file-excel me-1" />Excel
                   </Button>
                 </div>

@@ -77,6 +77,12 @@ const OrderReport = props => {
     setSortColumnDir(nextState.sortColumnDir);
   };
 
+  useEffect(() => {
+    if (hasSearched) {
+      loadOrderReports();
+    }
+  }, [sortColumn, sortColumnDir]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "fromDate") setFromDate(value);
@@ -171,10 +177,10 @@ const OrderReport = props => {
               </Form>
               {hasSearched && rows && rows.length > 0 && (
                 <div className="d-flex justify-content-end mb-3 gap-2">
-                  <Button color="info" type="button" onClick={() => OrderReportExportToPdf({ fromDate, toDate, customerId, status })}>
+                  <Button color="info" type="button" onClick={() => OrderReportExportToPdf({ fromDate, toDate, customerId, status, sortColumn, sortColumnDir })}>
                     <i className="mdi mdi-file-pdf-box me-1" />PDF
                   </Button>
-                  <Button color="success" type="button" onClick={() => OrderReportExportToExcel({ fromDate, toDate, customerId, status })}>
+                  <Button color="success" type="button" onClick={() => OrderReportExportToExcel({ fromDate, toDate, customerId, status, sortColumn, sortColumnDir })}>
                     <i className="mdi mdi-file-excel me-1" />Excel
                   </Button>
                 </div>

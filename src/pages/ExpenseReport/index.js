@@ -56,6 +56,7 @@ const ExpenseReport = props => {
         fromDate,
         toDate,
         categoryId,
+        paymentMode,
       });
       if (response.isSuccess && response.data && response.data.data) {
         setRows(response.data.data);
@@ -116,20 +117,20 @@ const ExpenseReport = props => {
           <Card>
             <CardBody>
               <Form onSubmit={(e) => { e.preventDefault(); loadExpenseReports(); }}>
-                <Row>
-                  <Col md={3}>
+<Row>
+                  <Col >
                     <FormGroup>
                       <Label>From Date</Label>
                       <Input type="date" name="fromDate" value={fromDate} onChange={handleChange} />
                     </FormGroup>
                   </Col>
-                  <Col md={3}>
+                  <Col >
                     <FormGroup>
                       <Label>To Date</Label>
                       <Input type="date" name="toDate" value={toDate} onChange={handleChange} />
                     </FormGroup>
                   </Col>
-                  <Col md={3}>
+                  <Col >
                     <FormGroup>
                       <Label>Category</Label>
                       <Select
@@ -142,8 +143,21 @@ const ExpenseReport = props => {
                       />
                     </FormGroup>
                   </Col>
+                  <Col >
+                    <FormGroup>
+                      <Label>Payment Mode</Label>
+                      <Select
+                        classNamePrefix="select2-selection"
+                        placeholder="Select Payment Mode"
+                        options={paymentModeList}
+                        value={paymentModeList.find(p => p.value === paymentMode) || null}
+                        onChange={option => setPaymentMode(option ? option.value : "")}
+                        isClearable
+                      />
+                    </FormGroup>
+                  </Col>
                   
-                  <Col md={3}>
+                  <Col >
                     <FormGroup>
                       <Label>&nbsp;</Label>
                       <Button

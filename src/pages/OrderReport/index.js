@@ -93,10 +93,11 @@ const OrderReport = props => {
     return withAutoSrColumn({
       columns: buildServerSortColumns({
         columns: [
-          { label: "Order No", field: "orderNo", sort: "asc" },
+          { label: "Order No / Order Date", field: "orderNo", sort: "asc" },
           { label: "Customer Name", field: "customerName", sort: "asc" },
-          { label: "Order Date", field: "orderDate", sort: "asc" },
-          { label: "Total Amount", field: "totalAmount", sort: "asc" },
+        //  { label: "Order Date", field: "orderDate", sort: "asc" },
+          { label: "Total / Remaining Amount", field: "totalAmount", sort: "asc" },
+         // { label: "Remaining Amount", field: "remainingAmount", sort: "asc" },
           { label: "Payment Status", field: "paymentStatusname", sort: "asc" },
         ],
         onSort: handleSortChange,
@@ -104,10 +105,11 @@ const OrderReport = props => {
         sortColumnDir,
       }),
       rows: rows.map(item => ({
-        orderNo: item.orderNo,
+        orderNo: `${item.orderNo} / ${item.orderDate?.split("T")[0] || ""}`,
         customerName: item.customerName,
-        orderDate: item.orderDate?.split("T")[0] || "",
-        totalAmount: item.totalAmount,
+      //  orderDate: item.orderDate?.split("T")[0] || "",
+        totalAmount: `${item.totalAmount} / ${item.remainingAmount}`,
+       // remainingAmount: item.remainingAmount,
         paymentStatusname: item.paymentStatusname,
       })),
     });
@@ -148,7 +150,7 @@ const OrderReport = props => {
                   </Col>
                   <Col>
                     <FormGroup>
-                      <Label>Status</Label>
+                      <Label>Payment Status</Label>
                       <Select
                         classNamePrefix="select2-selection"
                         placeholder="Select Status"

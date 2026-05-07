@@ -103,7 +103,7 @@ const Quotations = props => {
         customerName: quotation.customerName || "",
         quotationDate: quotation.quotationDate || "",
         totalAmount: quotation.totalAmount ?? 0,
-        orderDate: "",
+        orderDate: new Date().toISOString().split("T")[0],
         orderTime: quotation.orderTime || "",
         items: Array.isArray(quotation.items) && quotation.items.length > 0
           ? quotation.items.map(item => {
@@ -246,7 +246,7 @@ const Quotations = props => {
         setFormData({
           quotationId: 0,
           customerId: "",
-quotationDate: "",
+quotationDate: new Date().toISOString().split("T")[0],
           totalAmount: 0,
           items: [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
         })

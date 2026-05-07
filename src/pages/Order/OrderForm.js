@@ -161,7 +161,7 @@ const OrderForm = ({
               />
             </Col>
             <Col md={6}>
-              <Label>Order Time</Label>
+              <Label>Order Time<span style={{ color: "red" }}>*</span></Label>
               <Input
                 type="time"
                 name="orderTime"

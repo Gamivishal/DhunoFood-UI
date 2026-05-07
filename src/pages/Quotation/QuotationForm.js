@@ -83,15 +83,15 @@ const QuotationForm = ({
   }
 
   const handleQuantityChange = (index, e) => {
-    let qty = Number(e.target.value) || 0
-    if (qty < 1) qty = 1
+    const value = e.target.value
+    const qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null))
     const updatedItems = [...formData.items]
     const currentItem = formData.items[index] || {}
     const ratePerUnit = currentItem.ratePerUnit || 0
     updatedItems[index] = {
       ...currentItem,
       baseQty: qty,
-      amount: ratePerUnit * qty,
+      amount: qty !== null ? ratePerUnit * qty : 0,
     }
     onItemChange(index, {
       target: {
@@ -211,11 +211,10 @@ const QuotationForm = ({
                                                 </td>
                         <td>
                           <Input
-                            type="number"
+                            type="text"
                             name="baseQty"
-                            value={item.baseQty || 0}
+                            value={item.baseQty ?? ''}
                             onChange={e => handleQuantityChange(index, e)}
-                            min={1}
                           />
                         </td>
                         <td className="d-none">

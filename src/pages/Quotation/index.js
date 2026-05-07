@@ -410,12 +410,12 @@ quotationDate: "",
         ...itemData, // This will update all fields: itemId, itemName, price, baseQty, ratePerUnit, amount
       };
     } else if (name === "baseQty") {
-      const qty = Number(value) || 0;
+      const qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null));
       const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
         baseQty: qty,
-        amount: ratePerUnit * qty,
+        amount: qty !== null ? ratePerUnit * qty : 0,
       };
     } else {
       updatedItems[index] = {
@@ -514,13 +514,12 @@ quotationDate: "",
         ...itemData,
       };
     } else if (name === "quantity") {
-      const qty = Number(value) || 0;
-      if (qty < 1) qty = 1;
+      const qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null));
       const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
         quantity: qty,
-        amount: ratePerUnit * qty,
+        amount: qty !== null ? ratePerUnit * qty : 0,
       };
     } else {
       updatedItems[index] = {

@@ -168,16 +168,15 @@ const ConvertToOrderForm = ({
                         </td>
                         <td>
                           <Input
-                            type="number"
+                            type="text"
                             name="quantity"
-                            value={item.quantity || 0}
+                            value={item.quantity ?? ''}
                             onChange={e => {
-                              let qty = Number(e.target.value) || 0;
-                              if (qty < 1) qty = 1;
-                              const updated = { ...item, quantity: qty, amount: (item.ratePerUnit || 0) * qty };
+                              const value = e.target.value
+                              const qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null))
+                              const updated = { ...item, quantity: qty, amount: qty !== null ? (item.ratePerUnit || 0) * qty : 0 };
                               onItemChange(index, { target: { name: "quantity", value: qty, updated } });
                             }}
-                            min={1}
                           />
                         </td>
                         <td className="d-none">

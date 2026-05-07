@@ -202,7 +202,7 @@ const OrderForm = ({
                   <thead>
                     <tr>
                       <th style={{ width: "180px" }}>Item</th>
-                      <th style={{ width: "150px" }}>Price (Qty-UOM)</th>
+                      <th style={{ width: "150px" }}>Price (Qty)</th>
                       <th style={{ width: "100px" }}>Quantity</th>
                       <th className="d-none" style={{ width: "100px" }}>Rate/Unit</th>
                       <th style={{ width: "120px" }}>Amount</th>

@@ -104,11 +104,11 @@ export const buildServerSortColumns = ({
   })
 }
 
-export const withAutoSrColumn = ({ columns = [], rows = [] }) => {
+export const withAutoSrColumn = ({ columns = [], rows = [], startIndex = 0 }) => {
   const normalizedColumns = (columns || []).filter(column => column?.field !== SR_AUTO_FIELD)
-  const normalizedRows = (rows || []).map(row => ({
+  const normalizedRows = (rows || []).map((row, idx) => ({
     ...(row || {}),
-    [SR_AUTO_FIELD]: "",
+    [SR_AUTO_FIELD]: startIndex + idx + 1,
   }))
 
   return {

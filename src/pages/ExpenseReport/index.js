@@ -204,7 +204,7 @@ const ExpenseReport = props => {
                       small
                       noBottomColumns
                       data={data}
-                      className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
+                     // className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
                       noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
                     />
                     

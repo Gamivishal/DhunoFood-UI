@@ -96,9 +96,9 @@ const OrderForm = ({
           itemName: option?.label || "",
           price: selectedItem?.price || 0,
           baseQty: baseQty,
-          quantity: null,
+          quantity: baseQty,
           ratePerUnit: ratePerUnit,
-          amount: null,
+          amount: ratePerUnit * baseQty,
           unit: unit,
           priceUMO: priceUMO,
         })
@@ -107,21 +107,19 @@ const OrderForm = ({
   }
 
   const handleQuantityChange = (index, e) => {
-    const val = e.target.value
-    let qty = val === "" ? null : Number(val)
+    const value = e.target.value
+    let qty = value === '' ? null : Number(value)
     if (qty !== null && (isNaN(qty) || qty < 1)) qty = 1
-    const updatedItems = [...formData.items]
     const currentItem = formData.items[index] || {}
     const ratePerUnit = currentItem.ratePerUnit || 0
-    updatedItems[index] = {
-      ...currentItem,
-      quantity: qty,
-      amount: qty !== null ? ratePerUnit * qty : null,
-    }
     onItemChange(index, {
       target: {
         name: "quantity",
-        value: qty
+        value: JSON.stringify({
+          baseQty: qty,
+          quantity: qty,
+          amount: qty !== null ? ratePerUnit * qty : null,
+        })
       }
     })
   }
@@ -243,8 +241,8 @@ const OrderForm = ({
                           <Input
                             type="text"
                             name="quantity"
-                            value={item.quantity ?? ""}
-onChange={e => handleQuantityChange(index, e)}
+                            value={item.quantity ?? item.baseQty ?? ''}
+                            onChange={e => handleQuantityChange(index, e)}
                           />
                         </td>
                         <td className="d-none">

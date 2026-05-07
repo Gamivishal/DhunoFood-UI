@@ -277,8 +277,9 @@ quotationDate: "",
                 return {
                   ...item,
                   quantity: item.quantity || item.baseQty || 1,
+                  baseQty: item.baseQty ?? item.quantity ?? null,
                   ratePerUnit: item.ratePerUnit || 0,
-                  amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
+                  amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
                   unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
                 }
               })
@@ -404,18 +405,38 @@ quotationDate: "",
     const updatedItems = [...formData.items];
 
     if (name === "itemSelected") {
-      const itemData = JSON.parse(value || "{}");
+      let itemData;
+      try {
+        itemData = JSON.parse(value || "{}");
+      } catch (e) {
+        itemData = {};
+      }
       updatedItems[index] = {
         ...updatedItems[index],
-        ...itemData, // This will update all fields: itemId, itemName, price, baseQty, ratePerUnit, amount
+        ...itemData,
+        quantity: itemData.baseQty ?? itemData.quantity ?? 1,
       };
     } else if (name === "baseQty") {
-      const qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null));
+      let qty, amt;
+      if (typeof value === 'string' && value.startsWith('{')) {
+        try {
+          const data = JSON.parse(value);
+          qty = data.baseQty;
+          amt = data.amount;
+        } catch (e) {
+          qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null));
+          amt = null;
+        }
+      } else {
+        qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null));
+        amt = null;
+      }
       const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
         baseQty: qty,
-        amount: qty !== null ? ratePerUnit * qty : 0,
+        quantity: qty,
+        amount: amt !== null ? amt : (qty !== null ? ratePerUnit * qty : 0),
       };
     } else {
       updatedItems[index] = {

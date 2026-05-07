@@ -73,6 +73,7 @@ const QuotationForm = ({
           itemName: option?.label || "",
           price: selectedItem?.price || 0,
           baseQty: baseQty,
+          quantity: baseQty,
           ratePerUnit: ratePerUnit,
           amount: ratePerUnit * baseQty,
           unit: unit,
@@ -85,18 +86,16 @@ const QuotationForm = ({
   const handleQuantityChange = (index, e) => {
     const value = e.target.value
     const qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null))
-    const updatedItems = [...formData.items]
     const currentItem = formData.items[index] || {}
     const ratePerUnit = currentItem.ratePerUnit || 0
-    updatedItems[index] = {
-      ...currentItem,
-      baseQty: qty,
-      amount: qty !== null ? ratePerUnit * qty : 0,
-    }
     onItemChange(index, {
       target: {
         name: "baseQty",
-        value: qty
+        value: JSON.stringify({
+          baseQty: qty,
+          quantity: qty,
+          amount: qty !== null ? ratePerUnit * qty : 0,
+        })
       }
     })
   }
@@ -170,6 +169,7 @@ const QuotationForm = ({
                       <th style={{ width: "120px" }}>Amount</th>
                       <th style={{ width: "60px" }}>Action</th>
                     </tr>
+                    
                   </thead>
                   <tbody>
                     {(formData.items || []).map((item, index) => (
@@ -213,7 +213,7 @@ const QuotationForm = ({
                           <Input
                             type="text"
                             name="baseQty"
-                            value={item.baseQty ?? ''}
+                            value={item.quantity ?? item.baseQty ?? ''}
                             onChange={e => handleQuantityChange(index, e)}
                           />
                         </td>

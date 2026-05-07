@@ -216,7 +216,9 @@ orderDate: new Date().toLocaleDateString("en-CA"),
               const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
               return {
                 ...item,
-                amount: (Number(item.quantity) || 0) * (Number(item.ratePerUnit) || 0),
+                baseQty: item.baseQty ?? item.quantity ?? null,
+                quantity: item.quantity ?? item.baseQty ?? 1,
+                amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
                 unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
               }
             })
@@ -313,24 +315,41 @@ orderDate: new Date().toLocaleDateString("en-CA"),
     const updatedItems = [...formData.items];
 
     if (name === "itemSelected") {
-      const itemData = JSON.parse(value || "{}");
+      let itemData;
+      try {
+        itemData = JSON.parse(value || "{}");
+      } catch (e) {
+        itemData = {};
+      }
       updatedItems[index] = {
         ...updatedItems[index],
         ...itemData,
-        quantity: itemData.baseQty || 1,
-        amount: (itemData.baseQty || 1) * (itemData.ratePerUnit || 0),
+        quantity: itemData.baseQty ?? itemData.quantity ?? 1,
       };
     } else if (name === "quantity") {
-      const val = value;
-      const qty = val === "" || val === null || val === undefined ? null : Number(val);
+      let qty, amt;
+      if (typeof value === 'string' && value.startsWith('{')) {
+        try {
+          const data = JSON.parse(value);
+          qty = data.quantity;
+          amt = data.amount;
+        } catch (e) {
+          qty = value === '' || value === null || value === undefined ? null : Number(value);
+          amt = null;
+        }
+      } else {
+        qty = value === '' || value === null || value === undefined ? null : Number(value);
+        amt = null;
+      }
       if (qty !== null && (isNaN(qty) || qty < 1)) {
         return;
       }
       const ratePerUnit = updatedItems[index].ratePerUnit || 0;
       updatedItems[index] = {
         ...updatedItems[index],
+        baseQty: qty,
         quantity: qty,
-        amount: qty !== null ? ratePerUnit * qty : null,
+        amount: amt !== null ? amt : (qty !== null ? ratePerUnit * qty : null),
       };
     } else {
       updatedItems[index] = {

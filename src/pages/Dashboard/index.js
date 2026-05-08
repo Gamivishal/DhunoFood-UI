@@ -103,11 +103,10 @@ const Dashboard = (props) => {
 
   return (
     <React.Fragment>
-      <Row>
-        <Col>
+      <Row className="g-2">
+        <Col xs={12} className="d-flex flex-column flex-md-row gap-2">
           <Button
             color={selectedView === "summary" ? "success" : "secondary"}
-            className="me-2"
             onClick={handleGetSummary}
             disabled={loadingSummary}
           >
@@ -115,7 +114,6 @@ const Dashboard = (props) => {
           </Button>
           <Button
             color={selectedView === "orders" ? "success" : "secondary"}
-            className="me-2"
             onClick={handleGetNext7DaysOrders}
             disabled={loadingOrders}
           >

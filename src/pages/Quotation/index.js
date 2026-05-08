@@ -266,7 +266,7 @@ const Quotations = props => {
           quotationId: quotation.quotationId || 0,
           customerId: quotation.customerId ?? "",
           quotationDate: quotation.quotationDate && !isNaN(new Date(quotation.quotationDate).getTime())
-              ? new Date(quotation.quotationDate).toISOString().split("T")[0]
+              ? new Date(quotation.quotationDate).toLocaleDateString("en-CA")
               : null,
           totalAmount: quotation.totalAmount ?? 0,
           items: Array.isArray(quotation.items) && quotation.items.length > 0

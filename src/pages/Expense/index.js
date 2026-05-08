@@ -180,7 +180,7 @@ if (!(response?.isSuccess)) {
 
         const expense = response?.data || {}
         const expenseDate = expense.expenseDate
-          ? new Date(expense.expenseDate).toISOString().slice(0, 10)
+          ? new Date(expense.expenseDate).toLocaleDateString("en-CA")
           : ""
 
         setFormTitle("Edit Expense")

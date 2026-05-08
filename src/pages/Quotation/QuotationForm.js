@@ -146,6 +146,12 @@ const QuotationForm = ({
                 name="quotationDate"
                 value={formData.quotationDate}
                 onChange={onChange}
+                max={new Date().toLocaleDateString("en-CA")}
+min={(() => {
+  const d = new Date();
+  d.setDate(d.getDate() - 7);
+  return d.toLocaleDateString("en-CA");
+})()}
               />
             </Col>
           </Row>

@@ -205,7 +205,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           orderId: order.orderId || 0,
           customerId: order.customerId ?? "",
           orderDate: order.orderDate
-            ? order.orderDate.split("T")[0]
+            ? new Date(order.orderDate).toLocaleDateString("en-CA")
             : new Date().toISOString().split("T")[0],
           orderTime: order.orderTime || "",
           quotationId: order.quotationId ?? "",

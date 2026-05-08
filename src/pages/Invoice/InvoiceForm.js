@@ -63,7 +63,7 @@ const InvoiceForm = ({
             </Col>
             <Col md={6}>
               <FormGroup>
-                <Label>Order <span style={{ color: "red" }}>*</span></Label>
+                <Label>Order No. <span style={{ color: "red" }}>*</span></Label>
                 <Select
                   classNamePrefix="select2-selection"
                   placeholder="Select order"
@@ -106,6 +106,12 @@ const InvoiceForm = ({
                   id="invoiceDate"
                   value={formData.invoiceDate}
                   onChange={onChange}
+max={new Date().toLocaleDateString("en-CA")}
+min={(() => {
+  const d = new Date();
+  d.setDate(d.getDate() - 7);
+  return d.toLocaleDateString("en-CA");
+})()}
                   required
                 />
               </FormGroup>

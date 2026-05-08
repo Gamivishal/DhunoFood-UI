@@ -67,6 +67,13 @@ const ExpenseForm = ({
                 value={formData.expenseDate}
                 onChange={onChange}
                 placeholder="Select expense date"
+max={new Date().toLocaleDateString("en-CA")}
+min={(() => {
+  const today = new Date();
+  const minDate = new Date(today);
+  minDate.setDate(today.getDate() - 7);
+  return minDate.toLocaleDateString("en-CA");
+})()}
               />
             </Col>
             <Col md={6}>

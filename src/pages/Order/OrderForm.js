@@ -157,7 +157,12 @@ const OrderForm = ({
                 name="orderDate"
                 value={formData.orderDate}
                 onChange={onChange}
-                min={new Date().toLocaleDateString("en-CA")}
+                min={new Date().toISOString().split("T")[0]}
+max={(() => {
+  const d = new Date();
+  d.setDate(d.getDate() + 7);
+  return d.toISOString().split("T")[0];
+})()}
               />
             </Col>
             <Col md={6}>

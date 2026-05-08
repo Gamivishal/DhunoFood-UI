@@ -132,6 +132,12 @@ const paymentModeSelectOptions = (paymentModeOptions || []).map(mode => ({
                 name="paymentDate"
                 value={formData.paymentDate}
                 onChange={onChange}
+                max={new Date().toISOString().split("T")[0]}
+                min={(() => {
+                  const d = new Date();
+                  d.setDate(d.getDate() - 7);
+                  return d.toISOString().split("T")[0];
+                })()}
               />
             </Col>
             <Col md={6}>

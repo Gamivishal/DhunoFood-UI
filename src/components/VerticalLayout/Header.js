@@ -146,7 +146,7 @@ const Header = props => {
                 <span className="fa fa-search"></span>
               </div>
             </form> */}
-            <div className="dropdown d-inline-block d-lg-none ms-2">
+            {/* <div className="dropdown d-inline-block d-lg-none ms-2">
               <button
                 onClick={() => {
                   setsearch(!search)
@@ -183,7 +183,7 @@ const Header = props => {
                   </div>
                 </form>
               </div>
-            </div>
+            </div> */}
             {/* <LanguageDropdown /> */}
             <div className="dropdown d-none d-lg-inline-block">
               <button

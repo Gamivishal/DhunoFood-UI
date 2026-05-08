@@ -198,6 +198,7 @@ const ExpenseReport = props => {
                         </span>
                       </div>
                     )}
+                    <div className="table-responsive">
                     <MDBDataTable
                       striped
                       bordered
@@ -207,7 +208,7 @@ const ExpenseReport = props => {
                      // className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
                       noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
                     />
-                    
+                    </div>
                   </>
                 )
               )}

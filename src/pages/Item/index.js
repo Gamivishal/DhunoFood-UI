@@ -370,7 +370,9 @@ columns: buildServerSortColumns({
                     <Spinner color="primary" />
                   </div>
                 ) : (
+                  <div className="table-responsive">
                   <MDBDataTable striped bordered small noBottomColumns data={data} />
+                </div>
                 )}
               </CardBody>
             </Card>

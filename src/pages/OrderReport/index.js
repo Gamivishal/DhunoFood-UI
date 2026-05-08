@@ -194,6 +194,7 @@ const OrderReport = props => {
                     <Spinner color="primary" />
                   </div>
                 ) : (
+                     <div className="table-responsive">
                   <MDBDataTable
                     striped
                     bordered
@@ -202,7 +203,9 @@ const OrderReport = props => {
                     data={data}
                     // className={rows && rows.length > 0 ? "table-auto-sr" : undefined}
                     noRecordsFoundLabel={<span style={{display: 'block', textAlign: 'center', fontWeight: 'bold', color: '#888'}}>You don't have any record</span>}
-                  />
+                 
+                 />
+                 </div>
                 )
               )}
             </CardBody>

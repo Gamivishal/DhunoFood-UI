@@ -276,10 +276,11 @@ const ExpenseCategories = props => {
                     <Spinner color="primary" />
                   </div>
                 ) : (
+                  <div className="table-responsive">
                   <MDBDataTable
               //     className={data.rows && data.rows.length > 0 ? "table-auto-sr" : ""} 
                    striped bordered small noBottomColumns data={data} />
-                )}
+            </div>   )}
               </CardBody>
             </Card>
           )}

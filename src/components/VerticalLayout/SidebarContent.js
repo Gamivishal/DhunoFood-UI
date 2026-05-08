@@ -7,12 +7,20 @@ import SimpleBar from "simplebar-react"
 // MetisMenu
 import MetisMenu from "metismenujs"
 import withRouter from "components/Common/withRouter"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 //i18n
 import { withTranslation } from "react-i18next"
 
 const SidebarContent = props => {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (window.innerWidth < 992) {
+      document.body.classList.remove("sidebar-enable")
+      document.body.classList.remove("vertical-collpsed")
+    }
+  }, [location])
   const ref = useRef();
   const activateParentDropdown = useCallback((item) => {
     item.classList.add("active");

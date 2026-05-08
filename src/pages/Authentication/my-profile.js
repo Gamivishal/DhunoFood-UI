@@ -22,7 +22,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import withRouter from "components/Common/withRouter";
 
-import user1 from "../../assets/images/users/user-1.jpg";
+// users
+//import user1 from "../../assets/images/users/user-1.jpg";
+import user1 from "../../assets/images/DhunoFood/Userimg.jpg"
+
+
 import { changePassword, getUserById, resetPassword } from "../../helpers/fakebackend_helper";
 import { editProfile, resetProfileFlag } from "../../store/actions";
 

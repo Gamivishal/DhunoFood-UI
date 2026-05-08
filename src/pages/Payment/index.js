@@ -187,7 +187,7 @@ const Payments = props => {
         columns: [
           { label: "Order No", field: "orderNo", sort: "asc" },
           { label: "Customer Name", field: "customerName", sort: "asc" },
-          { label: "OrderDate", field: "orderDate", sort: "asc" },
+          { label: "Order Date", field: "orderDate", sort: "asc" },
           { label: "Order Amount", field: "totalAmount", sort: "asc" },
 
   { label: "Paid Amount", field: "paidAmount", sort: "asc" },

@@ -20,7 +20,7 @@ const EXPENSE_CATEGORY_LIST_SORT_COLUMN = "categoryName"
 const EXPENSE_CATEGORY_LIST_SORT_DIR = "asc"
 
 const ExpenseCategories = props => {
-    document.title = `Expense Categories | ${DASHBOARD_NAME}`
+    document.title = `Expense Category | ${DASHBOARD_NAME}`
  // document.title = "Expense Categories | Lexa - Responsive Bootstrap 5 Admin Dashboard"
   const navigate = useNavigate()
   const location = useLocation()
@@ -45,7 +45,7 @@ const ExpenseCategories = props => {
 
   const breadcrumbItems = [
     { title: "Lexa", link: "#" },
-    { title: "Expense Categories", link: "#" },
+    { title: "Expense Category", link: "#" },
   ]
 
   const loadExpenseCategories = async () => {
@@ -61,20 +61,20 @@ const ExpenseCategories = props => {
       })
 
       if (!(response?.isSuccess)) {
-        throw new Error(response?.message || "Failed to load categories")
+        throw new Error(response?.message || "Failed to load Category")
       }
 
       const list = response?.data?.data || []
       setRows(Array.isArray(list) ? list : [])
     } catch (err) {
-      setError(err?.message || err || "Failed to load categories")
+      setError(err?.message || err || "Failed to load Category")
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Expense Categorie")
+    props.setBreadcrumbItems("Expense Category")
   }, [])
 
   useEffect(() => {

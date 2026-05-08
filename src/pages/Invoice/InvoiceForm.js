@@ -172,9 +172,9 @@ min={(() => {
                 <Row>
                    <Col md={6}>
               <FormGroup>
-                <Label for="dueDate">Amount <span className="text-danger">*</span></Label>
+                {/* <Label for="dueDate">Amount <span className="text-danger">*</span></Label> */}
                 <Input
-                  type="text"           
+                  type="hidden"           
                    value={totalAmount || 0}
                 readOnly
                 />

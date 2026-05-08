@@ -231,6 +231,7 @@ if (!(response?.isSuccess)) {
           { label: "Expense Date", field: "expenseDate", sort: "asc" },
           { label: "Amount", field: "amount", sort: "asc" },
           { label: "Payment Mode", field: "paymentName", sort: "asc" },
+                    { label: "Category Name", field: "categoryName", sort: "asc" },
           { label: "Description", field: "description", sort: "asc" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
@@ -244,6 +245,7 @@ if (!(response?.isSuccess)) {
         categoryName: item.categoryName || "",
         amount: item.amount ?? "",
         paymentName: item.paymentName || "",
+        categoryName: item.categoryName || "",
         description: item.description || "",
         isActive: item.isActive ? "Yes" : "No",
         action: (

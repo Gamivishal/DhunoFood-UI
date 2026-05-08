@@ -257,7 +257,7 @@ const OrderForm = ({
                           <Input
                             type="number"
                             name="amount"
-                            value={item.amount ?? ""}
+                            value={item.amount != null ? Math.round(item.amount) : ""}
                             readOnly
                           />
                         </td>
@@ -284,7 +284,7 @@ const OrderForm = ({
             <Col md={{ size: 4, offset: 8 }}>
               <div className="text-end">
                 <strong>Total Amount: </strong>
-                <span className="ms-2">{calculateTotal()}</span>
+                <span className="ms-2">{Math.round(calculateTotal())}</span>
               </div>
             </Col>
           </Row>

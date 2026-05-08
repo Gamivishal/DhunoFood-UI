@@ -587,16 +587,16 @@ try {
         quotationId: Number(convertFormData.quotationId) || 0,
         customerId: Number(convertFormData.customerId) || 0,
         quotationDate: convertFormData.quotationDate || null,
-        totalAmount: calculateConvertTotal(),
+        totalAmount: Math.round(calculateConvertTotal()),
         isConvert: true,
         orderDate: convertFormData.orderDate || null,
         orderTime: convertFormData.orderTime || null,
         items: convertFormData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
-          baseQty: Number(item.baseQty) || 0,
+          baseQty: Number(item.quantity) || 0,
           ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
-          amount: Number(item.amount) || 0,
+          amount: Math.round(Number(item.amount) || 0),
           unit: item.unit || "",
         })),
       }
@@ -631,14 +631,14 @@ try {
         quotationDate: (formData.quotationDate && !isNaN(new Date(formData.quotationDate).getTime()))
           ? new Date(formData.quotationDate).toISOString()
           : null,
-        totalAmount: calculateTotal(),
+        totalAmount: Math.round(calculateTotal()),
         isConvert: false,
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
           baseQty: Number(item.baseQty) || 0,
           ratePerUnit: Number(item.ratePerUnit) || 0,
           price: Number(item.price) || 0,
-          amount: Number(item.amount) || 0,
+          amount: Math.round(Number(item.amount) || 0),
           unit: item.unit || "",
         })),
       }

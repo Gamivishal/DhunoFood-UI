@@ -191,7 +191,7 @@ const ConvertToOrderForm = ({
                           <Input
                             type="number"
                             name="amount"
-                            value={item.amount || 0}
+                            value={Math.round(item.amount || 0)}
                             readOnly
                           />
                         </td>
@@ -218,7 +218,7 @@ const ConvertToOrderForm = ({
             <Col md={{ size: 4, offset: 8 }}>
               <div className="text-end">
                 <strong>Total Amount: </strong>
-                <span className="ms-2">{calculateTotal()}</span>
+                <span className="ms-2">{Math.round(calculateTotal())}</span>
               </div>
             </Col>
           </Row>

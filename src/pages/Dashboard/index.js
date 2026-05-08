@@ -81,7 +81,13 @@ const Dashboard = (props) => {
     rows: next7DaysOrders.map(order => ({
       orderNo: order.orderNo || "-",
       orderDate: order.orderDate ? order.orderDate.split("T")[0] : "-",
-      orderTime: order.orderTime || "-",
+      orderTime: order.orderTime
+  ? new Date(`1970-01-01T${order.orderTime}`).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    })
+  : "-",
       customerName: order.customerName || "-",
       totalAmount: order.totalAmount || 0,
       statusName: order.statusName || "-",

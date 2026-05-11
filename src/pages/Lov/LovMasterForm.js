@@ -1,4 +1,5 @@
 import React from "react"
+import { FaTimes } from "react-icons/fa"
 import { Alert, Button, Card, CardBody, CardHeader, Col, Form, Input, Label, Row, Spinner } from "reactstrap"
 
 const LovMasterForm = ({ title, formData, saving, formError, onChange, onSubmit, onCancel }) => {
@@ -7,7 +8,7 @@ const LovMasterForm = ({ title, formData, saving, formError, onChange, onSubmit,
       <CardHeader className="bg-white d-flex align-items-center justify-content-between">
         <h5 className="mb-0">{title}</h5>
         <Button color="link" className="p-0" type="button" onClick={onCancel}>
-          Close
+          <FaTimes color="red" size={18} />
         </Button>
       </CardHeader>
       <CardBody className="app-form-body">

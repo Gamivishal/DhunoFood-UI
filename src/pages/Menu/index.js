@@ -4,7 +4,7 @@ import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
-
+import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import { deleteMenuById, getMenuById, getMenusPages, saveMenu } from "../../helpers/fakebackend_helper"
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
@@ -24,7 +24,8 @@ const toBoolean = value => {
 }
 
 const Menus = props => {
-  document.title = "Menus | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+
+  document.title =   `Menu | ${DASHBOARD_NAME}`
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()

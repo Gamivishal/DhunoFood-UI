@@ -4,7 +4,7 @@ import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
-
+import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import {
   deleteRoleById,
@@ -30,7 +30,7 @@ const toBoolean = value => {
 }
 
 const Roles = props => {
-  document.title = "Roles | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+  document.title = `Role | ${DASHBOARD_NAME}`
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()

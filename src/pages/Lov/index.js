@@ -4,7 +4,7 @@ import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { buildServerSortColumns, getNextSortState, withAutoSrColumn } from "../../common/common"
-
+import { DASHBOARD_NAME } from "../../config";
 import { setBreadcrumbItems } from "../../store/actions"
 import {
   getLovColumns,
@@ -52,18 +52,13 @@ const normalizeList = payload => {
   return []
 }
 
-const LOV_BREADCRUMB_ITEMS = [
-  { title: "Lexa", link: "#" },
-  { title: "LOV", link: "#" },
-]
-
 const LOV_MASTER_SORT_COLUMN = "lov_Column"
 const LOV_MASTER_SORT_DIR = "asc"
 const LOV_DETAIL_SORT_COLUMN = "displayOrder"
 const LOV_DETAIL_SORT_DIR = "asc"
 
 const Lov = props => {
-  document.title = "LOV | Lexa - Responsive Bootstrap 5 Admin Dashboard"
+  document.title =`LOV | ${DASHBOARD_NAME}`
   const { setBreadcrumbItems } = props
 
   const navigate = useNavigate()

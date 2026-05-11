@@ -46,10 +46,7 @@ const Users = props => {
     isDeleted: false,
   })
 
-  const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
-    { title: "Users", link: "#" },
-  ]
+
 
   const loadUsers = async () => {
     setLoading(true)

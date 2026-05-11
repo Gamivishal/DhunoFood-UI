@@ -56,10 +56,7 @@ const Roles = props => {
     selectedMenu: "",
   })
 
-  const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
-    { title: "Roles", link: "#" },
-  ]
+ 
 
   const loadRoles = async () => {
     setLoading(true)
@@ -87,7 +84,7 @@ const Roles = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Roles", breadcrumbItems)
+    props.setBreadcrumbItems("Roles")
   }, [])
 
   useEffect(() => {

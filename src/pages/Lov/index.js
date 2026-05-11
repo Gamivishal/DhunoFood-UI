@@ -213,7 +213,7 @@ const Lov = props => {
   }
 
   useEffect(() => {
-    setBreadcrumbItems("LOV", LOV_BREADCRUMB_ITEMS)
+    setBreadcrumbItems("LOV")
   }, [setBreadcrumbItems])
 
   useEffect(() => {

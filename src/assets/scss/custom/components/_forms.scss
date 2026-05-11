@@ -169,4 +169,15 @@ $value in $theme-colors {
   margin-bottom: 0px;
 }
 
+// Hide browser default password eye icon
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
 

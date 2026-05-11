@@ -314,7 +314,9 @@ const Invoices = props => {
               title="View PDF"
               type="button"
               onClick={() => {
-                window.open(getInvoicePdfUrl(invoice.invoiceId), '_blank', 'noopener,noreferrer');
+                getInvoicePdfUrl(invoice.invoiceId).then(url => {
+                  window.open(url, '_blank', 'noopener,noreferrer');
+                });
               }}
             >
               <i className="mdi mdi-eye font-size-18" />

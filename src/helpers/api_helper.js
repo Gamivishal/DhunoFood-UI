@@ -201,8 +201,10 @@ export async function getNext7DaysOrders(sortColumn = "orderNo", sortColumnDir =
 export async function getNext7DaysOrderItems(sortColumn = "itemName", sortColumnDir = "asc") {
   return await get(`/Dashboard/GetNext7DaysOrderItems?sortColumn=${sortColumn}&sortColumnDir=${sortColumnDir}`);
 }
-export function getInvoicePdfUrl(invoiceId) {
-  return `${API_URL}/Invoice/ViewInvoicePdf?id=${invoiceId}`;
+export async function getInvoicePdfUrl(invoiceId) {
+  const response = await getBlob(`/Invoice/ViewInvoicePdf?id=${invoiceId}`);
+  const blob = new Blob([response.data], { type: "application/pdf" });
+  return window.URL.createObjectURL(blob);
 }
 // export function getInvoicePdfUrl(invoiceId) {
 //   return `https://localhost:7281/api/Invoice/ViewInvoicePdf?id=${invoiceId}`;

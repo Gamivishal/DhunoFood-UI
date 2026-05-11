@@ -130,7 +130,7 @@ const ExpenseReport = props => {
                       <Input type="date" name="toDate" value={toDate} onChange={handleChange} />
                     </FormGroup>
                   </Col>
-                  <Col xs={12} md={6} lg={4} className="mb-2">
+                  <Col xs={12} md={6} lg={3} className="mb-2">
                     <FormGroup>
                       <Label>Category</Label>
                       <Select
@@ -143,7 +143,7 @@ const ExpenseReport = props => {
                       />
                     </FormGroup>
                   </Col>
-                  <Col xs={12} md={6} lg={2} className="mb-2">
+                  <Col xs={12} md={6} lg={3} className="mb-2">
                     <FormGroup>
                       <Label>Payment Mode</Label>
                       <Select

@@ -21,7 +21,7 @@ import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import withRouter from "components/Common/withRouter";
-
+import { DASHBOARD_NAME } from "../../config";
 // users
 //import user1 from "../../assets/images/users/user-1.jpg";
 import user1 from "../../assets/images/DhunoFood/Userimg.jpg"
@@ -31,8 +31,7 @@ import { changePassword, getUserById, resetPassword } from "../../helpers/fakeba
 import { editProfile, resetProfileFlag } from "../../store/actions";
 
 const MyProfile = () => {
-  document.title = "My Profile | Lexa - Responsive Bootstrap 5 Admin Dashboard";
-
+    document.title = `My Profile | ${DASHBOARD_NAME}`
   const dispatch = useDispatch();
 
   const [profile, setProfile] = useState({

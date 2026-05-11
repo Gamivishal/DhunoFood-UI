@@ -319,7 +319,17 @@ const Invoices = props => {
                   });
                   const blob = new Blob([response.data], { type: 'application/pdf' });
                   const blobUrl = window.URL.createObjectURL(blob);
-                  window.open(blobUrl, '_blank', 'noopener,noreferrer');
+                  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                  if (isMobile) {
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = `Invoice_${invoice.invoiceId}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  } else {
+                    window.open(blobUrl, '_blank', 'noopener,noreferrer');
+                  }
                   setTimeout(() => window.URL.revokeObjectURL(blobUrl), 10000);
                 } catch (err) {
                   alert('Failed to download PDF: ' + (err?.response?.status === 401 ? 'Unauthorized (401)' : 'Unknown error'));

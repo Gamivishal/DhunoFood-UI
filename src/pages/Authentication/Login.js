@@ -168,7 +168,8 @@ const Login = props => {
                                                 transform: "translateY(10%)",
                                                 cursor: "pointer",
                                                 color: "#6c757d",
-                                                zIndex: 10
+                                                zIndex: 10,
+                                                display: validation.values.password ? "block" : "none"
                                               }}
                                             >
                                               <i className={showPassword ? "mdi mdi-eye-off" : "mdi mdi-eye"} style={{ fontSize: "18px" }} />

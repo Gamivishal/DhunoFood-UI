@@ -41,6 +41,7 @@ const ExpenseCategories = props => {
   const [formData, setFormData] = useState({
     id: 0,
     categoryName: "",
+    isActive: true,
   })
 
   const breadcrumbItems = [
@@ -102,6 +103,7 @@ const ExpenseCategories = props => {
         setFormData({
           id: 0,
           categoryName: "",
+          isActive: true,
         })
         return
       }
@@ -120,6 +122,7 @@ const ExpenseCategories = props => {
         setFormData({
           id: category.expenseCategoryId || 0,
           categoryName: category.categoryName || "",
+          isActive: category.isActive ?? true,
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load category")
@@ -136,6 +139,7 @@ const ExpenseCategories = props => {
       columns: buildServerSortColumns({
         columns: [
           { label: "Category Name", field: "categoryName", sort: "asc" },
+          { label: "Status", field: "status", sort: "disabled" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
         onSort: handleSortChange,
@@ -145,6 +149,16 @@ const ExpenseCategories = props => {
       rows: rows.map(item => ({
         expenseCategoryId: item.expenseCategoryId,
         categoryName: item.categoryName || "",
+        status: (
+          <span
+            style={{
+              color: item.isActive ? "#28a745" : "#dc3545",
+              fontWeight: "bold",
+            }}
+          >
+            {item.isActive ? "Active" : "Inactive"}
+          </span>
+        ),
         action: (
           <div className="d-flex gap-2 justify-content-center">
             <Button
@@ -177,7 +191,11 @@ const ExpenseCategories = props => {
   }, [rows, sortColumn, sortColumnDir])
 
   const handleChange = event => {
-    const { name, value, type, checked } = event.target
+    const target = event?.target
+    const name = target?.name
+    const type = target?.type
+    const checked = target?.checked
+    const value = target?.value
     setFormData(previous => ({
       ...previous,
       [name]: type === "checkbox" ? checked : value,
@@ -218,6 +236,7 @@ const ExpenseCategories = props => {
       const payload = {
         expenseCategoryId: isEditMode ? Number(formData.id) || expenseCategoryId : 0,
         categoryName: formData.categoryName,
+        isActive: formData.isActive ?? true,
       }
 
       const response = await saveExpenseCategory(payload)

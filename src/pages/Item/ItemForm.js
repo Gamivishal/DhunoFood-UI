@@ -134,6 +134,24 @@ const ItemForm = ({
                 }}
               />
             </Col>
+            {isEditMode && (
+              <Col md={6}>
+                <div className="form-check" style={{ marginTop: "30px" }}>
+                  <input
+                    type="checkbox"
+                    name="isActive"
+                    id="isActive"
+                    className="form-check-input"
+                    checked={formData.isActive ?? true}
+                    onChange={e => e.preventDefault()}
+                    onClick={() => onChange({ target: { name: "isActive", type: "checkbox", checked: !formData.isActive } })}
+                  />
+                  <label className="form-check-label ms-2" htmlFor="isActive">
+                    Active
+                  </label>
+                </div>
+              </Col>
+            )}
           </Row>
 
           <div className="app-form-actions">

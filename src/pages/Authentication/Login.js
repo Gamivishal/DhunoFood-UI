@@ -102,8 +102,8 @@ const Login = props => {
       }
 
       .login-logo {
-        width: 200px;
-        height: auto;
+        width: 350px;
+        height: 160px;
       }
     `}
   </style>

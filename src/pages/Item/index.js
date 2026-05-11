@@ -50,6 +50,7 @@ const Items = props => {
     unit: "",
     price: "",
     baseQty: 0,
+    isActive: true,
   })
 
   const breadcrumbItems = [
@@ -110,7 +111,11 @@ const Items = props => {
           length: 100,
         })
         if (response?.isSuccess && Array.isArray(response?.data?.data)) {
-          setCategoryOptions(response.data.data)
+          
+            const activeCategories = response.data.data.filter(
+      item => item.isActive === 1 || item.isActive === true
+    )
+          setCategoryOptions(activeCategories)
           return
         }
 
@@ -162,6 +167,7 @@ const Items = props => {
           unit: "",
           price: "",
           baseQty: 0,
+          isActive: true,
         })
         return
       }
@@ -184,6 +190,7 @@ const Items = props => {
           unit: item.unit ?? "",
           price: item.price ?? "",
           baseQty: item.baseQty ?? 0,
+          isActive: item.isActive ?? true,
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load item")
@@ -203,7 +210,7 @@ columns: buildServerSortColumns({
           { label: "Category", field: "categoryName", sort: "asc" },
           { label: "Unit", field: "unitName", sort: "asc" },
           { label: "Price", field: "price", sort: "asc" },
-    //      { label: "Payment Mode", field: "paymentName", sort: "asc" },
+          { label: "Status", field: "status", sort: "disabled" },
           { label: "Action", field: "action", sort: "disabled" },
         ],
         onSort: handleSortChange,
@@ -216,7 +223,16 @@ columns: buildServerSortColumns({
         categoryName: item.categoryName || "",
         unitName: item.unitName || "",
         price: item.price ?? "",
-    //    paymentName: item.paymentName || "",
+        status: (
+          <span
+            style={{
+              color: item.isActive ? "#28a745" : "#dc3545",
+              fontWeight: "bold",
+            }}
+          >
+            {item.isActive ? "Active" : "Inactive"}
+          </span>
+        ),
         action: (
           <div className="d-flex gap-2 justify-content-center">
             <Button
@@ -249,7 +265,11 @@ columns: buildServerSortColumns({
   }, [rows, sortColumn, sortColumnDir, unitOptions])
 
   const handleChange = event => {
-    const { name, value, type, checked } = event.target
+    const target = event?.target
+    const name = target?.name
+    const type = target?.type
+    const checked = target?.checked
+    const value = target?.value
     setFormData(previous => ({
       ...previous,
       [name]: type === "checkbox" ? checked : value,
@@ -308,6 +328,7 @@ columns: buildServerSortColumns({
         unit: formData.unit,
         price: Number(formData.price) || null,
         baseQty: Number(formData.baseQty) || null,
+        isActive: formData.isActive ?? true,
       }
 
       const response = await saveItem(payload)

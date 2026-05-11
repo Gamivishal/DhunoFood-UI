@@ -112,7 +112,12 @@ if (!(response?.isSuccess)) {
           length: 100,
         })
         if (response?.isSuccess && Array.isArray(response?.data?.data)) {
-          setCategoryOptions(response.data.data)
+         console.log("Fetched categories:", response.data.data)
+        const activeCategories = response.data.data.filter(
+      item => item.isActive === 1 || item.isActive === true
+    )
+
+          setCategoryOptions(activeCategories)
           return
         }
 

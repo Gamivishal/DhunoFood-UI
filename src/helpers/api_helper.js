@@ -177,18 +177,6 @@ export async function getLovDropdownList(lovColumn) {
   return await get(`/Dropdown/LovMaster?Lov_column=${encodeURIComponent(lovColumn)}`);
 }
 
-// Download PDF from backend
-export async function downloadPDF(url, filename) {
-  const response = await getBlob(url);
-  const blob = new Blob([response.data], { type: "application/pdf" });
-  const link = document.createElement("a");
-  link.href = window.URL.createObjectURL(blob);
-  link.setAttribute("download", filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
 // Dashboard API helpers
 export async function getDashboardSummary() {
   return await get("/Dashboard/GetSummary");
@@ -201,11 +189,15 @@ export async function getNext7DaysOrders(sortColumn = "orderNo", sortColumnDir =
 export async function getNext7DaysOrderItems(sortColumn = "itemName", sortColumnDir = "asc") {
   return await get(`/Dashboard/GetNext7DaysOrderItems?sortColumn=${sortColumn}&sortColumnDir=${sortColumnDir}`);
 }
-export async function getInvoicePdfUrl(invoiceId) {
-  const response = await getBlob(`/Invoice/ViewInvoicePdf?id=${invoiceId}`);
-  const blob = new Blob([response.data], { type: "application/pdf" });
-  return window.URL.createObjectURL(blob);
+// export function getInvoicePdfUrl(invoiceId) {
+//   return `${API_URL}/Invoice/ViewInvoicePdf?id=${invoiceId}`;
+// }
+export function getInvoicePdfUrl(invoiceId) {
+  return `${API_URL}/Invoice/ViewInvoicePdf?id=${invoiceId}`;
 }
 // export function getInvoicePdfUrl(invoiceId) {
 //   return `https://localhost:7281/api/Invoice/ViewInvoicePdf?id=${invoiceId}`;
 // }
+
+// Export axiosApi for use in other files
+export { axiosApi };

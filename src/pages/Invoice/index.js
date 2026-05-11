@@ -16,7 +16,7 @@ import {
   getCustomerNameByOrderId,
   saveInvoice,
 } from "../../helpers/fakebackend_helper"
-import { getLovDropdownList,getInvoicePdfUrl } from "../../helpers/api_helper"
+import { getLovDropdownList, getInvoicePdfUrl, axiosApi } from "../../helpers/api_helper";
 import { showConfirm, showError, showSuccess } from "../../Pop_show/alertService"
 import InvoiceForm from "./InvoiceForm"
 
@@ -307,16 +307,23 @@ const Invoices = props => {
         status: invoice.status || "",
         action: (
           <div className="d-flex gap-2 justify-content-center">
-           
-                       <Button
+            <Button
               color="link"
               className="p-0 text-info"
               title="View PDF"
               type="button"
-              onClick={() => {
-                getInvoicePdfUrl(invoice.invoiceId).then(url => {
-                  window.open(url, '_blank', 'noopener,noreferrer');
-                });
+              onClick={async () => {
+                try {
+                  const response = await axiosApi.get(getInvoicePdfUrl(invoice.invoiceId), {
+                    responseType: 'blob',
+                  });
+                  const blob = new Blob([response.data], { type: 'application/pdf' });
+                  const blobUrl = window.URL.createObjectURL(blob);
+                  window.open(blobUrl, '_blank', 'noopener,noreferrer');
+                  setTimeout(() => window.URL.revokeObjectURL(blobUrl), 10000);
+                } catch (err) {
+                  alert('Failed to download PDF: ' + (err?.response?.status === 401 ? 'Unauthorized (401)' : 'Unknown error'));
+                }
               }}
             >
               <i className="mdi mdi-eye font-size-18" />

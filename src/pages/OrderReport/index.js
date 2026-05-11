@@ -123,58 +123,58 @@ const OrderReport = props => {
             <CardBody>
               <Form onSubmit={(e) => { e.preventDefault(); loadOrderReports(); }}>
                <Row>
-                <Col >
-                    <FormGroup>
-                      <Label>From Date</Label>
-                      <Input type="date" name="fromDate" value={fromDate} onChange={handleChange} />
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label>To Date</Label>
-                      <Input type="date" name="toDate" value={toDate} onChange={handleChange} />
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label>Customer</Label>
-                      <Select
-                        classNamePrefix="select2-selection"
-                        placeholder="Select Customer"
-                        options={customerList}
-                        value={customerList.find(c => c.value === customerId) || null}
-                        onChange={option => setCustomerId(option ? option.value : "")}
-                        isClearable
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label>Payment Status</Label>
-                      <Select
-                        classNamePrefix="select2-selection"
-                        placeholder="Select Status"
-                        options={statusList}
-                        value={statusList.find(s => s.value === status) || null}
-                        onChange={option => setStatus(option ? option.value : "")}
-                        isClearable
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label>&nbsp;</Label>
-                      <Button
-                        color="primary"
-                        type="submit"
-                        disabled={loading}
-                        className="w-100"
-                        style={{ height: "38px", borderRadius: "0.375rem" }}
-                      >
-                        {loading ? "..." : "Search"}
-                      </Button>
-                    </FormGroup>
-                  </Col>
+                <Col xs={12} md={6} lg={2} className="mb-2">
+                  <FormGroup>
+                    <Label>From Date</Label>
+                    <Input type="date" name="fromDate" value={fromDate} onChange={handleChange} />
+                  </FormGroup>
+                </Col>
+                <Col xs={12} md={6} lg={2} className="mb-2">
+                  <FormGroup>
+                    <Label>To Date</Label>
+                    <Input type="date" name="toDate" value={toDate} onChange={handleChange} />
+                  </FormGroup>
+                </Col>
+                <Col xs={12} md={6} lg={3} className="mb-2">
+                  <FormGroup>
+                    <Label>Customer</Label>
+                    <Select
+                      classNamePrefix="select2-selection"
+                      placeholder="Select Customer"
+                      options={customerList}
+                      value={customerList.find(c => c.value === customerId) || null}
+                      onChange={option => setCustomerId(option ? option.value : "")}
+                      isClearable
+                    />
+                  </FormGroup>
+                </Col>
+                <Col xs={12} md={6} lg={3} className="mb-2">
+                  <FormGroup>
+                    <Label>Payment Status</Label>
+                    <Select
+                      classNamePrefix="select2-selection"
+                      placeholder="Select Status"
+                      options={statusList}
+                      value={statusList.find(s => s.value === status) || null}
+                      onChange={option => setStatus(option ? option.value : "")}
+                      isClearable
+                    />
+                  </FormGroup>
+                </Col>
+                <Col xs={12} md={12} lg={2} className="mb-2">
+                  <FormGroup>
+                    <Label className="d-none d-md-block">&nbsp;</Label>
+                    <Button
+                      color="primary"
+                      type="submit"
+                      disabled={loading}
+                      className="w-100"
+                      style={{ height: "38px", borderRadius: "0.375rem" }}
+                    >
+                      {loading ? "..." : "Search"}
+                    </Button>
+                  </FormGroup>
+                </Col>
                 </Row>
               </Form>
               {hasSearched && rows && rows.length > 0 && (

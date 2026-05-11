@@ -118,19 +118,19 @@ const ExpenseReport = props => {
             <CardBody>
               <Form onSubmit={(e) => { e.preventDefault(); loadExpenseReports(); }}>
 <Row>
-                  <Col >
+                  <Col xs={12} md={6} lg={2} className="mb-2">
                     <FormGroup>
                       <Label>From Date</Label>
                       <Input type="date" name="fromDate" value={fromDate} onChange={handleChange} />
                     </FormGroup>
                   </Col>
-                  <Col >
+                  <Col xs={12} md={6} lg={2} className="mb-2">
                     <FormGroup>
                       <Label>To Date</Label>
                       <Input type="date" name="toDate" value={toDate} onChange={handleChange} />
                     </FormGroup>
                   </Col>
-                  <Col >
+                  <Col xs={12} md={6} lg={4} className="mb-2">
                     <FormGroup>
                       <Label>Category</Label>
                       <Select
@@ -143,7 +143,7 @@ const ExpenseReport = props => {
                       />
                     </FormGroup>
                   </Col>
-                  <Col >
+                  <Col xs={12} md={6} lg={2} className="mb-2">
                     <FormGroup>
                       <Label>Payment Mode</Label>
                       <Select
@@ -156,10 +156,9 @@ const ExpenseReport = props => {
                       />
                     </FormGroup>
                   </Col>
-                  
-                  <Col >
+                  <Col xs={12} md={12} lg={2} className="mb-2">
                     <FormGroup>
-                      <Label>&nbsp;</Label>
+                      <Label className="d-none d-md-block">&nbsp;</Label>
                       <Button
                         color="primary"
                         type="submit"

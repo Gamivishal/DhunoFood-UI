@@ -886,6 +886,20 @@ const getOrderById = async id => {
   }
 }
 
+const getCustomerNameByOrderId = async orderId => {
+  try {
+    return await get("/Dropdown/Customernamebyorderid", {
+      params: { orderId },
+    })
+  } catch (error) {
+    throw (
+      error?.response?.data?.message ||
+      error?.message ||
+      "Customer name by order fetch failed"
+    )
+  }
+}
+
 const saveOrder = async payload => {
   try {
     return await post("/Order/Save", payload)
@@ -1279,6 +1293,7 @@ export {
   downloadQuotationPdf,
   getOrderPages,
   getOrderById,
+  getCustomerNameByOrderId,
   saveOrder,
   deleteOrderById,
   updateOrderStatus,

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
+import axios from "axios"
 import { Alert, Button, Card, CardBody, Col, Row, Spinner } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
@@ -12,6 +13,7 @@ import {
   getInvoicePages,
   getOrderById,
   getOrderDropdownList,
+  getCustomerNameByOrderId,
   saveInvoice,
 } from "../../helpers/fakebackend_helper"
 import { getLovDropdownList,getInvoicePdfUrl } from "../../helpers/api_helper"
@@ -43,6 +45,7 @@ const Invoices = props => {
   const [invoiceTypeOptions, setInvoiceTypeOptions] = useState([])
   const [orderItems, setOrderItems] = useState([])
   const [totalAmount, setTotalAmount] = useState(0)
+  const [customerIdFromOrder, setCustomerIdFromOrder] = useState(0)
   const [formData, setFormData] = useState({
     invoiceId: 0,
     orderId: "",
@@ -176,6 +179,30 @@ const Invoices = props => {
     }
 
     loadOrderItems()
+  }, [isFormPage, formData.orderId])
+
+  useEffect(() => {
+    const fetchCustomerByOrder = async () => {
+      if (!isFormPage || !formData.orderId) {
+        setCustomerIdFromOrder(0)
+        return
+      }
+
+      try {
+        const response = await getCustomerNameByOrderId(formData.orderId)
+        if (response?.isSuccess && response?.data?.length > 0) {
+          const customerData = response.data[0]
+          setCustomerIdFromOrder(customerData)
+        } else {
+          setCustomerIdFromOrder({ id: 0, name: "" })
+        }
+      } catch (err) {
+        console.error("Failed to fetch customer by orderId", err)
+        setCustomerIdFromOrder({ id: 0, name: "" })
+      }
+    }
+
+    fetchCustomerByOrder()
   }, [isFormPage, formData.orderId])
 
   useEffect(() => {
@@ -433,6 +460,7 @@ const Invoices = props => {
                 totalAmount={totalAmount}
                 isEditMode={isEditMode}
                 saving={saving}
+                customerIdFromOrder={customerIdFromOrder}
                 onChange={handleChange}
                 onOrderSelectChange={handleOrderSelectChange}
                 onInvoiceTypeSelectChange={handleInvoiceTypeSelectChange}

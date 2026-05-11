@@ -27,6 +27,7 @@ const InvoiceForm = ({
   totalAmount,
   isEditMode,
   saving,
+  customerIdFromOrder,
   onChange,
   onOrderSelectChange,
   onInvoiceTypeSelectChange,
@@ -76,9 +77,25 @@ const InvoiceForm = ({
                   isClearable
                 />
               </FormGroup>
+</Col>
+            <Col md={6}>
+              <FormGroup>
+                <Label>Customer Name</Label>
+                <Input
+                  type="text"
+                  name="customerName"
+                  value={customerIdFromOrder?.name || ""}
+                  readOnly
+                />
+                <Input
+                  type="hidden"
+                  name="customerId"
+                  value={customerIdFromOrder?.id || 0}
+                />
+              </FormGroup>
             </Col>
 
-          
+           
 
             <Col md={6}>
               <FormGroup>

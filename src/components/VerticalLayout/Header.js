@@ -185,7 +185,7 @@ const Header = props => {
               </div>
             </div> */}
             {/* <LanguageDropdown /> */}
-            <div className="dropdown d-none d-lg-inline-block">
+            {/* <div className="dropdown d-none d-lg-inline-block">
               <button
                 type="button"
                 onClick={() => {
@@ -196,7 +196,7 @@ const Header = props => {
               >
                 <i className="mdi mdi-fullscreen font-size-24"></i>
               </button>
-            </div>
+            </div> */}
             {/* <NotificationDropdown /> */}
             <ProfileMenu />
             {/* <div

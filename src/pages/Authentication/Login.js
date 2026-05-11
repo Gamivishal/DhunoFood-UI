@@ -38,7 +38,7 @@ const Login = props => {
       password: "",
     },
     validationSchema: Yup.object({
-      userName: Yup.string().required("Please Enter Your Username"),
+      userName: Yup.string().required("Please Enter Your User Id"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: (values) => {
@@ -128,11 +128,11 @@ const Login = props => {
                                     >
                                       {error ? <Alert color="danger">{error}</Alert> : null}
                                         <div className="mb-3">
-                                            <Label htmlFor="username">Username</Label>
+                                            <Label htmlFor="username">User Id</Label>
                                             <Input
                                               name="userName"
                                               className="form-control"
-                                              placeholder="Enter username"
+                                              placeholder="Enter User Id"
                                               type="text"
                                               onChange={validation.handleChange}
                                               onBlur={validation.handleBlur}

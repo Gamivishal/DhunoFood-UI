@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Container, Row,Col, Card, CardBody, Label, Form, Alert, Input, FormFeedback } from 'reactstrap';
 import logoDark from "../../assets/images/logo-dark.png";
@@ -26,6 +26,7 @@ import { apiError, loginUser, socialLogin } from "../../store/actions";
 const Login = props => {
     document.title = `Login | ${DASHBOARD_NAME}`
 
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -144,19 +145,34 @@ const Login = props => {
                                               <FormFeedback type="invalid">{validation.errors.userName}</FormFeedback>
                                             ) : null}
                                         </div>
-                                        <div className="mb-3">
+                                        <div className="mb-3 position-relative">
                                             <Label htmlFor="userpassword">Password</Label> 
                                             <Input
                                               name="password"
                                               value={validation.values.password || ""}
-                                              type="password"
+                                              type={showPassword ? "text" : "password"}
                                               placeholder="Enter Password"
                                               onChange={validation.handleChange}
                                               onBlur={validation.handleBlur}
                                               invalid={
                                                 validation.touched.password && validation.errors.password ? true : false
                                               }
+                                              style={{ paddingRight: "40px" }}
                                             />
+                                            <span
+                                              onClick={() => setShowPassword(!showPassword)}
+                                              style={{ 
+                                                position: "absolute", 
+                                                right: "12px", 
+                                                top: "50%", 
+                                                transform: "translateY(10%)",
+                                                cursor: "pointer",
+                                                color: "#6c757d",
+                                                zIndex: 10
+                                              }}
+                                            >
+                                              <i className={showPassword ? "mdi mdi-eye-off" : "mdi mdi-eye"} style={{ fontSize: "18px" }} />
+                                            </span>
                                             {validation.touched.password && validation.errors.password ? (
                                               <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
                                             ) : null}

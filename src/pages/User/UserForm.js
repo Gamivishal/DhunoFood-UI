@@ -32,6 +32,7 @@ const UserForm = ({
   const [roles, setRoles] = useState([]);
   const [loadingRoles, setLoadingRoles] = useState(false);
   const [roleError, setRoleError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     setLoadingRoles(true);
@@ -75,13 +76,30 @@ const UserForm = ({
             {!isEditMode && (
               <Col md={6}>
                 <Label>Password<span style={{ color: "red" }}>*</span></Label>
-                <Input
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={onChange}
-                  placeholder="Enter password"
-                />
+                <div className="position-relative">
+                  <Input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={onChange}
+                    placeholder="Enter password"
+                    style={{ paddingRight: "40px" }}
+                  />
+                  <span
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ 
+                      position: "absolute", 
+                      right: "12px", 
+                      top: "50%", 
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                      color: "#6c757d",
+                      zIndex: 10
+                    }}
+                  >
+                    <i className={showPassword ? "mdi mdi-eye-off" : "mdi mdi-eye"} style={{ fontSize: "18px" }} />
+                  </span>
+                </div>
               </Col>
             )}
             <Col md={6}>

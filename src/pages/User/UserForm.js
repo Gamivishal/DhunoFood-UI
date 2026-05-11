@@ -1,18 +1,20 @@
-import React from "react"
-import Select from "react-select"
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
 import {
-  Alert,
+    Alert,
   Button,
   Card,
   CardBody,
   CardHeader,
   Col,
   Form,
+  FormGroup,
   Input,
   Label,
   Row,
   Spinner,
 } from "reactstrap"
+import { getRoleDropdownList } from "../../helpers/api_helper";
 
 const UserForm = ({
   title,
@@ -26,12 +28,27 @@ const UserForm = ({
   onSubmit,
   onClose,
 }) => {
-  const roleSelectOptions = (roleOptions || []).map(role => ({
-    value: role.id,
-    label: role.name,
-  }))
+  const [roles, setRoles] = useState([]);
+  const [loadingRoles, setLoadingRoles] = useState(false);
+  const [roleError, setRoleError] = useState("");
 
-  const selectedRole = roleSelectOptions.find(option => Number(option.value) === Number(formData.roleId)) || null
+  useEffect(() => {
+    setLoadingRoles(true);
+    getRoleDropdownList()
+      .then(data => {
+        if (data && data.data) {
+          setRoles(data.data);
+        } else {
+          setRoles([]);
+        }
+        setLoadingRoles(false);
+      })
+      .catch(() => {
+        setRoles([]);
+        setLoadingRoles(false);
+        setRoleError("Failed to load roles");
+      });
+  }, []);
 
   return (
     <Card className="mb-4 app-form-card">
@@ -67,7 +84,7 @@ const UserForm = ({
               </Col>
             )}
             <Col md={6}>
-              <Label>Email<span style={{ color: "red" }}>*</span></Label>
+              <Label>Email</Label>
               <Input
                 name="email"
                 value={formData.email}
@@ -76,7 +93,7 @@ const UserForm = ({
               />
             </Col>
             <Col md={6}>
-              <Label>Mobile Number<span style={{ color: "red" }}>*</span></Label>
+              <Label>Mobile Number</Label>
               <Input
                 name="mobileNumber"
                 type="tel"
@@ -94,18 +111,36 @@ const UserForm = ({
                 maxLength={10}
               />
             </Col>
-            {/* <Col md={6}>
-              <Label>Select Role<span style={{ color: "red" }}>*</span></Label>
-              <Select
-                classNamePrefix="select2-selection"
-                placeholder="Select role"
-                options={roleSelectOptions}
-                value={selectedRole}
-                onChange={onRoleChange}
-                isSearchable
-                isClearable
-              />
-            </Col> */}
+            <Col md={6}>
+              <FormGroup>
+                <Label>Select Role<span style={{ color: "red" }}>*</span></Label>
+                <Select
+                  classNamePrefix="select2-selection"
+                  placeholder="Select role"
+                  options={roles.map(role => ({ value: role.id, label: role.name }))}
+                  value={
+                    roles && roles.length && formData.roleId
+                      ? roles.map(role => ({ value: role.id, label: role.name })).find(opt => Number(opt.value) === Number(formData.roleId)) || null
+                      : null
+                  }
+                  onChange={option => {
+                    if (onRoleChange) {
+                      onRoleChange(option);
+                    } else {
+                      onChange({
+                        target: {
+                          name: "roleId",
+                          value: option ? Number(option.value) : "",
+                        },
+                      });
+                    }
+                  }}
+                  isSearchable
+                  isClearable
+                />
+                {roleError && <div style={{ color: "red", fontSize: "0.9em" }}>{roleError}</div>}
+              </FormGroup>
+            </Col>
           </Row>
 
           <div className="app-form-actions">

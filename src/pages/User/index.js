@@ -182,7 +182,7 @@ const handleExportPdf = async () => {
           password: "",
           email: "",
           mobileNumber: "",
-          roleId: 1,
+          roleId: "",
           isDeleted: false,
         })
         return
@@ -204,7 +204,7 @@ const handleExportPdf = async () => {
           password: "",
           email: user.email || "",
           mobileNumber: user.mobileNumber || "",
-          roleId: 1,
+          roleId: user.roleId || "",
           isDeleted: Boolean(user.isDeleted),
         })
       } catch (err) {
@@ -323,7 +323,7 @@ const handleExportPdf = async () => {
         isDeleted: Boolean(formData.isDeleted),
         email: formData.email,
         mobileNumber: formData.mobileNumber,
-        roleId: 1,
+        roleId: formData.roleId ? Number(formData.roleId) : 0,
       }
 
       if (!isEditMode) {

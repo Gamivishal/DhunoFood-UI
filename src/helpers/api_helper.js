@@ -177,6 +177,12 @@ export async function getLovDropdownList(lovColumn) {
   return await get(`/Dropdown/LovMaster?Lov_column=${encodeURIComponent(lovColumn)}`);
 }
 
+// Role dropdown API helper
+export async function getRoleDropdownList() {
+  // Use the local dev URL as requested
+  return await get("/Dropdown/RoleName");
+}
+
 // Dashboard API helpers
 export async function getDashboardSummary() {
   return await get("/Dashboard/GetSummary");

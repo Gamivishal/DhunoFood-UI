@@ -147,7 +147,7 @@ const ItemForm = ({
                     onClick={() => onChange({ target: { name: "isActive", type: "checkbox", checked: !formData.isActive } })}
                   />
                   <label className="form-check-label ms-2" htmlFor="isActive">
-                    Active
+                    Status
                   </label>
                 </div>
               </Col>

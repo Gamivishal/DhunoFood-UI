@@ -229,7 +229,7 @@ const SidebarContent = props => {
 
             {dynamicMenu.length > 0 && (
               <>
-                <li className="menu-title">{props.t("Menu")}</li>
+                {/* <li className="menu-title">{props.t("Menu")}</li> */}
                 {dynamicMenu.map(parent => (
                   <li key={`dynamic-parent-${parent.id}`}>
                     <Link

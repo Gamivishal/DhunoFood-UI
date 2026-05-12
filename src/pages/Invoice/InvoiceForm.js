@@ -98,7 +98,7 @@ const InvoiceForm = ({
 
            
 
-            <Col md={6}>
+            {/* <Col md={6}>
               <FormGroup>
                 <Label>Invoice Type <span style={{ color: "red" }}>*</span></Label>
                 <Select
@@ -113,7 +113,7 @@ const InvoiceForm = ({
                   isClearable
                 />
               </FormGroup>
-            </Col>
+            </Col> */}
 
             <Col md={6}>
               <FormGroup>

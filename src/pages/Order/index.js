@@ -254,11 +254,11 @@ orderDate: new Date().toLocaleDateString("en-CA"),
       rows: rows.map(order => ({
         orderId: order.orderId,
         customerName: order.customerName || "",
-        orderDate: formatDate(order.orderDate),
+        orderDate: <span style={{ whiteSpace: "nowrap" }}>{formatDate(order.orderDate, order.orderTime)}</span>,
         totalAmount: order.totalAmount ?? 0,
         quotationId: order.quotationId || "-",
         statusname: order.statusname || "",
-        orderNo: order.orderNo || "",
+        orderNo: <span style={{ whiteSpace: "nowrap" }}>{order.orderNo || ""}</span>,
         action: (
           <div className="d-flex gap-2 justify-content-center">
             <Button

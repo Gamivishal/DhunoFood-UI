@@ -102,7 +102,7 @@ const ExpenseReport = props => {
         sortColumnDir,
       }),
       rows: rows.map(item => ({
-        expenseDate: item.expenseDate?.split("T")[0] || "",
+        expenseDate: <span style={{ whiteSpace: "nowrap" }}>{item.expenseDate?.split("T")[0] || ""}</span>,
         categoryName: item.categoryName,
         paymentModeName: item.paymentModeName,
         amount: item.amount,

@@ -311,7 +311,7 @@ const Quotations = props => {
       rows: rows.map(quotation => ({
         quotationId: quotation.quotationId,
         customerName: quotation.customerName || "",
-        quotationDate: formatDate(quotation.quotationDate),
+        quotationDate: <span style={{ whiteSpace: "nowrap" }}>{formatDate(quotation.quotationDate)}</span>,
         totalAmount: quotation.totalAmount ?? 0,
         action: (
           <div className="d-flex gap-2 justify-content-center">

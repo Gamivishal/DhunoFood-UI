@@ -105,7 +105,7 @@ const OrderReport = props => {
         sortColumnDir,
       }),
       rows: rows.map(item => ({
-        orderNo: `${item.orderNo} / ${item.orderDate?.split("T")[0] || ""}`,
+        orderNo: <span style={{ whiteSpace: "nowrap" }}>{`${item.orderNo} / ${item.orderDate?.split("T")[0] || ""}`}</span>,
         customerName: item.customerName,
       //  orderDate: item.orderDate?.split("T")[0] || "",
         totalAmount: `${item.totalAmount} / ${item.remainingAmount}`,

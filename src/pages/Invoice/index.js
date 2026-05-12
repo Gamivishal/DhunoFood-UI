@@ -56,10 +56,7 @@ const Invoices = props => {
     notes: "",
   })
 
-  const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
-    { title: "Invoices", link: "#" },
-  ]
+
 
   const loadInvoices = async () => {
     setLoading(true)
@@ -298,11 +295,27 @@ const Invoices = props => {
       }),
       rows: rows.map(invoice => ({
         invoiceId: invoice.invoiceId,
-        invoiceNumber: invoice.invoiceNumber || "",
+       invoiceNumber: (
+  <span style={{ whiteSpace: "nowrap" }}>
+    {invoice.invoiceNumber || "-"}
+  </span>
+),
         customerName: invoice.customerName || "",
-        orderNo: invoice.orderNo || "",
-        invoiceDate: formatDate(invoice.invoiceDate),
-        dueDate: formatDate(invoice.dueDate),
+       orderNo: (
+  <span style={{ whiteSpace: "nowrap" }}>
+    {invoice.orderNo || "-"}
+  </span>
+),
+        invoiceDate: (
+  <span style={{ whiteSpace: "nowrap" }}>
+    {formatDate(invoice.invoiceDate)}
+  </span>
+),
+       dueDate: (
+  <span style={{ whiteSpace: "nowrap" }}>
+    {formatDate(invoice.dueDate)}
+  </span>
+),
         amount: invoice.amount ?? 0,
         status: invoice.status || "",
         action: (

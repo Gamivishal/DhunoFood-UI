@@ -246,7 +246,8 @@ if (!(response?.isSuccess)) {
       }),
       rows: rows.map(item => ({
         expenseId: item.expenseId,
-        expenseDate: formatExpenseDate(item.expenseDate),
+       // expenseDate: formatExpenseDate(item.expenseDate),
+    expenseDate: <span style={{ whiteSpace: "nowrap" }}>{formatDate(item.expenseDate)}</span>,
         categoryName: item.categoryName || "",
         amount: item.amount ?? "",
         paymentName: item.paymentName || "",

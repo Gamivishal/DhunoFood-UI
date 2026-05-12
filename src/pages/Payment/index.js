@@ -206,8 +206,8 @@ const Payments = props => {
         paymentId: payment.paymentId,
         orderId: payment.orderId || "-",
         customerName: payment.customerName || "",
-        orderNo: payment.orderNo || "-",
-        orderDate: formatDate(payment.orderDate),
+        orderNo:<span style={{ whiteSpace: "nowrap" }}>{ payment.orderNo || "-" }</span>,
+        orderDate:<span style={{ whiteSpace: "nowrap" }}> {formatDate(payment.orderDate)}</span>,
         totalAmount: payment.totalAmount ?? 0,
 
         paidAmount: payment.paidAmount ?? 0,

@@ -84,7 +84,7 @@ const Roles = props => {
   }
 
   useEffect(() => {
-    props.setBreadcrumbItems("Roles")
+    props.setBreadcrumbItems("Role")
   }, [])
 
   useEffect(() => {

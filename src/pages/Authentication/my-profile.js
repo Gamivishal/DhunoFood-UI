@@ -374,7 +374,7 @@ const MyProfile = () => {
                     />
                     <div>
                       <h5 className="mb-1">{profile.fullName}</h5>
-                      <p className="text-muted mb-0">{profile.role}</p>
+                      {/* <p className="text-muted mb-0">{profile.role}</p> */}
                     </div>
                   </div>
 

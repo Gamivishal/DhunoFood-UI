@@ -546,27 +546,23 @@ navigate("/Order")
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-between mb-3">
-                  <div>
-                    
+                  <div className="order-filter-btn-group">
                     <Button
                       color={statusFilter === "1" ? "primary" : "secondary"}
                       size="sm"
-                          className="me-2"
                       onClick={() => setStatusFilter("1")}
                     >
                       Pending
                     </Button>
-
                     <Button
                       color={statusFilter === "" ? "primary" : "secondary"}
                       size="sm"
-                      className="me-2"
                       onClick={() => setStatusFilter("")}
                     >
                       All
                     </Button>
                   </div>
-                  <Button color="primary" type="button" onClick={() => navigate("/Order/manage")}>
+                  <Button color="primary" type="button" onClick={() => navigate("/Order/manage")}> 
                     <i className="mdi mdi-plus me-1" />Add Order
                   </Button>
                 </div>

@@ -1,0 +1,19 @@
+.order-filter-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.order-filter-btn-group .btn {
+  min-width: 100px;
+  flex: 1 1 0;
+  text-align: center;
+}
+
+@media (max-width: 576px) {
+  .order-filter-btn-group .btn {
+    // min-width: 0;
+    font-size: 14px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}

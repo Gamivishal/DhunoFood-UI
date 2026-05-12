@@ -388,7 +388,7 @@ const MyProfile = () => {
                   >
                     <Row className="g-3">
                       <Col md="12">
-                        <Label>Full Name</Label>
+                        <Label>User Id</Label>
                         <Input
                           name="fullName"
                           className="form-control"

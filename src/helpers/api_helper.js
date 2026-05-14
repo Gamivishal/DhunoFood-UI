@@ -52,10 +52,15 @@ export async function exportToFile(url, filename, config = {}) {
 //const API_URL = "https://localhost:7281/api";
 const API_URL = "https://dhunofood.bsite.net/api";
 
+// const axiosApi = axios.create({
+//   baseURL: API_URL,
+// });
 const axiosApi = axios.create({
   baseURL: API_URL,
+  headers: {
+    "x-db-name": "thedhunoffood"
+  }
 });
-
 let lastApiResponseData = null;
 
 axiosApi.interceptors.request.use(

@@ -184,7 +184,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           orderTime: "",
           quotationId: "",
           totalAmount: 0,
-          items: [{ itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null }],
+          items: [{ itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null, umo: "" }],
         })
         return
       }
@@ -214,15 +214,21 @@ orderDate: new Date().toLocaleDateString("en-CA"),
           items: Array.isArray(order.items) && order.items.length > 0
             ? order.items.map(item => {
               const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+              const isCustom = matchedItem?.iscustome === true
+              const qty = item.baseQty ?? item.quantity ?? 1
+              const rate = Number(item.ratePerUnit) || 0
               return {
                 ...item,
+                iscustome: isCustom,
+                itemName: item.itemName || (matchedItem ? (matchedItem.itemName || matchedItem.name) : "") || "",
                 baseQty: item.baseQty ?? item.quantity ?? null,
                 quantity: item.quantity ?? item.baseQty ?? 1,
-                amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
+                amount: isCustom ? (item.price || item.amount || 0) : (qty * rate),
                 unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
+                umo: isCustom ? (item.umo || matchedItem?.umo || matchedItem?.priceUMO || "") : (item.umo || matchedItem?.umo || matchedItem?.priceUMO || ""),
               }
             })
-            : [{ itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null, unit: "" }],
+            : [{ itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null, unit: "", umo: "" }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load order")
@@ -232,7 +238,7 @@ orderDate: new Date().toLocaleDateString("en-CA"),
     }
 
     loadOrder()
-  }, [isFormPage, isEditMode, orderId])
+  }, [isFormPage, isEditMode, orderId, itemOptions])
 
   const data = useMemo(() => {
     return withAutoSrColumn({
@@ -354,8 +360,11 @@ orderDate: new Date().toLocaleDateString("en-CA"),
     } else {
       updatedItems[index] = {
         ...updatedItems[index],
-        [name]: value,
+        [name]: name === "amount" ? Number(value) || 0 : value,
       };
+      if (name === "customItemName") {
+        updatedItems[index].itemName = value;
+      }
     }
 
     setFormData(previous => ({
@@ -382,12 +391,24 @@ orderDate: new Date().toLocaleDateString("en-CA"),
     }))
   }
 
+  const handleCustomItemSave = (index, itemData) => {
+    const updatedItems = [...formData.items];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      ...itemData,
+    };
+    setFormData(previous => ({
+      ...previous,
+      items: updatedItems,
+    }));
+  }
+
   const addItem = () => {
     setFormData(previous => ({
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null },
+        { itemId: 0, itemName: "", quantity: null, ratePerUnit: 0, price: 0, amount: null, umo: "" },
       ],
     }))
   }
@@ -401,7 +422,13 @@ orderDate: new Date().toLocaleDateString("en-CA"),
   }
 
   const calculateTotal = () => {
-    return formData.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0)
+    return formData.items.reduce((sum, item) => {
+      const isCustom = item.iscustome;
+      const amt = isCustom 
+        ? (Number(item.amount) || 0)
+        : ((Number(item.ratePerUnit) || 0) * (Number(item.quantity) || 0));
+      return sum + amt;
+    }, 0);
   }
 
   const handleDelete = async id => {
@@ -447,11 +474,13 @@ orderDate: new Date().toLocaleDateString("en-CA"),
         totalAmount: Math.round(calculateTotal()),
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
+          itemName: item.itemName || "",
           quantity: Number(item.quantity) || 0,
-          ratePerUnit: Number(item.ratePerUnit) || 0,
-          price: Number(item.price) || 0,
+          ratePerUnit: item.iscustome ? 0 : (Number(item.ratePerUnit) || 0),
+          price: item.iscustome ? (Number(item.amount) || 0) : (Number(item.price) || 0),
           amount: Math.round(Number(item.amount) || 0),
           unit: item.unit || "",
+          umo: item.umo || "",
         })),
       }
 
@@ -540,6 +569,7 @@ navigate("/Order")
                 calculateTotal={calculateTotal}
                 onCancelOrder={handleCancelOrder}
                 onCompleteOrder={handleCompleteOrder}
+                onCustomItemSave={handleCustomItemSave}
               />
             )
           ) : (

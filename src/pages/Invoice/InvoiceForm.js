@@ -168,7 +168,8 @@ min={(() => {
                     {orderItems.map((item, index) => (
                       <tr key={index}>
                         <td>{item.itemName || "-"}</td>
-                        <td>{item.priceUMO || "-"}</td>
+                        {/* <td>{item.iscustome ? "----" : (item.priceUMO || "-")}</td> */}
+                         <td>{(item.priceUMO || "-")}</td>
                         <td>{item.quantity || 0}</td>
                         <td>{item.price || 0}</td>
                       </tr>

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Select from "react-select"
 import { FaTimes } from "react-icons/fa";
 import {
@@ -11,6 +11,10 @@ import {
   Form,
   Input,
   Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Row,
   Spinner,
   Table,
@@ -33,7 +37,13 @@ const QuotationForm = ({
   onClose,
   calculateTotal,
   onAddCustomer,
+  onCustomItemSave,
 }) => {
+  const [customItemModal, setCustomItemModal] = useState(false)
+  const [customItemName, setCustomItemName] = useState("")
+  const [pendingItemIndex, setPendingItemIndex] = useState(null)
+  const [pendingItemData, setPendingItemData] = useState(null)
+
   const itemSelectOptions = (itemOptions || []).map(item => ({
     value: item.itemId || item.id,
     label: item.itemName || item.name,
@@ -42,6 +52,8 @@ const QuotationForm = ({
     ratePerUnit: item.ratePerUnit,
     unit: item.unit,
     priceUMO: item.priceUMO,
+    umo: item.umo || item.priceUMO || "",
+    iscustome: item.iscustome || false,
   }))
 
   const customerSelectOptions = (customerOptions || []).map(customer => ({
@@ -60,11 +72,30 @@ const QuotationForm = ({
 
   const handleItemSelectChange = (index, option) => {
     const selectedItem = itemSelectOptions.find(opt => Number(opt.value) === Number(option?.value))
+    
+    if (selectedItem?.iscustome === true) {
+      setPendingItemIndex(index)
+      setPendingItemData({
+        itemId: option?.value || 0,
+        price: selectedItem?.price || 0,
+        baseQty: selectedItem?.baseQty || 0,
+        ratePerUnit: selectedItem?.ratePerUnit || 0,
+        unit: selectedItem?.unit || "",
+        priceUMO: selectedItem?.priceUMO || "",
+        umo: selectedItem?.umo || "",
+        amount: "",
+      })
+      setCustomItemName("")
+      setCustomItemModal(true)
+      return
+    }
+    
     const currentItem = formData.items[index] || {}
     const baseQty = selectedItem?.baseQty || 0
     const ratePerUnit = selectedItem?.ratePerUnit || 0
     const unit = selectedItem?.unit || ""
-     const priceUMO = selectedItem?.priceUMO || ""
+    const priceUMO = selectedItem?.priceUMO || ""
+    const umo = selectedItem?.umo || ""
     onItemChange(index, {
       target: {
         name: "itemSelected",
@@ -78,23 +109,60 @@ const QuotationForm = ({
           amount: ratePerUnit * baseQty,
           unit: unit,
           priceUMO: priceUMO,
+          umo: umo,
+          iscustome: selectedItem?.iscustome || false,
         })
       }
     })
   }
 
-  const handleQuantityChange = (index, e) => {
+  const handleCustomItemSave = () => {
+    if (!customItemName.trim()) return
+    
+    const quantity = pendingItemData?.baseQty || 1
+    const amount = pendingItemData?.amount !== undefined && pendingItemData?.amount !== "" ? Number(pendingItemData.amount) : (Number(pendingItemData?.price) || 0)
+    const ratePerUnit = amount / quantity
+    
+    onCustomItemSave(pendingItemIndex, {
+      itemId: pendingItemData?.itemId || 0,
+      itemName: customItemName.trim(),
+      price: ratePerUnit,
+      baseQty: quantity,
+      quantity: quantity,
+      ratePerUnit: ratePerUnit,
+      amount: amount,
+      unit: pendingItemData?.unit || "",
+      priceUMO: ratePerUnit.toString(),
+      umo: ratePerUnit.toString(),
+      iscustome: true,
+    })
+    
+    setCustomItemModal(false)
+    setCustomItemName("")
+    setPendingItemIndex(null)
+    setPendingItemData(null)
+  }
+
+  const handleCustomItemCancel = () => {
+    setCustomItemModal(false)
+    setCustomItemName("")
+    setPendingItemIndex(null)
+    setPendingItemData(null)
+  }
+
+  const handleQuantityChange = (index, e, isCustom) => {
     const value = e.target.value
     const qty = value === '' ? null : (value === '0' ? 0 : (Number(value) || null))
     const currentItem = formData.items[index] || {}
     const ratePerUnit = currentItem.ratePerUnit || 0
+    
     onItemChange(index, {
       target: {
         name: "baseQty",
         value: JSON.stringify({
           baseQty: qty,
           quantity: qty,
-          amount: qty !== null ? ratePerUnit * qty : 0,
+          amount: isCustom ? currentItem.amount : (qty !== null ? ratePerUnit * qty : 0),
         })
       }
     })
@@ -177,50 +245,44 @@ min={(() => {
                     </tr>
                     
                   </thead>
-                  <tbody>
-                    {(formData.items || []).map((item, index) => (
-                      <tr key={index}>
-                        <td>
-                          <Select
-                            classNamePrefix="select2-selection"
-                            placeholder="Select item"
-                            options={itemSelectOptions}
-                            value={itemSelectOptions.find(
-                              opt => Number(opt.value) === Number(item.itemId)
-                            ) || null}
-                            onChange={option => handleItemSelectChange(index, option)}
-                                                        menuPlacement="auto"
-                            menuShouldScrollIntoView={false}
-                            styles={{ menu: (provided) => ({ ...provided, maxHeight: 300, zIndex: 9999 }) }}
-                            menuPortalTarget={typeof window !== 'undefined' ? window.document.body : null}
-                            menuPosition="fixed"
-                            isSearchable
-                            isClearable
-                          />
-                        </td>
-                        {/* <td>
-                          <Input
-                            type="number"
-                            name="price"
-                            value={item.price || 0}
-                            readOnly
-                          />
-                        </td> */}
-                         <td>
-                                                  <Input
-                                                    type="text"
-                                                    name="price"
-                                                   value={item.priceUMO || 0}
-                                                    // value={item.baseQty && item.unit ? `${item.price || 0} (${item.baseQty} ${item.unit})` : item.price || 0}
-                                                    readOnly
-                                                  />
-                                                </td>
+<tbody>
+                    {(formData.items || []).map((item, index) => {
+                      const selectedOption = itemSelectOptions.find(
+                        opt => Number(opt.value) === Number(item.itemId)
+                      )
+                      const displayLabel = item.itemName || selectedOption?.label || ""
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <Select
+                              classNamePrefix="select2-selection"
+                              placeholder="Select item"
+                              options={itemSelectOptions}
+                              value={item.itemId > 0 ? { value: item.itemId, label: displayLabel } : null}
+                              onChange={option => handleItemSelectChange(index, option)}
+                              menuPlacement="auto"
+                              menuShouldScrollIntoView={false}
+                              styles={{ menu: (provided) => ({ ...provided, maxHeight: 300, zIndex: 9999 }) }}
+                              menuPortalTarget={typeof window !== 'undefined' ? window.document.body : null}
+                              menuPosition="fixed"
+                              isSearchable
+                              isClearable
+                            />
+                          </td>
+<td>
+                            <Input
+                              type="text"
+                              name="price"
+                              value={selectedOption?.iscustome ? (selectedOption?.umo || item.umo || item.priceUMO || "") : (item.priceUMO || 0)}
+                              readOnly
+                            />
+                          </td>
                         <td>
                           <Input
                             type="text"
                             name="baseQty"
                             value={item.quantity ?? item.baseQty ?? ''}
-                            onChange={e => handleQuantityChange(index, e)}
+                            onChange={e => handleQuantityChange(index, e, selectedOption?.iscustome)}
                           />
                         </td>
                         <td className="d-none">
@@ -235,8 +297,22 @@ min={(() => {
                           <Input
                             type="number"
                             name="amount"
-                            value={Math.round(item.amount || 0)}
-                            readOnly
+                            value={
+                              selectedOption?.iscustome
+                                ? (item.amount != null && item.amount !== 0 && item.amount !== "") ? Math.round(item.amount) : ""
+                                : (item.ratePerUnit != null && item.quantity != null) ? Math.round(Number(item.ratePerUnit) * Number(item.quantity)) : ""
+                            }
+                            readOnly={!selectedOption?.iscustome}
+                            onChange={e => {
+                              if (selectedOption?.iscustome) {
+                                onItemChange(index, {
+                                  target: {
+                                    name: "amount",
+                                    value: e.target.value
+                                  }
+                                })
+                              }
+                            }}
                           />
                         </td>
                         <td>
@@ -251,7 +327,8 @@ min={(() => {
                           </Button>
                         </td>
                       </tr>
-                    ))}
+                      )
+                    })}
                   </tbody>
                 </Table>
               </div>
@@ -267,8 +344,8 @@ min={(() => {
             </Col>
           </Row>
 
-          <div className="app-form-actions">
-           
+<div className="app-form-actions">
+            
             <Button color="success" type="submit" disabled={saving}>
               {saving ? <Spinner size="sm" className="me-2" /> : null}
               Save
@@ -279,6 +356,50 @@ min={(() => {
           </div>
         </Form>
       </CardBody>
+
+      <Modal isOpen={customItemModal} toggle={handleCustomItemCancel}>
+        <ModalHeader toggle={handleCustomItemCancel}>Enter Custom Item Details</ModalHeader>
+        <ModalBody>
+          <div className="mb-3">
+            <Label>Item Name<span style={{ color: "red" }}>*</span></Label>
+            <Input
+              type="text"
+              placeholder="Enter item name"
+              value={customItemName}
+              onChange={e => setCustomItemName(e.target.value)}
+              autoFocus
+            />
+          </div>
+          <div className="mb-3">
+            <Label>Quantity</Label>
+            <Input
+              type="number"
+              placeholder="Enter quantity"
+              value={pendingItemData?.baseQty || ""}
+              onChange={e => setPendingItemData(prev => ({ ...prev, baseQty: Number(e.target.value) || 0 }))}
+              min={1}
+            />
+          </div>
+          <div className="mb-3">
+            <Label>Amount</Label>
+            <Input
+              type="number"
+              placeholder="Enter amount"
+              value={pendingItemData?.amount !== undefined ? pendingItemData.amount : ""}
+              onChange={e => setPendingItemData(prev => ({ ...prev, amount: e.target.value === "" ? "" : Number(e.target.value) }))}
+              min={0}
+            />
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="light" type="button" onClick={handleCustomItemCancel}>
+            Cancel
+          </Button>
+          <Button color="primary" type="button" onClick={handleCustomItemSave} disabled={!customItemName.trim()}>
+            Save
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Card>
   )
 }

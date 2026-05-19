@@ -11,6 +11,7 @@ import {
   deleteInvoiceById,
   getInvoiceById,
   getInvoicePages,
+  getItemList,
   getOrderById,
   getOrderDropdownList,
   getCustomerNameByOrderId,
@@ -44,6 +45,7 @@ const Invoices = props => {
   const [orderOptions, setOrderOptions] = useState([])
   const [invoiceTypeOptions, setInvoiceTypeOptions] = useState([])
   const [orderItems, setOrderItems] = useState([])
+  const [itemOptions, setItemOptions] = useState([])
   const [totalAmount, setTotalAmount] = useState(0)
   const [customerIdFromOrder, setCustomerIdFromOrder] = useState(0)
   const [formData, setFormData] = useState({
@@ -152,6 +154,28 @@ const Invoices = props => {
   }, [isFormPage])
 
   useEffect(() => {
+    const loadItemOptions = async () => {
+      if (!isFormPage) {
+        return
+      }
+
+      try {
+        const response = await getItemList()
+        if (response?.isSuccess && Array.isArray(response?.data)) {
+          setItemOptions(response.data)
+          return
+        }
+
+        throw new Error(response?.message || "Failed to load items")
+      } catch (err) {
+        setFormError(err?.message || err || "Failed to load items")
+      }
+    }
+
+    loadItemOptions()
+  }, [isFormPage])
+
+  useEffect(() => {
     const loadOrderItems = async () => {
       if (!isFormPage || !formData.orderId) {
         setOrderItems([])
@@ -162,7 +186,13 @@ const Invoices = props => {
         const response = await getOrderById(formData.orderId)
         if (response?.isSuccess && response?.data) {
           console.log("getOrderById response", response)
-          const items = response.data.items || []
+          const items = (response.data.items || []).map(item => {
+            const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+            return {
+              ...item,
+              iscustome: matchedItem?.iscustome === true,
+            }
+          })
           setOrderItems(items)
           setTotalAmount(response.data.totalAmount || 0)
           return
@@ -176,7 +206,7 @@ const Invoices = props => {
     }
 
     loadOrderItems()
-  }, [isFormPage, formData.orderId])
+  }, [isFormPage, formData.orderId, itemOptions])
 
   useEffect(() => {
     const fetchCustomerByOrder = async () => {

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Alert, Button, Card, CardBody, Col, Modal, Row, Spinner } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { connect } from "react-redux"
@@ -108,16 +108,20 @@ const Quotations = props => {
         items: Array.isArray(quotation.items) && quotation.items.length > 0
           ? quotation.items.map(item => {
             const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+            const isCustom = matchedItem?.iscustome === true
+            const qty = item.baseQty ?? item.quantity ?? 1
+            const rate = Number(item.ratePerUnit) || 0
             return {
               ...item,
+              iscustome: isCustom,
               quantity: item.quantity || item.baseQty || 1,
               ratePerUnit: item.ratePerUnit || 0,
-        //      amount: (Number(item.quantity) || Number(item.baseQty) || 1) * (Number(item.ratePerUnit) || 0),
-              amount: Number(item.amount) || 0,
+              amount: isCustom ? (item.price || item.amount || 0) : (qty * rate),
               unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
+              umo: item.umo || matchedItem?.umo || matchedItem?.priceUMO || "",
             }
           })
-          : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "" }],
+          : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "", umo: "" }],
       })
     } catch (err) {
       setFormError(err?.message || err || "Failed to load quotation")
@@ -245,7 +249,7 @@ const Quotations = props => {
           customerId: "",
           quotationDate: new Date().toISOString().split("T")[0],
           totalAmount: 0,
-          items: [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 }],
+          items: [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, umo: "" }],
         })
         return
       }
@@ -272,17 +276,21 @@ const Quotations = props => {
           items: Array.isArray(quotation.items) && quotation.items.length > 0
             ? quotation.items.map(item => {
                 const matchedItem = (itemOptions || []).find(i => Number(i.itemId) === Number(item.itemId) || Number(i.id) === Number(item.itemId))
+                const isCustom = matchedItem?.iscustome === true
+                const qty = item.baseQty ?? item.quantity ?? 1
+                const rate = Number(item.ratePerUnit) || 0
                 return {
                   ...item,
+                  iscustome: isCustom,
                   quantity: item.quantity || item.baseQty || 1,
                   baseQty: item.baseQty ?? item.quantity ?? null,
                   ratePerUnit: item.ratePerUnit || 0,
-                //  amount: (Number(item.baseQty) || Number(item.quantity) || 1) * (Number(item.ratePerUnit) || 0),
-                amount: Number(item.amount) || 0,
+                  amount: isCustom ? (item.price || item.amount || 0) : (qty * rate),
                   unit: item.unit || (matchedItem ? matchedItem.unit : "") || "",
+                  umo: item.umo || matchedItem?.umo || matchedItem?.priceUMO || "",
                 }
               })
-            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "" }],
+            : [{ itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, unit: "", umo: "" }],
         })
       } catch (err) {
         setFormError(err?.message || err || "Failed to load quotation")
@@ -292,7 +300,7 @@ const Quotations = props => {
     }
 
     loadQuotation()
-  }, [isFormPage, isEditMode, quotationId])
+  }, [isFormPage, isEditMode, quotationId, itemOptions])
 
   const data = useMemo(() => {
     return withAutoSrColumn({
@@ -440,7 +448,7 @@ const Quotations = props => {
     } else {
       updatedItems[index] = {
         ...updatedItems[index],
-        [name]: value,
+        [name]: name === "amount" ? Number(value) || 0 : value,
       };
     }
 
@@ -457,7 +465,7 @@ const Quotations = props => {
     updatedItems[index] = {
       ...updatedItems[index],
       quantity: qty,
-      amount: qty * (Number(updatedItems[index].price) || 0),
+      amount: updatedItems[index].iscustome ? updatedItems[index].amount : (qty * (Number(updatedItems[index].price) || 0)),
     }
     setFormData(previous => ({
       ...previous,
@@ -465,12 +473,24 @@ const Quotations = props => {
     }))
   }
 
+  const handleCustomItemSave = (index, itemData) => {
+    const updatedItems = [...formData.items];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      ...itemData,
+    };
+    setFormData(previous => ({
+      ...previous,
+      items: updatedItems,
+    }));
+  }
+
   const addItem = () => {
     setFormData(previous => ({
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, umo: "" },
       ],
     }))
   }
@@ -484,7 +504,13 @@ const Quotations = props => {
   }
 
   const calculateTotal = () => {
-    return formData.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0)
+    return formData.items.reduce((sum, item) => {
+      const isCustom = item.iscustome;
+      const amount = isCustom 
+        ? (Number(item.amount) || 0)
+        : ((Number(item.ratePerUnit) || 0) * (Number(item.quantity) || Number(item.baseQty) || 0));
+      return sum + amount;
+    }, 0);
   }
 
   const handleDelete = async id => {
@@ -539,7 +565,12 @@ const Quotations = props => {
       updatedItems[index] = {
         ...updatedItems[index],
         quantity: qty,
-        amount: qty !== null ? ratePerUnit * qty : 0,
+        amount: updatedItems[index].iscustome ? updatedItems[index].amount : (qty !== null ? ratePerUnit * qty : 0),
+      };
+    } else if (name === "amount") {
+      updatedItems[index] = {
+        ...updatedItems[index],
+        amount: Number(value) || 0,
       };
     } else {
       updatedItems[index] = {
@@ -559,7 +590,7 @@ const Quotations = props => {
       ...previous,
       items: [
         ...previous.items,
-        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0 },
+        { itemId: 0, itemName: "", quantity: 1, ratePerUnit: 0, price: 0, amount: 0, umo: "" },
       ],
     }))
   }
@@ -573,7 +604,25 @@ const Quotations = props => {
   }
 
   const calculateConvertTotal = () => {
-    return convertFormData.items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0)
+    return convertFormData.items.reduce((sum, item) => {
+      const isCustom = item.iscustome;
+      const amount = isCustom 
+        ? (Number(item.amount) || 0)
+        : ((Number(item.ratePerUnit) || 0) * (Number(item.quantity) || 0));
+      return sum + amount;
+    }, 0);
+  }
+
+  const handleConvertCustomItemSave = (index, itemData) => {
+    const updatedItems = [...convertFormData.items];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      ...itemData,
+    };
+    setConvertFormData(previous => ({
+      ...previous,
+      items: updatedItems,
+    }));
   }
 
   const handleConvertSubmit = async event => {
@@ -593,11 +642,13 @@ try {
         orderTime: convertFormData.orderTime || null,
         items: convertFormData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
+          itemName: item.itemName || "",
           baseQty: Number(item.quantity) || 0,
-          ratePerUnit: Number(item.ratePerUnit) || 0,
-          price: Number(item.price) || 0,
+          ratePerUnit: item.iscustome ? 0 : (Number(item.ratePerUnit) || 0),
+          price: item.iscustome ? (Number(item.amount) || 0) : (Number(item.price) || 0),
           amount: Math.round(Number(item.amount) || 0),
           unit: item.unit || "",
+          umo: item.umo || "",
         })),
       }
 
@@ -635,11 +686,13 @@ try {
         isConvert: false,
         items: formData.items.map(item => ({
           itemId: Number(item.itemId) || 0,
+          itemName: item.itemName || "",
           baseQty: Number(item.baseQty) || 0,
-          ratePerUnit: Number(item.ratePerUnit) || 0,
-          price: Number(item.price) || 0,
+          ratePerUnit: item.iscustome ? 0 : (Number(item.ratePerUnit) || 0),
+          price: item.iscustome ? (Number(item.amount) || 0) : (Number(item.price) || 0),
           amount: Math.round(Number(item.amount) || 0),
           unit: item.unit || "",
+          umo: item.umo || "",
         })),
       }
 
@@ -760,6 +813,7 @@ try {
                 onClose={() => navigate("/Quotation")}
                 calculateTotal={calculateTotal}
                 onAddCustomer={openCustomerModal}
+                onCustomItemSave={handleCustomItemSave}
               />
             )
           ) : isConvertPage ? (
@@ -786,6 +840,7 @@ try {
                 onSubmit={handleConvertSubmit}
                 onClose={() => navigate("/Quotation")}
                 calculateTotal={calculateConvertTotal}
+                onCustomItemSave={handleConvertCustomItemSave}
               />
             )
           ) : (

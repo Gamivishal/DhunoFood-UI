@@ -167,7 +167,11 @@ const ConvertToOrderForm = ({
                 name="orderDate"
                 value={getOrderDateValue()}
                 onChange={handleOrderDateChange}
-                min={new Date().toISOString().split("T")[0]}
+                min={(() => {
+                  const d = new Date();
+                  d.setDate(d.getDate() - 40);
+                  return d.toISOString().split("T")[0];
+                })()}
                 max={(() => {
                   const d = new Date();
                   d.setDate(d.getDate() + 7);
